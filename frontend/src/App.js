@@ -196,14 +196,19 @@ function App() {
       thc: 35.97,
       price: 85,
       description: "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down",
-      image: "https://images.unsplash.com/photo-1712051339878-4945960151e3",
+      image: "https://i.ibb.co/mCmXk6d9/image1.jpg",
       rating: 4.9,
       reviews: 42,
       isPremium: true,
       genetics: "Devil Driver x Oreoz",
       grower: "Discount Pharms",
       aroma: "Sweet with creamy notes",
-      flavor: "Smooth, dessert-like, rich"
+      flavor: "Smooth, dessert-like, rich",
+      images: [
+        "https://i.ibb.co/mCmXk6d9/image1.jpg",
+        "https://i.ibb.co/DHpSz8sS/image2.jpg", 
+        "https://i.ibb.co/C3mJX0Zz/image3.jpg"
+      ]
     },
     {
       id: 2,
