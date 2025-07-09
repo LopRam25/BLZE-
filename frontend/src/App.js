@@ -3,6 +3,8 @@ import "./App.css";
 
 const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
   const [address, setAddress] = useState("");
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   if (!isOpen) return null;
 
@@ -14,19 +16,110 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
     }
   };
 
+  const getCurrentLocation = () => {
+    setIsGettingLocation(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // In a real app, you'd use a geocoding service to convert coords to address
+          const mockAddress = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          setAddress(mockAddress);
+          setIsGettingLocation(false);
+          // Auto-submit with location
+          onLocationSet(mockAddress);
+          onClose();
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setIsGettingLocation(false);
+          alert("Unable to get your location. Please enter address manually.");
+        }
+      );
+    } else {
+      setIsGettingLocation(false);
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    setAddress(value);
+    
+    // Mock address suggestions - in real app, use Google Places API
+    if (value.length > 2) {
+      const mockSuggestions = [
+        `${value} Street, Los Angeles, CA`,
+        `${value} Ave, Beverly Hills, CA`,
+        `${value} Blvd, Santa Monica, CA`,
+        `${value} Dr, West Hollywood, CA`
+      ];
+      setSuggestions(mockSuggestions);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const selectSuggestion = (suggestion) => {
+    setAddress(suggestion);
+    setSuggestions([]);
+    onLocationSet(suggestion);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl max-w-md w-full p-6">
         <h2 className="text-2xl font-bold mb-4">Enter Your Location</h2>
-        <form onSubmit={handleSubmit}>
+        
+        <button
+          onClick={getCurrentLocation}
+          disabled={isGettingLocation}
+          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors mb-4 flex items-center justify-center space-x-2"
+        >
+          {isGettingLocation ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              <span>Getting Location...</span>
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span>Use Current Location</span>
+            </>
+          )}
+        </button>
+
+        <div className="text-center text-gray-500 mb-4">or</div>
+
+        <form onSubmit={handleSubmit} className="relative">
           <input
             type="text"
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={handleAddressChange}
             placeholder="Enter your delivery address"
             className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
             autoFocus
           />
+          
+          {suggestions.length > 0 && (
+            <div className="absolute top-12 left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+              {suggestions.map((suggestion, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => selectSuggestion(suggestion)}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
+          
           <div className="flex space-x-3">
             <button
               type="submit"
