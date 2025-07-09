@@ -755,9 +755,25 @@ function App() {
   const [cart, setCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Check age verification on component mount
+  useEffect(() => {
+    const ageVerified = localStorage.getItem('ageVerified');
+    if (ageVerified === 'true') {
+      setIsAgeVerified(true);
+    }
+  }, []);
+
+  // Show location modal after age verification
+  useEffect(() => {
+    if (isAgeVerified && !deliveryLocation) {
+      setIsLocationModalOpen(true);
+    }
+  }, [isAgeVerified, deliveryLocation]);
 
   const categories = [
     { id: "all", name: "All", icon: "🌿" },
@@ -829,11 +845,18 @@ function App() {
 
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  useEffect(() => {
-    if (!deliveryLocation) {
-      setIsLocationModalOpen(true);
-    }
-  }, [deliveryLocation]);
+  // Show age verification modal if not verified
+  if (!isAgeVerified) {
+    return (
+      <div className="App bg-gray-50 min-h-screen">
+        <AgeVerificationModal
+          isOpen={true}
+          onClose={() => {}}
+          onVerified={() => setIsAgeVerified(true)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="App bg-gray-50 min-h-screen">
@@ -941,7 +964,7 @@ function App() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
-            {selectedCategory === "all" ? "All Products" : categories.find(c => c.id === selectedCategory)?.name}
+            {selectedCategory === "all" ? "Premium Products" : categories.find(c => c.id === selectedCategory)?.name}
           </h1>
           <span className="text-sm text-gray-500">
             {filteredProducts.length} products
