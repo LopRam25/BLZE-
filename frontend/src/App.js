@@ -5,12 +5,21 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
   const [address, setAddress] = useState("");
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState("");
+  const [isInDeliveryArea, setIsInDeliveryArea] = useState(null);
+
+  const deliveryAreas = [
+    "Buncombe County, NC",
+    "Henderson County, NC", 
+    "Polk County, NC",
+    "Transylvania County, NC"
+  ];
 
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (address.trim()) {
+    if (address.trim() && isInDeliveryArea) {
       onLocationSet(address);
       onClose();
     }
@@ -22,18 +31,23 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // In a real app, you'd use a geocoding service to convert coords to address
-          const mockAddress = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          // Mock geocoding - in real app, use Google Geocoding API
+          const mockAddress = `${latitude.toFixed(4)}, ${longitude.toFixed(4)} - Western NC`;
           setAddress(mockAddress);
           setIsGettingLocation(false);
-          // Auto-submit with location
-          onLocationSet(mockAddress);
-          onClose();
+          // Simulate checking if location is in delivery area
+          setIsInDeliveryArea(true);
+          setSelectedCounty("Buncombe County, NC");
         },
         (error) => {
           console.error("Error getting location:", error);
           setIsGettingLocation(false);
-          alert("Unable to get your location. Please enter address manually.");
+          alert("Unable to get your location. Please enter address manually or enable location services.");
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
         }
       );
     } else {
@@ -46,14 +60,26 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
     const value = e.target.value;
     setAddress(value);
     
-    // Mock address suggestions - in real app, use Google Places API
+    // Check if address contains delivery area keywords
+    const lowerValue = value.toLowerCase();
+    const countyMatch = deliveryAreas.find(area => 
+      lowerValue.includes(area.toLowerCase().split(' ')[0]) || 
+      lowerValue.includes(area.toLowerCase())
+    );
+    
+    if (countyMatch) {
+      setIsInDeliveryArea(true);
+      setSelectedCounty(countyMatch);
+    } else if (value.length > 5) {
+      setIsInDeliveryArea(false);
+      setSelectedCounty("");
+    }
+    
+    // Mock address suggestions based on delivery areas
     if (value.length > 2) {
-      const mockSuggestions = [
-        `${value} Street, Los Angeles, CA`,
-        `${value} Ave, Beverly Hills, CA`,
-        `${value} Blvd, Santa Monica, CA`,
-        `${value} Dr, West Hollywood, CA`
-      ];
+      const mockSuggestions = deliveryAreas.map(county => 
+        `${value} Street, ${county}`
+      ).slice(0, 3);
       setSuggestions(mockSuggestions);
     } else {
       setSuggestions([]);
@@ -63,6 +89,9 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
   const selectSuggestion = (suggestion) => {
     setAddress(suggestion);
     setSuggestions([]);
+    setIsInDeliveryArea(true);
+    const county = deliveryAreas.find(area => suggestion.includes(area));
+    setSelectedCounty(county || "");
     onLocationSet(suggestion);
     onClose();
   };
@@ -71,6 +100,15 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl max-w-md w-full p-6">
         <h2 className="text-2xl font-bold mb-4">Enter Your Location</h2>
+        
+        <div className="mb-4 p-3 bg-green-50 rounded-lg">
+          <p className="text-sm text-green-800 font-semibold">🚚 We deliver to:</p>
+          <ul className="text-xs text-green-700 mt-1">
+            {deliveryAreas.map((area, index) => (
+              <li key={index}>• {area}</li>
+            ))}
+          </ul>
+        </div>
         
         <button
           onClick={getCurrentLocation}
@@ -101,9 +139,21 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
             value={address}
             onChange={handleAddressChange}
             placeholder="Enter your delivery address"
-            className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full p-3 border border-gray-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-green-500"
             autoFocus
           />
+          
+          {isInDeliveryArea === false && address.length > 5 && (
+            <div className="mb-3 p-2 bg-red-50 rounded-lg">
+              <p className="text-sm text-red-800">❌ Sorry, we don't deliver to this area yet.</p>
+            </div>
+          )}
+          
+          {isInDeliveryArea === true && selectedCounty && (
+            <div className="mb-3 p-2 bg-green-50 rounded-lg">
+              <p className="text-sm text-green-800">✅ Great! We deliver to {selectedCounty}</p>
+            </div>
+          )}
           
           {suggestions.length > 0 && (
             <div className="absolute top-12 left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
@@ -123,7 +173,12 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
           <div className="flex space-x-3">
             <button
               type="submit"
-              className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors"
+              disabled={!isInDeliveryArea}
+              className={`flex-1 py-3 rounded-lg transition-colors ${
+                isInDeliveryArea 
+                  ? 'bg-green-600 text-white hover:bg-green-700' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             >
               Confirm Location
             </button>
