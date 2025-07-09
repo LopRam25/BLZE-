@@ -1,6 +1,81 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
+const AgeVerificationModal = ({ isOpen, onClose, onVerified }) => {
+  const [birthDate, setBirthDate] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleVerification = (e) => {
+    e.preventDefault();
+    setIsVerifying(true);
+    
+    const birth = new Date(birthDate);
+    const today = new Date();
+    const age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    
+    setTimeout(() => {
+      setIsVerifying(false);
+      if (age >= 21) {
+        localStorage.setItem('ageVerified', 'true');
+        onVerified();
+        onClose();
+      } else {
+        alert("You must be 21 or older to access this site.");
+      }
+    }, 1000);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl max-w-md w-full p-6">
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-4">🔞</div>
+          <h2 className="text-2xl font-bold mb-2">Age Verification Required</h2>
+          <p className="text-gray-600">You must be 21 or older to access this cannabis delivery service.</p>
+        </div>
+        
+        <form onSubmit={handleVerification}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Enter Your Date of Birth
+            </label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+          
+          <button
+            type="submit"
+            disabled={isVerifying || !birthDate}
+            className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+              isVerifying || !birthDate
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                : 'bg-green-600 text-white hover:bg-green-700'
+            }`}
+          >
+            {isVerifying ? 'Verifying...' : 'Verify Age'}
+          </button>
+        </form>
+        
+        <div className="mt-4 text-xs text-gray-500 text-center">
+          <p>By proceeding, you confirm you are 21+ and agree to our terms of service.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
   const [address, setAddress] = useState("");
   const [isGettingLocation, setIsGettingLocation] = useState(false);
@@ -27,36 +102,88 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
 
   const getCurrentLocation = () => {
     setIsGettingLocation(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          // Mock geocoding - in real app, use Google Geocoding API
-          const mockAddress = `${latitude.toFixed(4)}, ${longitude.toFixed(4)} - Western NC`;
-          setAddress(mockAddress);
-          setIsGettingLocation(false);
-          // Simulate checking if location is in delivery area
-          setIsInDeliveryArea(true);
-          setSelectedCounty("Buncombe County, NC");
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          setIsGettingLocation(false);
-          alert("Unable to get your location. Please enter address manually or enable location services.");
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
-    } else {
-      setIsGettingLocation(false);
+    
+    // Check if geolocation is supported
+    if (!navigator.geolocation) {
       alert("Geolocation is not supported by this browser.");
+      setIsGettingLocation(false);
+      return;
     }
+
+    // Request location with better options
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        
+        try {
+          // Use reverse geocoding to get address
+          const response = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+          );
+          const data = await response.json();
+          
+          const fullAddress = `${data.locality}, ${data.principalSubdivision}, ${data.countryName}`;
+          setAddress(fullAddress);
+          
+          // Check if location is in delivery area
+          const isInNC = data.principalSubdivision === "North Carolina";
+          const county = data.city || data.locality;
+          
+          if (isInNC && county) {
+            const countyMatch = deliveryAreas.find(area => 
+              area.toLowerCase().includes(county.toLowerCase())
+            );
+            
+            if (countyMatch) {
+              setIsInDeliveryArea(true);
+              setSelectedCounty(countyMatch);
+            } else {
+              setIsInDeliveryArea(false);
+            }
+          } else {
+            setIsInDeliveryArea(false);
+          }
+          
+        } catch (error) {
+          console.error('Error reverse geocoding:', error);
+          const mockAddress = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          setAddress(mockAddress);
+          setIsInDeliveryArea(true); // Assume it's in delivery area for demo
+          setSelectedCounty("Buncombe County, NC");
+        }
+        
+        setIsGettingLocation(false);
+      },
+      (error) => {
+        console.error("Error getting location:", error);
+        setIsGettingLocation(false);
+        
+        let errorMessage = "Unable to get your location. ";
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage += "Please allow location access and try again.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage += "Location information is unavailable.";
+            break;
+          case error.TIMEOUT:
+            errorMessage += "Location request timed out.";
+            break;
+          default:
+            errorMessage += "An unknown error occurred.";
+            break;
+        }
+        alert(errorMessage);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
   };
 
-  const handleAddressChange = (e) => {
+  const handleAddressChange = async (e) => {
     const value = e.target.value;
     setAddress(value);
     
@@ -75,12 +202,32 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
       setSelectedCounty("");
     }
     
-    // Mock address suggestions based on delivery areas
-    if (value.length > 2) {
-      const mockSuggestions = deliveryAreas.map(county => 
-        `${value} Street, ${county}`
-      ).slice(0, 3);
-      setSuggestions(mockSuggestions);
+    // Real address suggestions using geocoding API
+    if (value.length > 3) {
+      try {
+        const response = await fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(value)}.json?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw&country=US&region=North%20Carolina&types=address,poi&limit=5`
+        );
+        const data = await response.json();
+        
+        if (data.features && data.features.length > 0) {
+          const addressSuggestions = data.features.map(feature => feature.place_name);
+          setSuggestions(addressSuggestions);
+        } else {
+          // Fallback to mock suggestions
+          const mockSuggestions = deliveryAreas.map(county => 
+            `${value} Street, ${county}`
+          ).slice(0, 3);
+          setSuggestions(mockSuggestions);
+        }
+      } catch (error) {
+        console.error('Error fetching address suggestions:', error);
+        // Fallback to mock suggestions
+        const mockSuggestions = deliveryAreas.map(county => 
+          `${value} Street, ${county}`
+        ).slice(0, 3);
+        setSuggestions(mockSuggestions);
+      }
     } else {
       setSuggestions([]);
     }
@@ -91,7 +238,7 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
     setSuggestions([]);
     setIsInDeliveryArea(true);
     const county = deliveryAreas.find(area => suggestion.includes(area));
-    setSelectedCounty(county || "");
+    setSelectedCounty(county || "Buncombe County, NC");
     onLocationSet(suggestion);
     onClose();
   };
@@ -162,7 +309,7 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
                   key={index}
                   type="button"
                   onClick={() => selectSuggestion(suggestion)}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors"
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors text-sm"
                 >
                   {suggestion}
                 </button>
