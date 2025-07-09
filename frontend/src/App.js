@@ -288,14 +288,65 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
 };
 
 const ProductCard = ({ product, addToCart }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const nextImage = () => {
+    if (product.images && product.images.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (product.images && product.images.length > 1) {
+      setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-40 bg-gray-200 relative overflow-hidden">
+      <div className="h-48 bg-gray-200 relative overflow-hidden">
         <img 
-          src={product.image} 
+          src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
           className="w-full h-full object-cover"
         />
+        
+        {/* Image navigation */}
+        {product.images && product.images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-75"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1 rounded-full hover:bg-opacity-75"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+            
+            {/* Image indicators */}
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+              {product.images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full ${
+                    index === currentImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        
         <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">
           {product.thc}% THC{product.thc >= 35 ? 'A' : ''}
         </div>
@@ -305,20 +356,79 @@ const ProductCard = ({ product, addToCart }) => {
           </div>
         )}
       </div>
+      
       <div className="p-4">
-        <h3 className="text-lg font-bold mb-1">{product.name}</h3>
+        <h3 className="text-xl font-bold mb-2">{product.name}</h3>
         <p className="text-sm text-gray-600 mb-2">{product.type}</p>
-        {product.genetics && (
-          <p className="text-xs text-gray-500 mb-1">Genetics: {product.genetics}</p>
+        
+        {/* Basic info always visible */}
+        <div className="flex items-center mb-2">
+          <span className="text-yellow-500 text-sm mr-1">★</span>
+          <span className="text-sm text-gray-600">{product.rating} ({product.reviews} reviews)</span>
+        </div>
+        
+        <p className="text-sm text-gray-500 mb-3 line-clamp-2">{product.description}</p>
+        
+        {/* Expandable details */}
+        {isExpanded && (
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <div className="space-y-2 text-sm">
+              {product.genetics && (
+                <div className="flex justify-between">
+                  <span className="font-semibold text-gray-700">Genetics:</span>
+                  <span className="text-gray-600">{product.genetics}</span>
+                </div>
+              )}
+              {product.grower && (
+                <div className="flex justify-between">
+                  <span className="font-semibold text-gray-700">Grower:</span>
+                  <span className="text-gray-600">{product.grower}</span>
+                </div>
+              )}
+              {product.aroma && (
+                <div className="flex justify-between">
+                  <span className="font-semibold text-gray-700">Aroma:</span>
+                  <span className="text-gray-600">{product.aroma}</span>
+                </div>
+              )}
+              {product.flavor && (
+                <div className="flex justify-between">
+                  <span className="font-semibold text-gray-700">Flavor:</span>
+                  <span className="text-gray-600">{product.flavor}</span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">THC Content:</span>
+                <span className="text-gray-600">{product.thc}%{product.thc >= 35 ? ' THCA' : ''}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Type:</span>
+                <span className="text-gray-600">{product.type}</span>
+              </div>
+              <div className="mt-3 p-2 bg-green-50 rounded">
+                <p className="text-xs text-green-800">
+                  <strong>Effects:</strong> {product.description}
+                </p>
+              </div>
+            </div>
+          </div>
         )}
-        <p className="text-xs text-gray-500 mb-3 line-clamp-2">{product.description}</p>
+        
+        {/* Toggle button */}
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full text-center text-green-600 text-sm font-semibold mb-3 hover:text-green-700"
+        >
+          {isExpanded ? 'Show Less ▲' : 'Show More Details ▼'}
+        </button>
+        
         <div className="flex justify-between items-center">
-          <span className="text-xl font-bold text-green-600">${product.price}</span>
+          <span className="text-2xl font-bold text-green-600">${product.price}</span>
           <button 
             onClick={() => addToCart(product)}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold"
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold"
           >
-            Add +
+            Add to Cart
           </button>
         </div>
       </div>
