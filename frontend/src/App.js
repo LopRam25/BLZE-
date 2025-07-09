@@ -346,7 +346,10 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
 const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, deliveryLocation }) => {
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
   const [isProcessingOrder, setIsProcessingOrder] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("card");
 
   if (!isOpen) return null;
 
@@ -355,19 +358,23 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
   const tax = subtotal * 0.08;
   const total = subtotal + deliveryFee + tax;
 
-  const handleCheckout = async () => {
-    if (!customerPhone || !customerName) {
-      alert("Please enter your name and phone number");
+  const handleProceedToPayment = () => {
+    if (!customerPhone || !customerName || !customerEmail) {
+      alert("Please fill in all customer information");
       return;
     }
+    setShowPayment(true);
+  };
 
+  const handlePayment = async (method) => {
     setIsProcessingOrder(true);
 
     // Create order object
     const orderData = {
       customer: {
         name: customerName,
-        phone: customerPhone
+        phone: customerPhone,
+        email: customerEmail
       },
       items: cart,
       address: deliveryLocation,
@@ -375,6 +382,7 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
       deliveryFee: deliveryFee.toFixed(2),
       tax: tax.toFixed(2),
       total: total.toFixed(2),
+      paymentMethod: method,
       orderTime: new Date().toLocaleString()
     };
 
@@ -391,6 +399,7 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
       if (response.ok) {
         alert("Order placed successfully! You'll receive a confirmation shortly.");
         onClose();
+        setShowPayment(false);
         // Clear cart after successful order
         cart.forEach(item => removeFromCart(item.id));
       } else {
@@ -403,6 +412,78 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
 
     setIsProcessingOrder(false);
   };
+
+  const handleStripePayment = async () => {
+    // In a real app, you'd integrate with Stripe Elements
+    // For now, we'll simulate a successful payment
+    setTimeout(() => {
+      handlePayment("Credit Card");
+    }, 2000);
+  };
+
+  if (showPayment) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl max-w-md w-full p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Payment</h2>
+            <button onClick={() => setShowPayment(false)} className="text-gray-500 hover:text-gray-700">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+            <p className="text-sm font-semibold">Order Total: ${total.toFixed(2)}</p>
+            <p className="text-xs text-gray-600">Delivering to: {deliveryLocation}</p>
+          </div>
+          
+          <div className="space-y-3">
+            <button
+              onClick={handleStripePayment}
+              disabled={isProcessingOrder}
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2 ${
+                isProcessingOrder
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              {isProcessingOrder ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                  </svg>
+                  <span>Pay with Card</span>
+                </>
+              )}
+            </button>
+            
+            <button
+              onClick={() => handlePayment("Cash")}
+              disabled={isProcessingOrder}
+              className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2 ${
+                isProcessingOrder
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
+              }`}
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+              </svg>
+              <span>Pay with Cash</span>
+            </button>
+          </div>
+          
+          <div className="mt-4 text-xs text-gray-500 text-center">
+            <p>🔒 Your payment information is secure and encrypted</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -468,6 +549,13 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
                 <input
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="Your Email Address"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <input
                   type="tel"
                   value={customerPhone}
                   onChange={(e) => setCustomerPhone(e.target.value)}
@@ -496,15 +584,15 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
               </div>
               
               <button 
-                onClick={handleCheckout}
-                disabled={isProcessingOrder || !customerPhone || !customerName}
+                onClick={handleProceedToPayment}
+                disabled={!customerPhone || !customerName || !customerEmail}
                 className={`w-full py-3 rounded-lg font-semibold mt-4 transition-colors ${
-                  isProcessingOrder || !customerPhone || !customerName
+                  !customerPhone || !customerName || !customerEmail
                     ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
                     : 'bg-green-600 text-white hover:bg-green-700'
                 }`}
               >
-                {isProcessingOrder ? 'Processing...' : `Place Order • $${total.toFixed(2)}`}
+                Proceed to Payment • ${total.toFixed(2)}
               </button>
             </>
           )}
