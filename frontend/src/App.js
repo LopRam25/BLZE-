@@ -197,12 +197,65 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
 };
 
 const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, deliveryLocation }) => {
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [isProcessingOrder, setIsProcessingOrder] = useState(false);
+
   if (!isOpen) return null;
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const deliveryFee = 5.99;
   const tax = subtotal * 0.08;
   const total = subtotal + deliveryFee + tax;
+
+  const handleCheckout = async () => {
+    if (!customerPhone || !customerName) {
+      alert("Please enter your name and phone number");
+      return;
+    }
+
+    setIsProcessingOrder(true);
+
+    // Create order object
+    const orderData = {
+      customer: {
+        name: customerName,
+        phone: customerPhone
+      },
+      items: cart,
+      address: deliveryLocation,
+      subtotal: subtotal.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      tax: tax.toFixed(2),
+      total: total.toFixed(2),
+      orderTime: new Date().toLocaleString()
+    };
+
+    try {
+      // Send order to backend
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (response.ok) {
+        alert("Order placed successfully! You'll receive a confirmation shortly.");
+        onClose();
+        // Clear cart after successful order
+        cart.forEach(item => removeFromCart(item.id));
+      } else {
+        alert("Error placing order. Please try again.");
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert("Error placing order. Please try again.");
+    }
+
+    setIsProcessingOrder(false);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -257,6 +310,25 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
                 ))}
               </div>
               
+              {/* Customer Information */}
+              <div className="mb-4 space-y-3">
+                <h3 className="font-semibold text-gray-700">Customer Information</h3>
+                <input
+                  type="text"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Your Full Name"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <input
+                  type="tel"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder="Your Phone Number"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
@@ -276,8 +348,16 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
                 </div>
               </div>
               
-              <button className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors mt-4">
-                Place Order • ${total.toFixed(2)}
+              <button 
+                onClick={handleCheckout}
+                disabled={isProcessingOrder || !customerPhone || !customerName}
+                className={`w-full py-3 rounded-lg font-semibold mt-4 transition-colors ${
+                  isProcessingOrder || !customerPhone || !customerName
+                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+              >
+                {isProcessingOrder ? 'Processing...' : `Place Order • $${total.toFixed(2)}`}
               </button>
             </>
           )}
