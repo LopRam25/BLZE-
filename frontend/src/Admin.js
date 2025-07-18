@@ -99,6 +99,16 @@ const ProductForm = ({ product, onSave, onCancel }) => {
     }));
   };
 
+  const handlePricingChange = (weight, value) => {
+    setFormData(prev => ({
+      ...prev,
+      pricing: {
+        ...prev.pricing,
+        [weight]: parseFloat(value) || 0
+      }
+    }));
+  };
+
   const handleFileUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
