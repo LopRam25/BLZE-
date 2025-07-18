@@ -901,8 +901,10 @@ const MainApp = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="text-2xl font-bold text-white">BLZE</div>
-              <div className="text-sm text-gray-300">Cannabis Menu</div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">BLZE</div>
+                <div className="text-xs text-gray-300">Cannabis Menu</div>
+              </div>
             </div>
             
             <div className="flex items-center space-x-4">

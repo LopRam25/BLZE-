@@ -5,6 +5,7 @@
     "type": "Indica-Dominant Hybrid",
     "category": "hybrid",
     "thc": 35.97,
+    "price": 10.0,
     "pricing": {
       "1g": 10,
       "3.5g": 30,
@@ -12,7 +13,6 @@
       "14g": 110,
       "28g": 200
     },
-    "price": 10,
     "quantity": 12,
     "description": "Premium THCA flower with sweet creamy notes",
     "genetics": "Devil Driver x Oreoz",
@@ -21,7 +21,9 @@
     "flavor": "Smooth, dessert-like, rich",
     "isPremium": true,
     "images": [
-      "https://879f0e09-df79-4d99-81f5-9944f31ad6f8.preview.emergentagent.com/api/uploads/900a12e4-5e6f-4dc1-8423-b3773477fa60.jpeg"
+      "https://879f0e09-df79-4d99-81f5-9944f31ad6f8.preview.emergentagent.com/api/uploads/baf2ac16-6cba-449a-8859-a2ff53eebc3b.jpeg",
+      "https://879f0e09-df79-4d99-81f5-9944f31ad6f8.preview.emergentagent.com/api/uploads/4ee1a943-ee67-41e3-8406-0e9326853e02.jpeg",
+      "https://879f0e09-df79-4d99-81f5-9944f31ad6f8.preview.emergentagent.com/api/uploads/c1cb663f-4f31-441f-a00e-9947dacc269b.jpeg"
     ],
     "coa": "",
     "rating": 0.0,
