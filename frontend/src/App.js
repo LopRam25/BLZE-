@@ -808,7 +808,9 @@ const ProductCard = ({ product }) => {
 };
 
 const MainApp = () => {
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [deliveryLocation, setDeliveryLocation] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState([
