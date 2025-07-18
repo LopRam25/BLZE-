@@ -216,7 +216,11 @@ async def upload_file(file: UploadFile = File(...), admin: bool = Depends(verify
     # Generate unique filename
     file_extension = file.filename.split('.')[-1].lower()
     unique_filename = f"{uuid.uuid4()}.{file_extension}"
-    file_path = f"uploads/{unique_filename}"
+    
+    # Use absolute path
+    upload_dir = os.path.join(os.getcwd(), "uploads")
+    os.makedirs(upload_dir, exist_ok=True)
+    file_path = os.path.join(upload_dir, unique_filename)
     
     try:
         # Save file
