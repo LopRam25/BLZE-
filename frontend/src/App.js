@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import "./App.css";
 import Admin from "./Admin";
+import Navigation from "./components/Navigation";
+import AboutPage from "./components/AboutPage";
+import BlogPage, { BlogPost } from "./components/BlogPage";
+import ContactPage from "./components/ContactPage";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
