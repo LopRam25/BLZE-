@@ -15,11 +15,7 @@
     "isPremium": true,
     "rating": 4.9,
     "reviews": 42,
-    "images": [
-      "https://i.ibb.co/mCmXk6d9/IMG-20240625-WA0001.jpg",
-      "https://i.ibb.co/DHpSz8sS/IMG-20240625-WA0002.jpg",
-      "https://i.ibb.co/C3mJX0Zz/IMG-20240625-WA0003.jpg"
-    ],
+    "images": [],
     "coa": ""
   }
 ]
