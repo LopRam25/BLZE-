@@ -1035,14 +1035,8 @@ const MainApp = () => {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
-          <h3 className="text-lg font-bold mb-4">BLZE Cannabis Delivery</h3>
-          <div className="flex justify-center space-x-8 mb-4">
-            <a href="tel:8285823092" className="text-white hover:text-gray-300 font-semibold">
-              📱 (828) 582-3092
-            </a>
-            <a href="tel:8288441805" className="text-white hover:text-green-400 font-semibold">
-              📱 (828) 844-1805
-            </a>
+          <div className="text-center">
+            <h3 className="text-lg font-semibold mb-2">BLZE Cannabis Delivery</h3>
           </div>
           <p className="text-gray-400 text-sm">Serving Buncombe, Henderson, Polk, and Transylvania Counties</p>
           <p className="text-gray-400 text-sm mt-2">Must be 21+ to order. Call for availability and pricing.</p>
