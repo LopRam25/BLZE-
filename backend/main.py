@@ -32,6 +32,8 @@ ADMIN_PASSWORD = "blze2024"
 PRODUCTS_FILE = "products.json"
 ORDERS_FILE = "orders.json"
 SETTINGS_FILE = "settings.json"
+PAGES_FILE = "backend/pages.json"
+BLOG_FILE = "backend/blog.json"
 
 # Ensure data files exist
 def ensure_data_files():
