@@ -782,7 +782,7 @@ const ProductCard = ({ product }) => {
   );
 };
 
-function App() {
+const MainApp = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [deliveryLocation, setDeliveryLocation] = useState("");
@@ -1040,6 +1040,17 @@ function App() {
         onLocationSet={setDeliveryLocation}
       />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/admin/*" element={<Admin />} />
+      </Routes>
+    </Router>
   );
 }
 
