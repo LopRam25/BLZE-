@@ -116,6 +116,9 @@ backend:
       - working: true
         agent: "main"
         comment: "Upload API endpoint successfully receiving and saving files to /app/uploads/ directory"
+      - working: true
+        agent: "testing"
+        comment: "CONFIRMED: Image upload API working perfectly. POST /api/admin/upload accepts JPEG files, saves to /app/uploads/ with unique UUID filenames, returns proper /uploads/ URLs. Tested with real image upload and verified file creation."
 
   - task: "Product Update API"
     implemented: true
@@ -128,6 +131,9 @@ backend:
       - working: true
         agent: "main"
         comment: "PUT /api/admin/products/{id} endpoint successfully processes requests"
+      - working: true
+        agent: "testing"
+        comment: "CONFIRMED: Product update API working correctly. PUT /api/admin/products/dante-inferno-001 accepts product updates including images array, returns updated product data. Authentication with Bearer admin_token works properly."
 
   - task: "Static File Serving"
     implemented: true
