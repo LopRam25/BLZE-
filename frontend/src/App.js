@@ -997,11 +997,8 @@ const MainApp = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="text-center">
             <h2 className="text-lg font-bold mb-2">📞 Call to Order</h2>
-            <div className="flex justify-center space-x-6">
-              <a href="tel:8285823092" className="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-semibold">
-                Call Now
-              </a>
-              <a href="tel:8288441805" className="bg-white text-black px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors font-semibold">
+            <div className="flex justify-center">
+              <a href="tel:8285823092" className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-semibold text-lg">
                 Call Now
               </a>
             </div>
