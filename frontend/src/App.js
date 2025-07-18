@@ -1020,12 +1020,6 @@ const MainApp = () => {
         </div>
       </footer>
 
-      {/* Location Modal */}
-      <LocationModal 
-        isOpen={isLocationModalOpen}
-        onClose={() => setIsLocationModalOpen(false)}
-        onLocationSet={setDeliveryLocation}
-      />
     </div>
   );
 };
