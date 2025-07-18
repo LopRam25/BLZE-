@@ -347,6 +347,8 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
 const ProductCard = ({ product }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   const handleCallNow = () => {
     window.location.href = "tel:8285823092";
@@ -361,6 +363,30 @@ const ProductCard = ({ product }) => {
   const prevImage = () => {
     if (product.images && product.images.length > 1) {
       setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
+  };
+
+  // Handle touch events for swipe
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && product.images && product.images.length > 1) {
+      nextImage();
+    }
+    if (isRightSwipe && product.images && product.images.length > 1) {
+      prevImage();
     }
   };
 
