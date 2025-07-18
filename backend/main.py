@@ -197,8 +197,20 @@ async def update_product(product_id: str, product: Product, admin: bool = Depend
     
     product_dict = product.dict()
     product_dict["id"] = product_id
+    
+    # Debug logging
+    print(f"Updating product {product_id}")
+    print(f"Received product data: {product_dict}")
+    print(f"Images in received data: {product_dict.get('images', [])}")
+    
     products[index] = product_dict
     save_products(products)
+    
+    # Verify the save
+    saved_products = load_products()
+    saved_product = next((p for p in saved_products if p["id"] == product_id), None)
+    print(f"After save - images in database: {saved_product.get('images', []) if saved_product else 'Product not found'}")
+    
     return product_dict
 
 @app.delete("/api/admin/products/{product_id}")
