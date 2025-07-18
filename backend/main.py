@@ -128,12 +128,34 @@ def load_products():
     try:
         with open(PRODUCTS_FILE, 'r') as f:
             return json.load(f)
-    except:
+    except FileNotFoundError:
         return []
 
 def save_products(products):
     with open(PRODUCTS_FILE, 'w') as f:
         json.dump(products, f, indent=2)
+
+def load_pages():
+    try:
+        with open(PAGES_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"about": {}, "contact": {}}
+
+def save_pages(pages):
+    with open(PAGES_FILE, 'w') as f:
+        json.dump(pages, f, indent=2)
+
+def load_blog_posts():
+    try:
+        with open(BLOG_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_blog_posts(posts):
+    with open(BLOG_FILE, 'w') as f:
+        json.dump(posts, f, indent=2)
 
 def load_orders():
     try:
