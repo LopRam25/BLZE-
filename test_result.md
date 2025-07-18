@@ -131,15 +131,18 @@ backend:
 
   - task: "Static File Serving"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/main.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
         agent: "main"
         comment: "Images uploaded to /app/uploads/ but not being served properly. Backend serves from 'uploads' directory but files are saved to '/app/uploads/'"
+      - working: true
+        agent: "testing"
+        comment: "RESOLVED: Static file serving is working correctly. Backend runs from /app directory, so 'uploads' directory resolves to /app/uploads/. Files are uploaded to /app/uploads/ and served correctly at /uploads/ URLs. Tested with actual image upload and verified 200 response with proper content-type."
 
 frontend:
   - task: "Premium Cannabis Landing Page"
