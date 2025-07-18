@@ -749,8 +749,8 @@ const ProductCard = ({ product }) => {
                   </button>
                 </div>
               )}
-              <div className="mt-3 p-2 bg-green-50 rounded">
-                <p className="text-xs text-green-800">
+              <div className="mt-3 p-2 bg-gray-50 rounded">
+                <p className="text-xs text-black">
                   <strong>Effects:</strong> {product.description}
                 </p>
               </div>
