@@ -183,7 +183,12 @@ const ProductForm = ({ product, onSave, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form data being submitted:", formData);
+    
+    // Create a fresh copy of form data to ensure latest state
+    const currentFormData = { ...formData };
+    
+    console.log("Form data being submitted:", currentFormData);
+    console.log("Images in form data:", currentFormData.images);
     
     const token = localStorage.getItem("admin_token");
     
@@ -196,7 +201,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       
       console.log("Sending request to:", url);
       console.log("Method:", method);
-      console.log("Data:", JSON.stringify(formData, null, 2));
+      console.log("Data:", JSON.stringify(currentFormData, null, 2));
       
       const response = await fetch(url, {
         method,
@@ -204,7 +209,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(currentFormData)
       });
       
       if (response.ok) {
