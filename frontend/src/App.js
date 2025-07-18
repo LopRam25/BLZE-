@@ -522,7 +522,7 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
                     <div className="flex-1">
                       <h3 className="font-semibold">{item.name}</h3>
                       <p className="text-sm text-gray-600">{item.type} • {item.thc}% THC</p>
-                      <p className="text-sm font-semibold text-green-600">${item.price}</p>
+                      <p className="text-sm font-semibold text-black">${item.price}</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <button 
