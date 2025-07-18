@@ -383,15 +383,35 @@ const ProductForm = ({ product, onSave, onCancel }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                COA (Certificate of Analysis) URL
+                COA (Certificate of Analysis) Image
               </label>
               <input
-                type="url"
-                name="coa"
-                value={formData.coa}
-                onChange={handleChange}
+                type="file"
+                accept="image/*"
+                onChange={handleCOAUpload}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
+              {uploadingCOA && <p className="text-sm text-gray-500 mt-1">Uploading COA...</p>}
+              
+              {formData.coa && (
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 mb-2">Current COA:</p>
+                  <div className="relative inline-block">
+                    <img
+                      src={formData.coa}
+                      alt="COA Certificate"
+                      className="w-32 h-32 object-cover rounded-lg border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({...prev, coa: ""}))}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex items-center">
