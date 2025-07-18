@@ -623,7 +623,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-gray-700">Total Products</h3>
-                <p className="text-3xl font-bold text-green-600">{stats.total_products || 0}</p>
+                <p className="text-3xl font-bold text-black">{stats.total_products || 0}</p>
               </div>
               <div className="bg-green-100 p-3 rounded-full">
                 <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
