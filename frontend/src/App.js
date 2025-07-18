@@ -253,9 +253,9 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
       <div className="bg-white rounded-xl max-w-md w-full p-6">
         <h2 className="text-2xl font-bold mb-4">Enter Your Location</h2>
         
-        <div className="mb-4 p-3 bg-green-50 rounded-lg">
-          <p className="text-sm text-green-800 font-semibold">🚚 We deliver to:</p>
-          <ul className="text-xs text-green-700 mt-1">
+        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+          <p className="text-sm text-black font-semibold">🚚 We deliver to:</p>
+          <ul className="text-xs text-gray-700 mt-1">
             {deliveryAreas.map((area, index) => (
               <li key={index}>• {area}</li>
             ))}
