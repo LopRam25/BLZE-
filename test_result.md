@@ -210,13 +210,14 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Premium Cannabis Landing Page"
-    - "E-commerce Cart Functionality"
-    - "Responsive Design & Premium Styling"
-  stuck_tasks: []
+    - "Static File Serving"
+    - "Image Upload Form"
+  stuck_tasks:
+    - "Static File Serving"
+    - "Image Upload Form"
   test_all: false
-  test_priority: "high_first"
+  test_priority: "stuck_first"
 
 agent_communication:
   - agent: "main"
-    message: "Successfully created premium cannabis e-commerce landing page for BLZE brand. Implemented hero section with cannabis background, product showcase with Jack Frost/Blue Dream/Purple Haze strains, about section, quality assurance section, delivery information, and functional shopping cart. All sections are responsive and feature premium design elements matching the brand's sophisticated packaging."
+    message: "Working on image upload issue. Files are being uploaded to /app/uploads/ but not being served correctly. Backend serves from 'uploads' directory but files are saved to '/app/uploads/'. Also, frontend form may have state timing issues preventing images from being saved to products.json database."
