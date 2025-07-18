@@ -302,8 +302,8 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
           )}
           
           {isInDeliveryArea === true && selectedCounty && (
-            <div className="mb-3 p-2 bg-green-50 rounded-lg">
-              <p className="text-sm text-green-800">✅ Great! We deliver to {selectedCounty}</p>
+            <div className="mb-3 p-2 bg-gray-50 rounded-lg">
+              <p className="text-sm text-black">✅ Great! We deliver to {selectedCounty}</p>
             </div>
           )}
           
