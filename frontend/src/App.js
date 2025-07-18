@@ -619,7 +619,7 @@ const HomePage = () => {
           <>
             <div className="text-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Our Cannabis Menu
+                Premium Cannabis Menu
               </h1>
               <p className="text-gray-600">
                 {sortedProducts.length} strain{sortedProducts.length !== 1 ? 's' : ''} available
