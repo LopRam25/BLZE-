@@ -37,7 +37,31 @@ SETTINGS_FILE = "settings.json"
 def ensure_data_files():
     if not os.path.exists(PRODUCTS_FILE):
         with open(PRODUCTS_FILE, 'w') as f:
-            json.dump([], f)
+            json.dump([
+                {
+                    "id": "dante-inferno-001",
+                    "name": "Dante's Inferno",
+                    "type": "Indica-Dominant Hybrid",
+                    "category": "hybrid",
+                    "thc": 35.97,
+                    "price": 85,
+                    "quantity": 12,
+                    "description": "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down",
+                    "genetics": "Devil Driver x Oreoz",
+                    "grower": "Discount Pharms",
+                    "aroma": "Sweet with creamy notes",
+                    "flavor": "Smooth, dessert-like, rich",
+                    "isPremium": True,
+                    "rating": 4.9,
+                    "reviews": 42,
+                    "images": [
+                        "https://i.ibb.co/mCmXk6d9/image1.jpg",
+                        "https://i.ibb.co/DHpSz8sS/image2.jpg", 
+                        "https://i.ibb.co/C3mJX0Zz/image3.jpg"
+                    ],
+                    "coa": ""
+                }
+            ], f)
     
     if not os.path.exists(ORDERS_FILE):
         with open(ORDERS_FILE, 'w') as f:
