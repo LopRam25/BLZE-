@@ -957,7 +957,7 @@ const MainApp = () => {
 
       {/* Delivery Info */}
       {deliveryLocation && (
-        <div className="bg-green-50 border-b">
+        <div className="bg-gray-50 border-b">
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
