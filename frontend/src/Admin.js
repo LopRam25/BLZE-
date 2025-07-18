@@ -737,6 +737,26 @@ const AdminDashboard = () => {
               >
                 Orders
               </button>
+              <button
+                onClick={() => setActiveTab("pages")}
+                className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors ${
+                  activeTab === "pages"
+                    ? "border-black text-black"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                Pages
+              </button>
+              <button
+                onClick={() => setActiveTab("blog")}
+                className={`py-4 px-1 border-b-2 font-semibold text-sm transition-colors ${
+                  activeTab === "blog"
+                    ? "border-black text-black"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                }`}
+              >
+                Blog
+              </button>
             </nav>
           </div>
 
