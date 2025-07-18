@@ -628,12 +628,15 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-60 bg-gray-100 relative overflow-hidden rounded-t-xl">
+    <div className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl hover:scale-105 transition-all duration-300 transform hover:-translate-y-2 border-2 border-gray-100 relative">
+      {/* Holographic effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-blue-50/20 to-purple-50/20 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+      
+      <div className="h-60 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden rounded-t-xl">
         <img 
           src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
-          className="w-full h-full object-contain bg-white"
+          className="w-full h-full object-contain bg-white p-2"
         />
         
         {/* Image navigation */}
