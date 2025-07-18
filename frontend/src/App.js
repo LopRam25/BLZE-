@@ -610,11 +610,11 @@ const HomePage = () => {
       <Navigation />
       
       {/* Search and Filter Section */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-4">
         {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-6">
+        <div className="max-w-xl mx-auto mb-4">
           <div className="relative">
-            <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
             <input
@@ -622,57 +622,57 @@ const HomePage = () => {
               placeholder="Search for premium cannabis flower..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-gray-300 bg-white shadow-sm"
+              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 bg-white shadow-sm"
             />
           </div>
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex justify-center mb-8">
-          <div className="flex space-x-4">
+        <div className="flex justify-center mb-4">
+          <div className="flex space-x-2">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+              className={`flex items-center space-x-1 px-4 py-2 rounded-full text-sm transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-black text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               <span>🌿</span>
-              <span className="font-medium">All</span>
+              <span>All</span>
             </button>
             <button
               onClick={() => setSelectedCategory('sativa')}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+              className={`flex items-center space-x-1 px-4 py-2 rounded-full text-sm transition-all ${
                 selectedCategory === 'sativa'
                   ? 'bg-black text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               <span>☀️</span>
-              <span className="font-medium">Sativa</span>
+              <span>Sativa</span>
             </button>
             <button
               onClick={() => setSelectedCategory('indica')}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+              className={`flex items-center space-x-1 px-4 py-2 rounded-full text-sm transition-all ${
                 selectedCategory === 'indica'
                   ? 'bg-black text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               <span>🌙</span>
-              <span className="font-medium">Indica</span>
+              <span>Indica</span>
             </button>
             <button
               onClick={() => setSelectedCategory('hybrid')}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full transition-all ${
+              className={`flex items-center space-x-1 px-4 py-2 rounded-full text-sm transition-all ${
                 selectedCategory === 'hybrid'
                   ? 'bg-black text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               <span>⚡</span>
-              <span className="font-medium">Hybrid</span>
+              <span>Hybrid</span>
             </button>
           </div>
         </div>
@@ -695,91 +695,9 @@ const HomePage = () => {
               </p>
             </div>
 
-            <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {sortedProducts.map((product) => (
-                <div key={product.id} className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                  {/* Large Product Image with Navigation */}
-                  <div className="relative h-96 bg-gray-100 overflow-hidden">
-                    <img 
-                      src={product.images ? product.images[0] : product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                    
-                    {/* Navigation Arrows */}
-                    <button className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-                      </svg>
-                    </button>
-                    <button className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                      </svg>
-                    </button>
-
-                    {/* Badges */}
-                    {product.isPremium && (
-                      <div className="absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-sm font-bold px-4 py-2 rounded-full">
-                        PREMIUM
-                      </div>
-                    )}
-                    <div className="absolute top-4 right-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-full">
-                      {product.thc}% THCA
-                    </div>
-                    <div className="absolute bottom-4 right-4 bg-blue-500 text-white text-sm font-bold px-4 py-2 rounded-full">
-                      {product.quantity} in stock
-                    </div>
-                    
-                    {/* Navigation Dots */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      <div className="w-3 h-3 bg-white rounded-full opacity-70"></div>
-                      <div className="w-3 h-3 bg-white/30 rounded-full"></div>
-                      <div className="w-3 h-3 bg-white/30 rounded-full"></div>
-                    </div>
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="p-8 text-center">
-                    <h2 className="text-4xl font-bold text-gray-900 mb-2">{product.name}</h2>
-                    <p className="text-xl text-gray-600 mb-4">{product.type}</p>
-                    
-                    <div className="flex items-center justify-center mb-6">
-                      <svg className="w-6 h-6 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                      </svg>
-                      <span className="text-xl text-gray-600">{product.rating} ({product.reviews} reviews)</span>
-                    </div>
-
-                    {/* Pricing */}
-                    <div className="mb-8">
-                      <div className="flex justify-center flex-wrap gap-3">
-                        {product.pricing ? (
-                          Object.entries(product.pricing).map(([weight, price]) => (
-                            <span key={weight} className="bg-gray-100 px-4 py-2 rounded-full text-lg font-semibold">
-                              {weight}: <span className="text-black">${price}</span>
-                            </span>
-                          ))
-                        ) : (
-                          <span className="bg-gray-100 px-4 py-2 rounded-full text-lg font-semibold">
-                            ${product.price}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Call Now Button */}
-                    <button 
-                      onClick={() => window.open('tel:8285823092')}
-                      className="bg-blue-500 text-white px-8 py-4 rounded-lg hover:bg-blue-600 transition-colors font-semibold text-lg flex items-center space-x-2 mx-auto"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                      </svg>
-                      <span>Call Now</span>
-                    </button>
-                  </div>
-                </div>
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
 
