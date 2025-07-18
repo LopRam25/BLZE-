@@ -778,13 +778,37 @@ const ProductCard = ({ product }) => {
 };
 
 function App() {
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [deliveryLocation, setDeliveryLocation] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      name: "Dante's Inferno",
+      type: "Indica-Dominant Hybrid",
+      category: "hybrid",
+      thc: 35.97,
+      price: 85,
+      quantity: 12,
+      description: "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down",
+      image: "https://i.ibb.co/mCmXk6d9/image1.jpg",
+      rating: 4.9,
+      reviews: 42,
+      isPremium: true,
+      genetics: "Devil Driver x Oreoz",
+      grower: "Discount Pharms",
+      aroma: "Sweet with creamy notes",
+      flavor: "Smooth, dessert-like, rich",
+      coa: "https://example.com/coa-dantes-inferno.pdf",
+      images: [
+        "https://i.ibb.co/mCmXk6d9/image1.jpg",
+        "https://i.ibb.co/DHpSz8sS/image2.jpg", 
+        "https://i.ibb.co/C3mJX0Zz/image3.jpg"
+      ]
+    }
+  ]);
 
   // Check age verification on component mount
   useEffect(() => {
@@ -801,6 +825,22 @@ function App() {
     }
   }, [isAgeVerified, deliveryLocation]);
 
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`);
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   const categories = [
     { id: "all", name: "All", icon: "🌿" },
     { id: "sativa", name: "Sativa", icon: "☀️" },
@@ -810,66 +850,12 @@ function App() {
     { id: "edibles", name: "Edibles", icon: "🍪" }
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: "Dante's Inferno",
-      type: "Indica-Dominant Hybrid",
-      category: "hybrid",
-      thc: 35.97,
-      price: 85,
-      description: "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down",
-      image: "https://i.ibb.co/mCmXk6d9/image1.jpg",
-      rating: 4.9,
-      reviews: 42,
-      isPremium: true,
-      genetics: "Devil Driver x Oreoz",
-      grower: "Discount Pharms",
-      aroma: "Sweet with creamy notes",
-      flavor: "Smooth, dessert-like, rich",
-      images: [
-        "https://i.ibb.co/mCmXk6d9/image1.jpg",
-        "https://i.ibb.co/DHpSz8sS/image2.jpg", 
-        "https://i.ibb.co/C3mJX0Zz/image3.jpg"
-      ]
-    }
-  ];
-
-  const addToCart = (product) => {
-    const existingItem = cart.find(item => item.id === product.id);
-    if (existingItem) {
-      setCart(cart.map(item => 
-        item.id === product.id 
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      ));
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-  };
-
-  const updateCart = (id, quantity) => {
-    if (quantity <= 0) {
-      removeFromCart(id);
-      return;
-    }
-    setCart(cart.map(item => 
-      item.id === id ? { ...item, quantity } : item
-    ));
-  };
-
-  const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.type.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
-
-  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Show age verification modal if not verified
   if (!isAgeVerified) {
@@ -892,7 +878,7 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="text-2xl font-bold text-green-600">BLZE</div>
-              <div className="text-sm text-gray-500">Cannabis Delivery</div>
+              <div className="text-sm text-gray-500">Cannabis Menu</div>
             </div>
             
             <div className="flex items-center space-x-4">
@@ -909,19 +895,15 @@ function App() {
                 </span>
               </button>
               
-              <button 
-                onClick={() => setIsCartOpen(true)}
-                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              <a 
+                href="tel:8285823092"
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 3H3m4 10v4a2 2 0 002 2h8a2 2 0 002-2v-4M9 17a2 2 0 11-4 0 2 2 0 014 0zM20 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                 </svg>
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                    {cartItemCount}
-                  </span>
-                )}
-              </button>
+                <span>Call Now</span>
+              </a>
             </div>
           </div>
         </div>
@@ -980,17 +962,34 @@ function App() {
                   <span className="font-semibold">Delivery to:</span> {deliveryLocation}
                 </span>
               </div>
-              <span className="text-sm text-green-600 font-semibold">30-45 min</span>
+              <span className="text-sm text-green-600 font-semibold">Call to Order</span>
             </div>
           </div>
         </div>
       )}
 
+      {/* Contact Banner */}
+      <div className="bg-green-600 text-white">
+        <div className="container mx-auto px-4 py-4">
+          <div className="text-center">
+            <h2 className="text-lg font-bold mb-2">📞 Call to Order</h2>
+            <div className="flex justify-center space-x-6">
+              <a href="tel:8285823092" className="text-white hover:text-green-200 font-semibold">
+                📱 (828) 582-3092
+              </a>
+              <a href="tel:8288441805" className="text-white hover:text-green-200 font-semibold">
+                📱 (828) 844-1805
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Products Grid */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
-            {selectedCategory === "all" ? "Premium Products" : categories.find(c => c.id === selectedCategory)?.name}
+            {selectedCategory === "all" ? "Premium Cannabis Menu" : categories.find(c => c.id === selectedCategory)?.name}
           </h1>
           <span className="text-sm text-gray-500">
             {filteredProducts.length} products
@@ -999,7 +998,7 @@ function App() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map(product => (
-            <ProductCard key={product.id} product={product} addToCart={addToCart} />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
         
@@ -1012,35 +1011,28 @@ function App() {
         )}
       </div>
 
-      {/* Fixed Cart Button */}
-      {cartItemCount > 0 && (
-        <div className="fixed bottom-4 right-4 z-30">
-          <button 
-            onClick={() => setIsCartOpen(true)}
-            className="bg-green-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8L6 3H3m4 10v4a2 2 0 002 2h8a2 2 0 002-2v-4M9 17a2 2 0 11-4 0 2 2 0 014 0zM20 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-            <span>View Cart ({cartItemCount})</span>
-          </button>
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-lg font-bold mb-4">BLZE Cannabis Delivery</h3>
+          <div className="flex justify-center space-x-8 mb-4">
+            <a href="tel:8285823092" className="text-white hover:text-green-400 font-semibold">
+              📱 (828) 582-3092
+            </a>
+            <a href="tel:8288441805" className="text-white hover:text-green-400 font-semibold">
+              📱 (828) 844-1805
+            </a>
+          </div>
+          <p className="text-gray-400 text-sm">Serving Buncombe, Henderson, Polk, and Transylvania Counties</p>
+          <p className="text-gray-400 text-sm mt-2">Must be 21+ to order. Call for availability and pricing.</p>
         </div>
-      )}
+      </footer>
 
-      {/* Modals */}
+      {/* Location Modal */}
       <LocationModal 
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
         onLocationSet={setDeliveryLocation}
-      />
-      
-      <CartModal 
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cart={cart}
-        updateCart={updateCart}
-        removeFromCart={removeFromCart}
-        deliveryLocation={deliveryLocation}
       />
     </div>
   );
