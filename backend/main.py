@@ -81,8 +81,9 @@ def ensure_data_files():
 ensure_data_files()
 
 # Create uploads directory
-os.makedirs("uploads", exist_ok=True)
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+uploads_dir = "/app/uploads"
+os.makedirs(uploads_dir, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
 # Pydantic models
 class Product(BaseModel):
