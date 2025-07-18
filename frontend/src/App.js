@@ -883,7 +883,7 @@ const MainApp = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="text-2xl font-bold text-green-600">BLZE</div>
+              <div className="text-2xl font-bold text-black">BLZE</div>
               <div className="text-sm text-gray-500">Cannabis Menu</div>
             </div>
             
