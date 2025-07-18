@@ -29,9 +29,9 @@ ADMIN_USERNAME = "admin"
 ADMIN_PASSWORD = "blze2024"
 
 # Data storage (in production, use proper database)
-PRODUCTS_FILE = "products.json"
-ORDERS_FILE = "orders.json"
-SETTINGS_FILE = "settings.json"
+PRODUCTS_FILE = "backend/products.json"
+ORDERS_FILE = "backend/orders.json"
+SETTINGS_FILE = "backend/settings.json"
 
 # Ensure data files exist
 def ensure_data_files():
