@@ -766,8 +766,26 @@ const ProductCard = ({ product }) => {
           {isExpanded ? 'Show Less ▲' : 'Show More Details ▼'}
         </button>
         
-        <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold text-black">${product.price}</span>
+        <div className="mb-4">
+          <h4 className="font-semibold text-gray-700 mb-2">Pricing</h4>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {product.pricing ? (
+              Object.entries(product.pricing).map(([weight, price]) => (
+                <div key={weight} className="bg-gray-50 p-2 rounded flex justify-between">
+                  <span className="font-medium">{weight}:</span>
+                  <span className="font-bold text-black">${price}</span>
+                </div>
+              ))
+            ) : (
+              <div className="bg-gray-50 p-2 rounded flex justify-between">
+                <span className="font-medium">Price:</span>
+                <span className="font-bold text-black">${product.price}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        <div className="flex justify-center">
           <button 
             onClick={handleCallNow}
             className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors font-semibold flex items-center space-x-2"
