@@ -975,7 +975,7 @@ const MainApp = () => {
       )}
 
       {/* Contact Banner */}
-      <div className="bg-green-600 text-white">
+      <div className="bg-black text-white">
         <div className="container mx-auto px-4 py-4">
           <div className="text-center">
             <h2 className="text-lg font-bold mb-2">📞 Call to Order</h2>
