@@ -116,17 +116,25 @@ const ProductForm = ({ product, onSave, onCancel }) => {
         
         if (response.ok) {
           const result = await response.json();
-          uploadedUrls.push(`${BACKEND_URL}${result.url}`);
+          // Use the backend URL to create full image path
+          const imageUrl = `${BACKEND_URL}${result.url}`;
+          uploadedUrls.push(imageUrl);
+          console.log("Uploaded image URL:", imageUrl);
+        } else {
+          console.error("Upload failed:", await response.text());
         }
       }
       
-      setFormData(prev => ({
-        ...prev,
-        images: [...prev.images, ...uploadedUrls]
-      }));
+      if (uploadedUrls.length > 0) {
+        setFormData(prev => ({
+          ...prev,
+          images: [...prev.images, ...uploadedUrls]
+        }));
+        console.log("Updated images:", [...formData.images, ...uploadedUrls]);
+      }
     } catch (error) {
       console.error("Error uploading files:", error);
-      alert("Error uploading files");
+      alert("Error uploading files: " + error.message);
     } finally {
       setUploading(false);
     }
