@@ -598,6 +598,7 @@ const HomePage = () => {
         <Navigation />
         <AgeVerificationModal 
           isOpen={!isAgeVerified}
+          onClose={() => setIsAgeVerified(true)}
           onVerified={() => setIsAgeVerified(true)}
         />
       </div>
