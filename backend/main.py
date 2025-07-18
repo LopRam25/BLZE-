@@ -87,7 +87,6 @@ uploads_dir = "/app/uploads"
 os.makedirs(uploads_dir, exist_ok=True)
 app.mount("/api/uploads", StaticFiles(directory=uploads_dir), name="uploads")
 
-# Pydantic models
 class Product(BaseModel):
     id: Optional[str] = None
     name: str
@@ -107,6 +106,25 @@ class Product(BaseModel):
     coa: Optional[str] = None
     rating: float = 0.0
     reviews: int = 0
+
+class PageContent(BaseModel):
+    title: str
+    heroImage: Optional[str] = None
+    missionStatement: Optional[str] = None
+    content: str
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    alternatePhone: Optional[str] = None
+    address: Optional[str] = None
+    hours: Optional[str] = None
+
+class BlogPost(BaseModel):
+    id: Optional[str] = None
+    title: str
+    content: str
+    image: Optional[str] = None
+    publishDate: Optional[str] = None
+    published: bool = True
 
 class Order(BaseModel):
     id: Optional[str] = None
