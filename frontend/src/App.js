@@ -1022,7 +1022,7 @@ const MainApp = () => {
         <div className="container mx-auto px-4 text-center">
           <h3 className="text-lg font-bold mb-4">BLZE Cannabis Delivery</h3>
           <div className="flex justify-center space-x-8 mb-4">
-            <a href="tel:8285823092" className="text-white hover:text-green-400 font-semibold">
+            <a href="tel:8285823092" className="text-white hover:text-gray-300 font-semibold">
               📱 (828) 582-3092
             </a>
             <a href="tel:8288441805" className="text-white hover:text-green-400 font-semibold">
