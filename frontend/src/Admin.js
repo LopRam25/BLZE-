@@ -126,11 +126,15 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       }
       
       if (uploadedUrls.length > 0) {
-        setFormData(prev => ({
-          ...prev,
-          images: [...prev.images, ...uploadedUrls]
-        }));
-        console.log("Updated images:", [...formData.images, ...uploadedUrls]);
+        setFormData(prev => {
+          const updatedFormData = {
+            ...prev,
+            images: [...prev.images, ...uploadedUrls]
+          };
+          console.log("Updated form data after upload:", updatedFormData);
+          console.log("All images after upload:", updatedFormData.images);
+          return updatedFormData;
+        });
       }
     } catch (error) {
       console.error("Error uploading files:", error);
