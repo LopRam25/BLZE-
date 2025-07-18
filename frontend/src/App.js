@@ -674,19 +674,22 @@ const ProductCard = ({ product }) => {
           </>
         )}
         
-        <div className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded-full">
-          {product.thc}% THC{product.thc >= 35 ? 'A' : ''}
-        </div>
+        {/* Premium badge with glow effect */}
         {product.isPremium && (
-          <div className="absolute top-2 left-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-            🔥 PREMIUM
+          <div className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs px-2 py-1 rounded-full shadow-lg">
+            <span className="font-bold">✨ PREMIUM</span>
           </div>
         )}
         
-        {/* Quantity Badge */}
+        {/* THCA badge with glow effect */}
+        <div className="absolute top-2 right-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs px-2 py-1 rounded-full shadow-lg">
+          <span className="font-bold">{product.thc}% THC{product.thc >= 35 ? 'A' : ''}</span>
+        </div>
+        
+        {/* Stock badge */}
         {product.quantity && (
-          <div className="absolute top-10 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-            {product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}
+          <div className="absolute top-10 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full shadow-lg">
+            <span className="font-bold">{product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}</span>
           </div>
         )}
       </div>
