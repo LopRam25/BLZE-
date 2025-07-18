@@ -105,6 +105,18 @@
 user_problem_statement: "Create a premium cannabis e-commerce landing page for BLZE brand with direct sales and delivery functionality. Image upload functionality is broken - uploaded JPEG images are not displaying on the product pages."
 
 backend:
+  - task: "Data Persistence"
+    implemented: true
+    working: true
+    file: "/app/backend/main.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "CONFIRMED: Data persistence working correctly. Backend runs from /app directory and saves to /app/products.json (not /app/backend/products.json). Product updates including images are properly persisted. Verified both API responses and file contents match."
+
   - task: "Image Upload API"
     implemented: true
     working: true
