@@ -188,6 +188,12 @@ const ProductForm = ({ product, onSave, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Prevent submission if still uploading
+    if (uploading || uploadingCOA) {
+      alert("Please wait for all uploads to complete before saving.");
+      return;
+    }
+    
     // Create a fresh copy of form data to ensure latest state
     const currentFormData = { ...formData };
     
