@@ -694,68 +694,67 @@ const ProductCard = ({ product }) => {
         )}
       </div>
       
-      <div className="p-4">
-        <h3 className="text-xl font-bold mb-2">{product.name}</h3>
-        <p className="text-sm text-gray-600 mb-2">{product.type}</p>
-        
-        {/* Basic info always visible */}
-        <div className="flex items-center mb-2">
-          <span className="text-yellow-500 text-sm mr-1">★</span>
-          <span className="text-sm text-gray-600">{product.rating} ({product.reviews} reviews)</span>
+      <div className="p-6">
+        <div className="text-center mb-4">
+          <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+          <p className="text-sm text-gray-600 mb-2">{product.type}</p>
+          
+          {/* Basic info centered */}
+          <div className="flex items-center justify-center mb-2">
+            <span className="text-yellow-500 text-sm mr-1">★</span>
+            <span className="text-sm text-gray-600">{product.rating} ({product.reviews} reviews)</span>
+          </div>
+          
+          <p className="text-sm text-gray-500 mb-3 line-clamp-2">{product.description}</p>
         </div>
-        
-        <p className="text-sm text-gray-500 mb-3 line-clamp-2">{product.description}</p>
         
         {/* Expandable details */}
         {isExpanded && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <div className="space-y-2 text-sm">
+          <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+            <div className="space-y-3 text-sm">
               {product.genetics && (
-                <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">Genetics:</span>
+                <div className="text-center">
+                  <span className="font-semibold text-gray-700">Genetics: </span>
                   <span className="text-gray-600">{product.genetics}</span>
                 </div>
               )}
               {product.grower && (
-                <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">Grower:</span>
+                <div className="text-center">
+                  <span className="font-semibold text-gray-700">Grower: </span>
                   <span className="text-gray-600">{product.grower}</span>
                 </div>
               )}
               {product.aroma && (
-                <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">Aroma:</span>
+                <div className="text-center">
+                  <span className="font-semibold text-gray-700">Aroma: </span>
                   <span className="text-gray-600">{product.aroma}</span>
                 </div>
               )}
               {product.flavor && (
-                <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">Flavor:</span>
+                <div className="text-center">
+                  <span className="font-semibold text-gray-700">Flavor: </span>
                   <span className="text-gray-600">{product.flavor}</span>
                 </div>
               )}
-              <div className="flex justify-between">
-                <span className="font-semibold text-gray-700">THC Content:</span>
+              <div className="text-center">
+                <span className="font-semibold text-gray-700">THC Content: </span>
                 <span className="text-gray-600">{product.thc}%{product.thc >= 35 ? ' THCA' : ''}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-gray-700">Type:</span>
+              <div className="text-center">
+                <span className="font-semibold text-gray-700">Type: </span>
                 <span className="text-gray-600">{product.type}</span>
               </div>
               {product.coa && (
-                <div className="mt-3">
-                  <button
-                    onClick={() => window.open(product.coa, '_blank')}
-                    className="text-blue-600 hover:text-blue-800 text-sm font-semibold flex items-center space-x-2"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="text-center">
+                  <span className="text-green-600 font-semibold flex items-center justify-center">
+                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    <span>View COA (Certificate of Analysis)</span>
-                  </button>
+                    COA Available
+                  </span>
                 </div>
               )}
-              <div className="mt-3 p-2 bg-gray-50 rounded">
+              <div className="text-center p-2 bg-gray-50 rounded">
                 <p className="text-xs text-black">
                   <strong>Effects:</strong> {product.description}
                 </p>
@@ -763,18 +762,10 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
         )}
-        
-        {/* Toggle button */}
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full text-center text-black text-sm font-semibold mb-3 hover:text-gray-700"
-        >
-          {isExpanded ? 'Show Less ▲' : 'Show More Details ▼'}
-        </button>
-        
+
         <div className="mb-4">
-          <h4 className="font-semibold text-gray-700 mb-2 text-sm">Pricing</h4>
-          <div className="flex flex-wrap gap-1 text-xs">
+          <h4 className="font-semibold text-gray-700 mb-2 text-center text-sm">Pricing</h4>
+          <div className="flex flex-wrap justify-center gap-1 text-xs">
             {product.pricing ? (
               Object.entries(product.pricing).map(([weight, price]) => (
                 <span key={weight} className="bg-gray-50 px-2 py-1 rounded whitespace-nowrap">
@@ -791,15 +782,24 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-4">
           <button 
             onClick={handleCallNow}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors font-medium flex items-center space-x-2"
+            className="bg-blue-500 text-white px-6 py-2.5 rounded-md hover:bg-blue-600 transition-colors font-medium flex items-center space-x-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
             </svg>
             <span>Call Now</span>
+          </button>
+        </div>
+
+        <div className="text-center">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="w-full text-black text-sm font-semibold hover:text-gray-700 transition-colors py-2"
+          >
+            {isExpanded ? 'Show Less Details ▲' : 'Show More Details ▼'}
           </button>
         </div>
       </div>
