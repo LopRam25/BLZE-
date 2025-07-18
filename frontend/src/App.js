@@ -688,7 +688,7 @@ const HomePage = () => {
           <>
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-3xl font-bold text-gray-900">
-                Premium Cannabis Menu
+                Premium Cannabis Flower
               </h1>
               <p className="text-gray-600">
                 {sortedProducts.length} product{sortedProducts.length !== 1 ? 's' : ''}
