@@ -775,13 +775,24 @@ const AdminDashboard = () => {
                         
                         <div className="space-y-2">
                           <p className="text-sm text-gray-600 bg-gray-50 px-2 py-1 rounded">{product.type}</p>
-                          <p className="text-2xl font-bold text-green-600">${product.price}</p>
+                          {product.pricing ? (
+                            <div className="grid grid-cols-2 gap-1 text-xs">
+                              {Object.entries(product.pricing).map(([weight, price]) => (
+                                <div key={weight} className="bg-gray-50 p-1 rounded flex justify-between">
+                                  <span>{weight}:</span>
+                                  <span className="font-bold text-black">${price}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-2xl font-bold text-black">${product.price}</p>
+                          )}
                           <div className="flex items-center justify-between text-sm">
                             <span className="text-gray-600">Stock: {product.quantity}</span>
                             <span className="text-gray-600">THC: {product.thc}%</span>
                           </div>
                           {product.coa && (
-                            <p className="text-sm text-green-600 flex items-center">
+                            <p className="text-sm text-black flex items-center">
                               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                               </svg>
