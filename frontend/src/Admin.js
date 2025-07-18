@@ -183,6 +183,8 @@ const ProductForm = ({ product, onSave, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form data being submitted:", formData);
+    
     const token = localStorage.getItem("admin_token");
     
     try {
@@ -191,6 +193,10 @@ const ProductForm = ({ product, onSave, onCancel }) => {
         : `${API}/admin/products`;
       
       const method = product ? "PUT" : "POST";
+      
+      console.log("Sending request to:", url);
+      console.log("Method:", method);
+      console.log("Data:", JSON.stringify(formData, null, 2));
       
       const response = await fetch(url, {
         method,
@@ -203,13 +209,16 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       
       if (response.ok) {
         const result = await response.json();
+        console.log("Product saved successfully:", result);
         onSave(result);
       } else {
-        alert("Error saving product");
+        const errorText = await response.text();
+        console.error("Error saving product:", errorText);
+        alert("Error saving product: " + errorText);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error saving product");
+      alert("Error saving product: " + error.message);
     }
   };
 
