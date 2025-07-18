@@ -508,9 +508,17 @@ const ProductForm = ({ product, onSave, onCancel }) => {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                disabled={uploading || uploadingCOA}
+                className={`px-4 py-2 text-white rounded-lg transition-colors ${
+                  uploading || uploadingCOA
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-600 hover:bg-green-700"
+                }`}
               >
-                {product ? "Update Product" : "Add Product"}
+                {uploading || uploadingCOA 
+                  ? "Uploading..." 
+                  : product ? "Update Product" : "Add Product"
+                }
               </button>
             </div>
           </form>
