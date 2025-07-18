@@ -628,7 +628,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl hover:scale-105 transition-all duration-300 transform hover:-translate-y-3 border border-gray-200 relative backdrop-blur-sm">
+    <div className="bg-white rounded-2xl shadow-2xl overflow-hidden hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] hover:scale-105 transition-all duration-300 transform hover:-translate-y-3 border border-gray-200 relative backdrop-blur-sm">
       {/* Enhanced holographic effect overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-100/10 via-purple-100/10 to-pink-100/10 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
       
