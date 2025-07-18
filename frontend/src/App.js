@@ -609,70 +609,18 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-black via-gray-900 to-black text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">Premium Cannabis Menu</h1>
-          <p className="text-xl text-gray-300 mb-8">
-            Discover our carefully curated selection of premium THCA flower
-          </p>
-          
-          {/* Search and Filters */}
-          <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
-            <div className="grid md:grid-cols-3 gap-4">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Search strains..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white placeholder-gray-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              
-              <div>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="all">All Categories</option>
-                  <option value="sativa">Sativa</option>
-                  <option value="indica">Indica</option>
-                  <option value="hybrid">Hybrid</option>
-                </select>
-              </div>
-              
-              <div>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="name">Sort by Name</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="thc-high">THC: High to Low</option>
-                  <option value="thc-low">THC: Low to High</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Products Grid */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-8">
         {loading ? (
           <div className="flex justify-center items-center py-16">
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
           </div>
         ) : (
           <>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Our Premium Cannabis Selection
-              </h2>
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Our Cannabis Menu
+              </h1>
               <p className="text-gray-600">
                 {sortedProducts.length} strain{sortedProducts.length !== 1 ? 's' : ''} available
               </p>
