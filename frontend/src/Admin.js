@@ -70,6 +70,13 @@ const ProductForm = ({ product, onSave, onCancel }) => {
     category: product?.category || "sativa",
     thc: product?.thc || 0,
     price: product?.price || 0,
+    pricing: product?.pricing || {
+      "1g": 10,
+      "3.5g": 30,
+      "7g": 60,
+      "14g": 110,
+      "28g": 200
+    },
     quantity: product?.quantity || 0,
     description: product?.description || "",
     genetics: product?.genetics || "",
