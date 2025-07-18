@@ -316,7 +316,6 @@ async def update_settings(settings: Settings, admin: bool = Depends(verify_admin
     save_settings(settings.dict())
     return settings
 
-# Dashboard stats
 @app.get("/api/admin/stats")
 async def get_stats(admin: bool = Depends(verify_admin)):
     products = load_products()
@@ -329,6 +328,90 @@ async def get_stats(admin: bool = Depends(verify_admin)):
         "total_revenue": sum(o["total"] for o in orders if o["status"] == "completed"),
         "low_stock_products": [p for p in products if p["quantity"] < 5]
     }
+
+# CMS Endpoints
+@app.get("/api/pages")
+async def get_pages():
+    return load_pages()
+
+@app.get("/api/pages/{page_type}")
+async def get_page(page_type: str):
+    pages = load_pages()
+    if page_type not in pages:
+        raise HTTPException(status_code=404, detail="Page not found")
+    return pages[page_type]
+
+@app.put("/api/admin/pages/{page_type}")
+async def update_page(page_type: str, page: PageContent, admin: bool = Depends(verify_admin)):
+    pages = load_pages()
+    from datetime import datetime
+    
+    page_data = page.dict()
+    page_data["lastUpdated"] = datetime.now().isoformat()
+    
+    pages[page_type] = page_data
+    save_pages(pages)
+    return page_data
+
+@app.get("/api/blog")
+async def get_blog_posts():
+    posts = load_blog_posts()
+    # Return only published posts for public API
+    return [post for post in posts if post.get("published", True)]
+
+@app.get("/api/blog/{post_id}")
+async def get_blog_post(post_id: str):
+    posts = load_blog_posts()
+    post = next((p for p in posts if p["id"] == post_id), None)
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    return post
+
+@app.get("/api/admin/blog")
+async def get_all_blog_posts(admin: bool = Depends(verify_admin)):
+    return load_blog_posts()
+
+@app.post("/api/admin/blog")
+async def create_blog_post(post: BlogPost, admin: bool = Depends(verify_admin)):
+    posts = load_blog_posts()
+    
+    # Generate ID if not provided
+    if not post.id:
+        post.id = f"post-{len(posts) + 1}"
+    
+    from datetime import datetime
+    post_data = post.dict()
+    if not post_data.get("publishDate"):
+        post_data["publishDate"] = datetime.now().isoformat()
+    
+    posts.append(post_data)
+    save_blog_posts(posts)
+    return post_data
+
+@app.put("/api/admin/blog/{post_id}")
+async def update_blog_post(post_id: str, post: BlogPost, admin: bool = Depends(verify_admin)):
+    posts = load_blog_posts()
+    index = next((i for i, p in enumerate(posts) if p["id"] == post_id), None)
+    if index is None:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    
+    post_data = post.dict()
+    post_data["id"] = post_id
+    
+    posts[index] = post_data
+    save_blog_posts(posts)
+    return post_data
+
+@app.delete("/api/admin/blog/{post_id}")
+async def delete_blog_post(post_id: str, admin: bool = Depends(verify_admin)):
+    posts = load_blog_posts()
+    index = next((i for i, p in enumerate(posts) if p["id"] == post_id), None)
+    if index is None:
+        raise HTTPException(status_code=404, detail="Blog post not found")
+    
+    deleted_post = posts.pop(index)
+    save_blog_posts(posts)
+    return deleted_post
 
 if __name__ == "__main__":
     import uvicorn
