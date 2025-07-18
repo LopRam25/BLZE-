@@ -1,1 +1,25 @@
-[{"id": "dante-inferno-001", "name": "Dante's Inferno", "type": "Indica-Dominant Hybrid", "category": "hybrid", "thc": 35.97, "price": 85, "quantity": 12, "description": "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down", "genetics": "Devil Driver x Oreoz", "grower": "Discount Pharms", "aroma": "Sweet with creamy notes", "flavor": "Smooth, dessert-like, rich", "isPremium": true, "rating": 4.9, "reviews": 42, "images": ["https://i.ibb.co/mCmXk6d9/image1.jpg", "https://i.ibb.co/DHpSz8sS/image2.jpg", "https://i.ibb.co/C3mJX0Zz/image3.jpg"], "coa": ""}]
+[
+  {
+    "id": "dante-inferno-001",
+    "name": "Dante's Inferno",
+    "type": "Indica-Dominant Hybrid",
+    "category": "hybrid",
+    "thc": 35.97,
+    "price": 85.0,
+    "quantity": 12,
+    "description": "Premium THCA flower with sweet creamy notes. Calming, mellow, slightly euphoric - perfect for winding down",
+    "genetics": "Devil Driver x Oreoz",
+    "grower": "Discount Pharms",
+    "aroma": "Sweet with creamy notes",
+    "flavor": "Smooth, dessert-like, rich",
+    "isPremium": true,
+    "images": [
+      "https://3e64bb30-5a16-4fd6-a4eb-35eceb6333de.preview.emergentagent.com/uploads/3fe9a79d-0d3c-4073-8bbf-934dcf44dcbd.jpeg",
+      "https://3e64bb30-5a16-4fd6-a4eb-35eceb6333de.preview.emergentagent.com/uploads/0f7e1493-8f1f-4e64-953a-bef2f0cf4404.jpeg",
+      "https://3e64bb30-5a16-4fd6-a4eb-35eceb6333de.preview.emergentagent.com/uploads/c4e9e24c-828d-4026-aa1b-0ceea11407fe.jpeg"
+    ],
+    "coa": "",
+    "rating": 0.0,
+    "reviews": 0
+  }
+]
