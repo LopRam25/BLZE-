@@ -768,16 +768,16 @@ const ProductCard = ({ product }) => {
         
         <div className="mb-4">
           <h4 className="font-semibold text-gray-700 mb-2">Pricing</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm">
+          <div className="flex flex-wrap gap-2 text-sm">
             {product.pricing ? (
               Object.entries(product.pricing).map(([weight, price]) => (
-                <div key={weight} className="bg-gray-50 p-2 rounded flex justify-between">
+                <div key={weight} className="bg-gray-50 px-2 py-1 rounded flex items-center space-x-1">
                   <span className="font-medium">{weight}:</span>
                   <span className="font-bold text-black">${price}</span>
                 </div>
               ))
             ) : (
-              <div className="bg-gray-50 p-2 rounded flex justify-between">
+              <div className="bg-gray-50 px-2 py-1 rounded flex items-center space-x-1">
                 <span className="font-medium">Price:</span>
                 <span className="font-bold text-black">${product.price}</span>
               </div>
