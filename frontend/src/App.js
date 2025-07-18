@@ -980,7 +980,7 @@ const MainApp = () => {
           <div className="text-center">
             <h2 className="text-lg font-bold mb-2">📞 Call to Order</h2>
             <div className="flex justify-center space-x-6">
-              <a href="tel:8285823092" className="text-white hover:text-green-200 font-semibold">
+              <a href="tel:8285823092" className="text-white hover:text-gray-300 font-semibold">
                 📱 (828) 582-3092
               </a>
               <a href="tel:8288441805" className="text-white hover:text-green-200 font-semibold">
