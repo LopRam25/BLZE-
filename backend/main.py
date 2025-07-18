@@ -214,16 +214,23 @@ async def upload_file(file: UploadFile = File(...), admin: bool = Depends(verify
         raise HTTPException(status_code=400, detail="No file provided")
     
     # Generate unique filename
-    file_extension = file.filename.split('.')[-1]
+    file_extension = file.filename.split('.')[-1].lower()
     unique_filename = f"{uuid.uuid4()}.{file_extension}"
     file_path = f"uploads/{unique_filename}"
     
-    # Save file
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    # Return URL
-    return {"url": f"/uploads/{unique_filename}"}
+    try:
+        # Save file
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        print(f"File uploaded successfully: {file_path}")
+        
+        # Return URL
+        return {"url": f"/uploads/{unique_filename}"}
+    except Exception as e:
+        print(f"Error uploading file: {e}")
+        raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
 
 @app.get("/api/admin/orders")
 async def get_orders(admin: bool = Depends(verify_admin)):
