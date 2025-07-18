@@ -767,7 +767,7 @@ const ProductCard = ({ product }) => {
         </button>
         
         <div className="flex justify-between items-center">
-          <span className="text-2xl font-bold text-green-600">${product.price}</span>
+          <span className="text-2xl font-bold text-black">${product.price}</span>
           <button 
             onClick={handleCallNow}
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold flex items-center space-x-2"
