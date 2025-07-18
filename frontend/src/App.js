@@ -472,7 +472,7 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
               className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2 ${
                 isProcessingOrder
                   ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                  : 'bg-green-600 text-white hover:bg-green-700'
+                  : 'bg-black text-white hover:bg-gray-800'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
