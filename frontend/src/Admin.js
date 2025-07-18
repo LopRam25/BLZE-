@@ -334,19 +334,25 @@ const ProductForm = ({ product, onSave, onCancel }) => {
                 />
               </div>
               
-              <div>
+              <div className="col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Price ($)
+                  Pricing Structure
                 </label>
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  step="0.01"
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  required
-                />
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(formData.pricing).map(([weight, price]) => (
+                    <div key={weight} className="flex items-center space-x-2">
+                      <label className="text-sm font-medium text-gray-600 w-12">{weight}:</label>
+                      <input
+                        type="number"
+                        value={price}
+                        onChange={(e) => handlePricingChange(weight, e.target.value)}
+                        step="0.01"
+                        className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
