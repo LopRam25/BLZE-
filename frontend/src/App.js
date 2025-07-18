@@ -328,7 +328,7 @@ const LocationModal = ({ isOpen, onClose, onLocationSet }) => {
               disabled={!isInDeliveryArea}
               className={`flex-1 py-3 rounded-lg transition-colors ${
                 isInDeliveryArea 
-                  ? 'bg-green-600 text-white hover:bg-green-700' 
+                  ? 'bg-black text-white hover:bg-gray-800' 
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }`}
             >
