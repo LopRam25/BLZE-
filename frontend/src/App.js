@@ -992,20 +992,6 @@ const MainApp = () => {
         </div>
       )}
 
-      {/* Contact Banner */}
-      <div className="bg-black text-white">
-        <div className="container mx-auto px-4 py-4">
-          <div className="text-center">
-            <h2 className="text-lg font-bold mb-2">📞 Call to Order</h2>
-            <div className="flex justify-center">
-              <a href="tel:8285823092" className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors font-semibold text-lg">
-                Call Now
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Products Grid */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
