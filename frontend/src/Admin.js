@@ -22,7 +22,7 @@ const AdminLogin = ({ onLogin }) => {
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="text-3xl font-bold text-green-600 mb-2">BLZE</div>
+          <div className="text-3xl font-bold text-black mb-2">BLZE</div>
           <div className="text-gray-500">Admin Portal</div>
         </div>
         
