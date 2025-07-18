@@ -659,6 +659,9 @@ const AdminDashboard = () => {
                       <p className="text-lg font-bold text-green-600">${product.price}</p>
                       <p className="text-sm text-gray-600">Stock: {product.quantity}</p>
                       <p className="text-sm text-gray-600">THC: {product.thc}%</p>
+                      {product.coa && (
+                        <p className="text-sm text-green-600">✓ COA Available</p>
+                      )}
                       {product.images && product.images.length > 0 && (
                         <img
                           src={product.images[0]}
