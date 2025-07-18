@@ -603,7 +603,7 @@ const AdminDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-4">
-              <div className="text-3xl font-bold text-green-600">BLZE</div>
+              <div className="text-3xl font-bold text-black">BLZE</div>
               <div className="text-gray-500">Admin Dashboard</div>
             </div>
             <button
