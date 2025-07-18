@@ -504,8 +504,8 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
           </div>
           
           {deliveryLocation && (
-            <div className="mb-4 p-3 bg-green-50 rounded-lg">
-              <p className="text-sm text-green-800">
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-black">
                 <span className="font-semibold">Delivering to:</span> {deliveryLocation}
               </p>
               <p className="text-sm text-green-600">Est. delivery: 30-45 min</p>
