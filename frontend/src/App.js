@@ -629,11 +629,11 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-48 bg-gray-200 relative overflow-hidden">
+      <div className="h-60 bg-gray-100 relative overflow-hidden rounded-t-xl">
         <img 
           src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain bg-white"
         />
         
         {/* Image navigation */}
