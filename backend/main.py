@@ -167,7 +167,8 @@ async def root():
 
 @app.get("/api/products")
 async def get_products():
-    return load_products()
+    products = load_products()
+    return products
 
 @app.get("/api/products/{product_id}")
 async def get_product(product_id: str):
@@ -264,4 +265,4 @@ async def get_stats(admin: bool = Depends(verify_admin)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
