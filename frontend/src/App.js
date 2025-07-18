@@ -602,9 +602,13 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
   );
 };
 
-const ProductCard = ({ product, addToCart }) => {
+const ProductCard = ({ product }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleCallNow = () => {
+    window.location.href = "tel:8285823092";
+  };
 
   const nextImage = () => {
     if (product.images && product.images.length > 1) {
@@ -670,6 +674,13 @@ const ProductCard = ({ product, addToCart }) => {
             🔥 PREMIUM
           </div>
         )}
+        
+        {/* Quantity Badge */}
+        {product.quantity && (
+          <div className="absolute top-10 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+            {product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock'}
+          </div>
+        )}
       </div>
       
       <div className="p-4">
@@ -720,6 +731,18 @@ const ProductCard = ({ product, addToCart }) => {
                 <span className="font-semibold text-gray-700">Type:</span>
                 <span className="text-gray-600">{product.type}</span>
               </div>
+              {product.coa && (
+                <div className="mt-3">
+                  <a 
+                    href={product.coa} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-sm font-semibold"
+                  >
+                    📄 View COA (Certificate of Analysis)
+                  </a>
+                </div>
+              )}
               <div className="mt-3 p-2 bg-green-50 rounded">
                 <p className="text-xs text-green-800">
                   <strong>Effects:</strong> {product.description}
@@ -740,10 +763,13 @@ const ProductCard = ({ product, addToCart }) => {
         <div className="flex justify-between items-center">
           <span className="text-2xl font-bold text-green-600">${product.price}</span>
           <button 
-            onClick={() => addToCart(product)}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold"
+            onClick={handleCallNow}
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors font-semibold flex items-center space-x-2"
           >
-            Add to Cart
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+            <span>Call Now</span>
           </button>
         </div>
       </div>
