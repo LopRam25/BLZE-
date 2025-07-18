@@ -745,6 +745,8 @@ const HomePage = () => {
       </footer>
     </div>
   );
+};
+
 function App() {
   return (
     <Router>
