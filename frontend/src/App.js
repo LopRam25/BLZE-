@@ -594,7 +594,7 @@ const CartModal = ({ isOpen, onClose, cart, updateCart, removeFromCart, delivery
                 className={`w-full py-3 rounded-lg font-semibold mt-4 transition-colors ${
                   !customerPhone || !customerName || !customerEmail
                     ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-black text-white hover:bg-gray-800'
                 }`}
               >
                 Proceed to Payment • ${total.toFixed(2)}
