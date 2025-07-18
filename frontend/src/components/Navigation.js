@@ -24,10 +24,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-white">BLZE</div>
-              <div className="text-xs text-gray-300">Premium Cannabis Menu</div>
-            </div>
+            <div className="text-2xl font-bold text-white">BLZE</div>
           </Link>
 
           {/* Desktop Navigation */}
