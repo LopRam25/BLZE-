@@ -961,7 +961,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MainApp />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/admin/*" element={<Admin />} />
       </Routes>
     </Router>
