@@ -544,12 +544,208 @@ const ProductCard = ({ product }) => {
   );
 };
 
-const MainApp = () => {
-  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+const HomePage = () => {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const [deliveryLocation, setDeliveryLocation] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('name');
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`);
+      if (response.ok) {
+        const data = await response.json();
+        setProducts(data);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'thc-high':
+        return b.thc - a.thc;
+      case 'thc-low':
+        return a.thc - b.thc;
+      default:
+        return a.name.localeCompare(b.name);
+    }
+  });
+
+  if (!isAgeVerified) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Navigation />
+        <AgeVerificationModal 
+          isOpen={!isAgeVerified}
+          onVerified={() => setIsAgeVerified(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+      
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-black via-gray-900 to-black text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Premium Cannabis Menu</h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Discover our carefully curated selection of premium THCA flower
+          </p>
+          
+          {/* Search and Filters */}
+          <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Search strains..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white placeholder-gray-300 border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="sativa">Sativa</option>
+                  <option value="indica">Indica</option>
+                  <option value="hybrid">Hybrid</option>
+                </select>
+              </div>
+              
+              <div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white/20 backdrop-blur-sm text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="name">Sort by Name</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="thc-high">THC: High to Low</option>
+                  <option value="thc-low">THC: Low to High</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Products Grid */}
+      <div className="container mx-auto px-4 py-16">
+        {loading ? (
+          <div className="flex justify-center items-center py-16">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Our Premium Cannabis Selection
+              </h2>
+              <p className="text-gray-600">
+                {sortedProducts.length} strain{sortedProducts.length !== 1 ? 's' : ''} available
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sortedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+
+            {sortedProducts.length === 0 && (
+              <div className="text-center py-16">
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                  No products found
+                </h3>
+                <p className="text-gray-500">
+                  Try adjusting your search or filter criteria
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-black text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold mb-4">BLZE Cannabis</h3>
+              <p className="text-gray-400 text-sm">
+                Premium cannabis delivery service serving North Carolina with the highest quality THCA flower.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li><Link to="/" className="hover:text-white transition-colors">Menu</Link></li>
+                <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Service Area</h4>
+              <ul className="space-y-2 text-sm text-gray-400">
+                <li>Buncombe County</li>
+                <li>Henderson County</li>
+                <li>Polk County</li>
+                <li>Transylvania County</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Contact</h4>
+              <div className="space-y-2 text-sm text-gray-400">
+                <p>Call to order:</p>
+                <p className="text-white font-semibold">(828) 582-3092</p>
+                <p className="text-white font-semibold">(828) 844-1805</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 BLZE Cannabis. All rights reserved. Must be 21+ to order.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
   const [products, setProducts] = useState([
     {
       id: 1,
