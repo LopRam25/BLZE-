@@ -19,12 +19,15 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-sm sticky top-0 z-50 border-b">
+    <nav className="bg-black shadow-lg sticky top-0 z-50 border-b border-gray-800">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <div className="text-2xl font-bold text-black">BLZE</div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white">BLZE</div>
+              <div className="text-xs text-gray-300">Premium Cannabis Menu</div>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -35,8 +38,8 @@ const Navigation = () => {
                 to={item.path}
                 className={`transition-colors duration-200 ${
                   isActive(item.path)
-                    ? 'text-black font-semibold'
-                    : 'text-gray-600 hover:text-black'
+                    ? 'text-white font-semibold'
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {item.label}
@@ -48,7 +51,7 @@ const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-gray-600 hover:text-black transition-colors"
+              className="text-gray-300 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -64,7 +67,7 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200">
+          <div className="md:hidden border-t border-gray-700">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <Link
@@ -73,8 +76,8 @@ const Navigation = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`block px-3 py-2 rounded-md transition-colors duration-200 ${
                     isActive(item.path)
-                      ? 'text-black bg-gray-100 font-semibold'
-                      : 'text-gray-600 hover:text-black hover:bg-gray-50'
+                      ? 'text-white bg-gray-800 font-semibold'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
                   }`}
                 >
                   {item.label}
