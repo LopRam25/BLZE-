@@ -78,6 +78,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
   });
 
   const [uploading, setUploading] = useState(false);
+  const [uploadingCOA, setUploadingCOA] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -124,6 +125,40 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       alert("Error uploading files");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleCOAUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingCOA(true);
+    const token = localStorage.getItem("admin_token");
+    
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const response = await fetch(`${API}/admin/upload`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        setFormData(prev => ({
+          ...prev,
+          coa: `${BACKEND_URL}${result.url}`
+        }));
+      }
+    } catch (error) {
+      console.error("Error uploading COA:", error);
+      alert("Error uploading COA");
+    } finally {
+      setUploadingCOA(false);
     }
   };
 
