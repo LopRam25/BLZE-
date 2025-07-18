@@ -558,6 +558,14 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({});
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  
+  // CMS state
+  const [pages, setPages] = useState({});
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [showPageEditor, setShowPageEditor] = useState(false);
+  const [editingPage, setEditingPage] = useState(null);
+  const [showBlogEditor, setShowBlogEditor] = useState(false);
+  const [editingBlog, setEditingBlog] = useState(null);
 
   useEffect(() => {
     fetchData();
