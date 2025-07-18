@@ -636,7 +636,7 @@ const ProductCard = ({ product }) => {
         <img 
           src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
-          className="w-full h-full object-contain bg-white p-2"
+          className="w-full h-full object-cover"
         />
         
         {/* Image navigation */}
