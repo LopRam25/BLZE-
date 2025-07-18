@@ -968,7 +968,7 @@ const MainApp = () => {
                   <span className="font-semibold">Delivery to:</span> {deliveryLocation}
                 </span>
               </div>
-              <span className="text-sm text-green-600 font-semibold">Call to Order</span>
+              <span className="text-sm text-black font-semibold">Call to Order</span>
             </div>
           </div>
         </div>
