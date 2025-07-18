@@ -244,7 +244,7 @@ async def upload_file(file: UploadFile = File(...), admin: bool = Depends(verify
         print(f"File uploaded successfully: {file_path}")
         
         # Return URL
-        return {"url": f"/uploads/{unique_filename}"}
+        return {"url": f"/api/uploads/{unique_filename}"}
     except Exception as e:
         print(f"Error uploading file: {e}")
         raise HTTPException(status_code=500, detail=f"Error uploading file: {str(e)}")
