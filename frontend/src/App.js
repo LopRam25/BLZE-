@@ -619,7 +619,7 @@ const HomePage = () => {
             </svg>
             <input
               type="text"
-              placeholder="Search for strains..."
+              placeholder="Search for premium cannabis flower..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-gray-300 bg-white shadow-sm"
