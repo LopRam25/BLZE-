@@ -395,7 +395,12 @@ const ProductCard = ({ product }) => {
       {/* Enhanced holographic effect overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-100/10 via-purple-100/10 to-pink-100/10 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"></div>
       
-      <div className="h-60 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden rounded-t-2xl">
+      <div 
+        className="h-60 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden rounded-t-2xl swipable-image"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <img 
           src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
