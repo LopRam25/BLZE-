@@ -93,6 +93,7 @@ class Product(BaseModel):
     category: str
     thc: float
     price: float
+    pricing: Optional[dict] = None
     quantity: int
     description: str
     genetics: Optional[str] = None
