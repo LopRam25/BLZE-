@@ -752,6 +752,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/admin/*" element={<Admin />} />
       </Routes>
     </Router>
