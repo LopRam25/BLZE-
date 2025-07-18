@@ -761,7 +761,7 @@ const ProductCard = ({ product }) => {
         {/* Toggle button */}
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full text-center text-green-600 text-sm font-semibold mb-3 hover:text-green-700"
+          className="w-full text-center text-black text-sm font-semibold mb-3 hover:text-gray-700"
         >
           {isExpanded ? 'Show Less ▲' : 'Show More Details ▼'}
         </button>
