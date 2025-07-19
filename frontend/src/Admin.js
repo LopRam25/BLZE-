@@ -1508,6 +1508,18 @@ const AdminDashboard = () => {
           }}
         />
       )}
+
+      {/* Blog Form Modal */}
+      {showBlogForm && (
+        <BlogForm
+          post={editingBlogPost}
+          onSave={handleSaveBlogPost}
+          onCancel={() => {
+            setShowBlogForm(false);
+            setEditingBlogPost(null);
+          }}
+        />
+      )}
     </div>
   );
 };
