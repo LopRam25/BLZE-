@@ -528,12 +528,6 @@ const ProductCard = ({ product }) => {
                   <span className="text-gray-600">{product.genetics}</span>
                 </div>
               )}
-              {product.grower && (
-                <div className="text-center">
-                  <span className="font-semibold text-gray-700">Grower: </span>
-                  <span className="text-gray-600">{product.grower}</span>
-                </div>
-              )}
               {product.aroma && (
                 <div className="text-center">
                   <span className="font-semibold text-gray-700">Aroma: </span>
