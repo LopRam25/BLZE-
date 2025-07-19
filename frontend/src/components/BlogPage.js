@@ -169,6 +169,7 @@ const BlogPost = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Navigation />
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
           <article className="bg-white rounded-2xl shadow-lg overflow-hidden">
