@@ -981,21 +981,68 @@ const AdminDashboard = () => {
   // Blog management functions
   const handleDeleteBlogPost = async (postId) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return;
-    
+
     const token = localStorage.getItem("admin_token");
-    
     try {
       const response = await fetch(`${API}/admin/blog/${postId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
-      
+
       if (response.ok) {
-        setBlogPosts(blogPosts.filter(p => p.id !== postId));
+        setBlogPosts(prev => prev.filter(post => post.id !== postId));
       }
     } catch (error) {
       console.error("Error deleting blog post:", error);
     }
+  };
+
+  const updateInventoryQuantity = async (productId, newQuantity) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/inventory/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+
+      if (response.ok) {
+        setInventory(prev => prev.map(item => 
+          item.id === productId ? { ...item, quantity: newQuantity } : item
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating inventory:", error);
+    }
+  };
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/orders/enhanced/${orderId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (response.ok) {
+        setEnhancedOrders(prev => prev.map(order => 
+          order.orderId === orderId ? { ...order, status: newStatus } : order
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  const viewReceipt = (orderId) => {
+    window.open(`${API.replace('/api', '')}/receipt/${orderId}`, '_blank');
   };
 
   const handleSaveBlogPost = async (blogPost) => {
