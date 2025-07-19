@@ -551,12 +551,26 @@ const ProductCard = ({ product }) => {
               </div>
               {product.coa && (
                 <div className="text-center">
-                  <span className="text-green-600 font-semibold flex items-center justify-center">
+                  <button
+                    onClick={() => setShowCOA(!showCOA)}
+                    className="text-green-600 font-semibold flex items-center justify-center hover:text-green-700 transition-colors"
+                  >
                     <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
-                    COA Available
-                  </span>
+                    COA Available {showCOA ? '▲' : '▼'}
+                  </button>
+                  {showCOA && (
+                    <div className="mt-3 p-3 bg-white rounded-lg border">
+                      <img 
+                        src={product.coa} 
+                        alt="Certificate of Analysis"
+                        className="w-full max-w-md mx-auto rounded cursor-pointer"
+                        onClick={() => openImageModal(0)}
+                      />
+                      <p className="text-xs text-gray-500 mt-2">Click to view full size</p>
+                    </div>
+                  )}
                 </div>
               )}
               <div className="text-center p-2 bg-gray-50 rounded">
