@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for BLZE Cannabis E-commerce Platform
-Tests image upload, product update, and static file serving functionality
+Backend API Testing for BLZE Order & Inventory Management System with THC Compliance
+Tests inventory management, order processing, THC calculations, and receipt generation
 """
 
 import requests
@@ -10,6 +10,7 @@ import os
 import tempfile
 from PIL import Image
 import io
+from datetime import datetime
 
 # Configuration
 BACKEND_URL = "https://a72bd55c-4478-4952-8f96-3344a97b4ae3.preview.emergentagent.com"
