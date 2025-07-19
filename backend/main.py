@@ -100,7 +100,6 @@ class Product(BaseModel):
     quantity: int
     description: str
     genetics: Optional[str] = None
-    grower: Optional[str] = None
     aroma: Optional[str] = None
     flavor: Optional[str] = None
     isPremium: bool = False
@@ -108,6 +107,14 @@ class Product(BaseModel):
     coa: Optional[str] = None
     rating: float = 0.0
     reviews: int = 0
+    # New inventory fields
+    sku: Optional[str] = None
+    unitWeightGrams: Optional[float] = None
+    delta9THC: Optional[float] = None  # in %
+    thca: Optional[float] = None      # in %
+    totalTHC: Optional[float] = None  # calculated
+    isCompliant: Optional[bool] = None
+    warningFlag: Optional[bool] = None
 
 class PageContent(BaseModel):
     title: str
