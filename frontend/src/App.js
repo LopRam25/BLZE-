@@ -427,7 +427,8 @@ const ProductCard = ({ product }) => {
         <img 
           src={product.images ? product.images[currentImageIndex] : product.image}
           alt={product.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover cursor-pointer"
+          onClick={() => openImageModal(currentImageIndex)}
         />
         
         {/* Image navigation */}
