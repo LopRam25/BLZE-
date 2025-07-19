@@ -619,12 +619,270 @@ async def update_order_status(order_id: str, status: str, admin: bool = Depends(
 
 @app.get("/receipt/{order_id}")
 async def get_receipt(order_id: str):
-    """Get receipt for an order"""
+    """Get mobile-friendly receipt for an order"""
     receipts = load_receipts()
     
     for receipt in receipts:
         if receipt.get('orderId') == order_id:
-            return receipt['receiptData']
+            receipt_data = receipt['receiptData']
+            
+            # Generate mobile-friendly HTML receipt
+            html_content = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt #{receipt_data['header']['receiptId']} - {receipt_data['header']['logo']}</title>
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        body {{
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            min-height: 100vh;
+            aspect-ratio: 9/16;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }}
+        .receipt-container {{
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }}
+        .header {{
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 16px;
+        }}
+        .logo {{
+            font-size: 32px;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 8px;
+        }}
+        .website {{
+            font-size: 14px;
+            color: #aaa;
+        }}
+        .receipt-info {{
+            margin-bottom: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #00ff88;
+        }}
+        .customer-info {{
+            margin-bottom: 20px;
+        }}
+        .section-title {{
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }}
+        .info-row {{
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }}
+        .products-table {{
+            width: 100%;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+        .products-table th,
+        .products-table td {{
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 12px;
+        }}
+        .products-table th {{
+            background: rgba(0, 255, 136, 0.2);
+            font-weight: bold;
+            color: #00ff88;
+        }}
+        .pricing {{
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }}
+        .total-row {{
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ff88;
+            border-top: 2px solid #00ff88;
+            padding-top: 8px;
+            margin-top: 8px;
+        }}
+        .compliance {{
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }}
+        .disclaimer {{
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            color: #ffc107;
+        }}
+        .verified-badge {{
+            display: inline-flex;
+            align-items: center;
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }}
+        .thc-info {{
+            font-size: 11px;
+            color: #aaa;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }}
+        .footer {{
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 24px;
+        }}
+        @media print {{
+            body {{
+                background: white;
+                color: black;
+            }}
+            .receipt-container {{
+                background: white;
+                border: 1px solid #ddd;
+            }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="header">
+            <div class="logo">{receipt_data['header']['logo']}</div>
+            <div class="website">{receipt_data['header']['website']}</div>
+        </div>
+
+        <div class="receipt-info">
+            <div class="info-row">
+                <span><strong>Receipt #:</strong></span>
+                <span>{receipt_data['header']['receiptId']}</span>
+            </div>
+            <div class="info-row">
+                <span><strong>Date:</strong></span>
+                <span>{receipt_data['header']['date']}</span>
+            </div>
+        </div>
+
+        <div class="customer-info">
+            <div class="section-title">👤 Customer Information</div>
+            <div class="info-row">
+                <span><strong>Name:</strong></span>
+                <span>{receipt_data['header']['customer']}</span>
+            </div>
+            <div class="info-row">
+                <span><strong>Phone:</strong></span>
+                <span>{receipt_data['header']['phone']}</span>
+            </div>
+            <div class="info-row">
+                <span><strong>ID Verified:</strong></span>
+                <span class="verified-badge">✅ Verified</span>
+            </div>
+        </div>
+
+        <div class="section-title">🛍️ Products Ordered</div>
+        <table class="products-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>THC Info</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>"""
+            
+            for product in receipt_data['products']:
+                html_content += f"""
+                <tr>
+                    <td>
+                        <strong>{product['productName']}</strong>
+                        <div class="thc-info">
+                            Δ9: {product['delta9THC']}% | THCA: {product['thca']}%<br>
+                            Total: {product['totalTHC']:.2f}%
+                        </div>
+                    </td>
+                    <td>{product['quantity']}</td>
+                    <td class="thc-info">
+                        Total THC<br>{product['totalTHC']:.2f}%
+                    </td>
+                    <td>${product['price']:.2f}</td>
+                </tr>"""
+            
+            html_content += f"""
+            </tbody>
+        </table>
+
+        <div class="pricing">
+            <div class="section-title">💰 Order Summary</div>
+            <div class="info-row">
+                <span>Subtotal:</span>
+                <span>${receipt_data['pricing']['subtotal']:.2f}</span>
+            </div>
+            <div class="info-row">
+                <span>Excise Tax (3%):</span>
+                <span>${receipt_data['pricing']['exciseTax']:.2f}</span>
+            </div>
+            <div class="info-row">
+                <span>Sales Tax (8%):</span>
+                <span>${receipt_data['pricing']['salesTax']:.2f}</span>
+            </div>
+            <div class="info-row total-row">
+                <span>Total:</span>
+                <span>${receipt_data['pricing']['total']:.2f}</span>
+            </div>
+        </div>
+
+        <div class="compliance">
+            <div class="section-title">⚠️ Important Information</div>"""
+            
+            for disclaimer in receipt_data['compliance']['disclaimer']:
+                html_content += f'<div class="disclaimer">{disclaimer}</div>'
+            
+            html_content += f"""
+        </div>
+
+        <div class="footer">
+            <p>Thank you for choosing {receipt_data['header']['logo']}!</p>
+            <p>Receipt verification: {receipt_data['header']['website']}/receipt/{order_id}</p>
+        </div>
+    </div>
+</body>
+</html>"""
+            
+            return HTMLResponse(content=html_content, media_type="text/html")
     
     raise HTTPException(status_code=404, detail="Receipt not found")
 
