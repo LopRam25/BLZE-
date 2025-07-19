@@ -244,12 +244,10 @@ def check_compliance(total_thc: float) -> bool:
     """Check product compliance (totalTHC <= 0.3%)"""
     return total_thc <= 0.3
 
-def update_product_compliance(product: dict) -> dict:
-    """Update product with calculated totalTHC and compliance status"""
+def update_product_inventory(product: dict) -> dict:
+    """Update product with inventory data (no compliance checking)"""
     if product.get('delta9THC') is not None and product.get('thca') is not None:
         product['totalTHC'] = calculate_total_thc(product['delta9THC'], product['thca'])
-        product['isCompliant'] = check_compliance(product['totalTHC'])
-        product['warningFlag'] = product.get('quantity', 0) < 5 or not product['isCompliant']
     return product
 
 def deduct_inventory(order_products: list, products: list) -> list:
