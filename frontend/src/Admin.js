@@ -776,7 +776,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("admin_token");
     
     try {
-      const [productsRes, ordersRes, statsRes, pagesRes, blogRes, inventoryRes, enhancedOrdersRes, complianceRes] = await Promise.all([
+      const [productsRes, ordersRes, statsRes, pagesRes, blogRes, inventoryRes, enhancedOrdersRes] = await Promise.all([
         fetch(`${API}/products`),
         fetch(`${API}/admin/orders`, {
           headers: { "Authorization": `Bearer ${token}` }
@@ -793,9 +793,6 @@ const AdminDashboard = () => {
         }),
         fetch(`${API}/admin/orders/enhanced`, {
           headers: { "Authorization": `Bearer ${token}` }
-        }),
-        fetch(`${API}/admin/compliance-report`, {
-          headers: { "Authorization": `Bearer ${token}` }
         })
       ]);
 
@@ -806,7 +803,6 @@ const AdminDashboard = () => {
       if (blogRes.ok) setBlogPosts(await blogRes.json());
       if (inventoryRes.ok) setInventory(await inventoryRes.json());
       if (enhancedOrdersRes.ok) setEnhancedOrders(await enhancedOrdersRes.json());
-      if (complianceRes.ok) setComplianceReport(await complianceRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     }
