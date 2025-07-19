@@ -919,6 +919,174 @@ const AdminDashboard = () => {
                 </div>
               </div>
             )}
+
+            {activeTab === "pages" && (
+              <div>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900">Pages Management</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* About Us Page */}
+                  <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-4">About Us Page</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Upload HTML File
+                          </label>
+                          <input
+                            type="file"
+                            accept=".html,.htm"
+                            onChange={(e) => handlePageFileUpload(e, 'about')}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Current Content Preview
+                          </label>
+                          <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600 max-h-32 overflow-y-auto">
+                            {pages.about?.content ? pages.about.content.substring(0, 200) + '...' : 'No content uploaded yet'}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => generateHTMLTemplate('about')}
+                          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          Download Template
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact Page */}
+                  <div className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-gray-900 mb-4">Contact Page</h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Upload HTML File
+                          </label>
+                          <input
+                            type="file"
+                            accept=".html,.htm"
+                            onChange={(e) => handlePageFileUpload(e, 'contact')}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Current Content Preview
+                          </label>
+                          <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-600 max-h-32 overflow-y-auto">
+                            {pages.contact?.content ? pages.contact.content.substring(0, 200) + '...' : 'No content uploaded yet'}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => generateHTMLTemplate('contact')}
+                          className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          Download Template
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Help/Instructions */}
+                  <div className="bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-xl shadow-lg overflow-hidden">
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-green-900 mb-4">📋 Instructions</h3>
+                      <div className="space-y-3 text-sm text-green-800">
+                        <p><strong>1.</strong> Click "Download Template" to get a sample HTML file</p>
+                        <p><strong>2.</strong> Edit the template with your content</p>
+                        <p><strong>3.</strong> Upload your HTML file using the file input</p>
+                        <p><strong>4.</strong> Content will automatically update on your site</p>
+                        <div className="mt-4 p-3 bg-white rounded-lg">
+                          <p className="font-semibold text-green-900">Supported:</p>
+                          <ul className="text-xs text-green-700 mt-1">
+                            <li>• HTML tags (h1, p, div, etc.)</li>
+                            <li>• CSS classes (use Tailwind)</li>
+                            <li>• Images (use URLs)</li>
+                            <li>• Links</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "blog" && (
+              <div>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900">Blog Management</h2>
+                  <button
+                    onClick={() => setShowBlogForm(true)}
+                    className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 transform hover:scale-105 font-semibold shadow-lg flex items-center space-x-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    <span>New Blog Post</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {blogPosts.map((post) => (
+                    <div key={post.id} className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                      <div className="p-6">
+                        <div className="flex justify-between items-start mb-3">
+                          <h3 className="text-xl font-bold text-gray-900">{post.title}</h3>
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => {
+                                setEditingBlogPost(post);
+                                setShowBlogForm(true);
+                              }}
+                              className="text-blue-600 hover:text-blue-800 p-1 rounded-full hover:bg-blue-50 transition-colors"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteBlogPost(post.id)}
+                              className="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-50 transition-colors"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <p className="text-sm text-gray-600">{post.publishDate && new Date(post.publishDate).toLocaleDateString()}</p>
+                          <div className="text-gray-700 text-sm">
+                            {post.content.length > 100 ? `${post.content.substring(0, 100)}...` : post.content}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {blogPosts.length === 0 && (
+                  <div className="text-center py-16">
+                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                      No blog posts yet
+                    </h3>
+                    <p className="text-gray-500">
+                      Create your first blog post using the button above
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
