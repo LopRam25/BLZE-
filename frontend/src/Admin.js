@@ -1000,6 +1000,45 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSaveBlogPost = async (blogPost) => {
+    const token = localStorage.getItem("admin_token");
+    
+    try {
+      const url = editingBlogPost 
+        ? `${API}/admin/blog/${editingBlogPost.id}`
+        : `${API}/admin/blog`;
+      
+      const method = editingBlogPost ? "PUT" : "POST";
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(blogPost)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (editingBlogPost) {
+          setBlogPosts(blogPosts.map(p => p.id === result.id ? result : p));
+        } else {
+          setBlogPosts([...blogPosts, result]);
+        }
+        setShowBlogForm(false);
+        setEditingBlogPost(null);
+      } else {
+        const errorText = await response.text();
+        console.error("Error saving blog post:", errorText);
+        alert("Error saving blog post: " + errorText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error saving blog post: " + error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-gray-100">
       {/* Header */}
