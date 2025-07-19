@@ -535,18 +535,9 @@ async def delete_blog_post(post_id: str, admin: bool = Depends(verify_admin)):
 # Enhanced Order System Endpoints
 @app.get("/api/admin/inventory")
 async def get_inventory(admin: bool = Depends(verify_admin)):
-    """Get all products with inventory and compliance data"""
+    """Get all products with inventory data"""
     products = load_products()
-    inventory = []
-    
-    for product in products:
-        # Update compliance calculations
-        updated_product = update_product_compliance(product)
-        inventory.append(updated_product)
-    
-    # Save updated products
-    save_products(inventory)
-    return inventory
+    return products
 
 @app.put("/api/admin/inventory/{product_id}")
 async def update_inventory(product_id: str, quantity: int, admin: bool = Depends(verify_admin)):
@@ -556,7 +547,6 @@ async def update_inventory(product_id: str, quantity: int, admin: bool = Depends
     for product in products:
         if product.get('id') == product_id:
             product['quantity'] = quantity
-            product = update_product_compliance(product)
             break
     else:
         raise HTTPException(status_code=404, detail="Product not found")
