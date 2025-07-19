@@ -535,6 +535,140 @@ async def delete_blog_post(post_id: str, admin: bool = Depends(verify_admin)):
     save_blog_posts(posts)
     return deleted_post
 
+# Enhanced Order System Endpoints
+@app.get("/api/admin/inventory")
+async def get_inventory(admin: bool = Depends(verify_admin)):
+    """Get all products with inventory and compliance data"""
+    products = load_products()
+    inventory = []
+    
+    for product in products:
+        # Update compliance calculations
+        updated_product = update_product_compliance(product)
+        inventory.append(updated_product)
+    
+    # Save updated products
+    save_products(inventory)
+    return inventory
+
+@app.put("/api/admin/inventory/{product_id}")
+async def update_inventory(product_id: str, quantity: int, admin: bool = Depends(verify_admin)):
+    """Update product inventory quantity"""
+    products = load_products()
+    
+    for product in products:
+        if product.get('id') == product_id:
+            product['quantity'] = quantity
+            product = update_product_compliance(product)
+            break
+    else:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    save_products(products)
+    return {"message": "Inventory updated successfully"}
+
+@app.post("/api/admin/orders/enhanced")
+async def create_enhanced_order(order: EnhancedOrder, admin: bool = Depends(verify_admin)):
+    """Create a new enhanced order with THC compliance tracking"""
+    from datetime import datetime
+    import uuid
+    
+    # Generate order ID and timestamp
+    order_data = order.dict()
+    order_data['orderId'] = str(uuid.uuid4())[:8].upper()
+    order_data['dateTime'] = datetime.now().isoformat()
+    
+    # Calculate taxes (simplified - 8% sales tax, 3% excise tax)
+    subtotal = order_data['subtotal']
+    order_data['exciseTax'] = round(subtotal * 0.03, 2)
+    order_data['salesTax'] = round(subtotal * 0.08, 2)
+    order_data['total'] = round(subtotal + order_data['exciseTax'] + order_data['salesTax'], 2)
+    
+    # Generate receipt
+    receipt_data = generate_receipt_data(order_data)
+    order_data['receiptUrl'] = f"/receipt/{order_data['orderId']}"
+    
+    # Save receipt
+    receipts = load_receipts()
+    receipt = {
+        "orderId": order_data['orderId'],
+        "receiptId": order_data['orderId'],
+        "generatedAt": order_data['dateTime'],
+        "receiptData": receipt_data
+    }
+    receipts.append(receipt)
+    save_receipts(receipts)
+    
+    # Deduct inventory
+    products = load_products()
+    updated_products = deduct_inventory(order_data['products'], products)
+    save_products(updated_products)
+    
+    # Save order
+    orders = load_enhanced_orders()
+    orders.append(order_data)
+    save_enhanced_orders(orders)
+    
+    return order_data
+
+@app.get("/api/admin/orders/enhanced")
+async def get_enhanced_orders(admin: bool = Depends(verify_admin)):
+    """Get all enhanced orders"""
+    return load_enhanced_orders()
+
+@app.put("/api/admin/orders/enhanced/{order_id}")
+async def update_order_status(order_id: str, status: str, admin: bool = Depends(verify_admin)):
+    """Update order status"""
+    orders = load_enhanced_orders()
+    
+    for order in orders:
+        if order.get('orderId') == order_id:
+            order['status'] = status
+            break
+    else:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    save_enhanced_orders(orders)
+    return {"message": "Order status updated successfully"}
+
+@app.get("/receipt/{order_id}")
+async def get_receipt(order_id: str):
+    """Get receipt for an order"""
+    receipts = load_receipts()
+    
+    for receipt in receipts:
+        if receipt.get('orderId') == order_id:
+            return receipt['receiptData']
+    
+    raise HTTPException(status_code=404, detail="Receipt not found")
+
+@app.get("/api/admin/compliance-report")
+async def get_compliance_report(admin: bool = Depends(verify_admin)):
+    """Get compliance report for all products"""
+    products = load_products()
+    report = {
+        "compliantProducts": [],
+        "nonCompliantProducts": [],
+        "lowStockProducts": [],
+        "warningProducts": []
+    }
+    
+    for product in products:
+        updated_product = update_product_compliance(product)
+        
+        if updated_product.get('isCompliant'):
+            report["compliantProducts"].append(updated_product)
+        else:
+            report["nonCompliantProducts"].append(updated_product)
+            
+        if updated_product.get('quantity', 0) < 5:
+            report["lowStockProducts"].append(updated_product)
+            
+        if updated_product.get('warningFlag'):
+            report["warningProducts"].append(updated_product)
+    
+    return report
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
