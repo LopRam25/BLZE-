@@ -633,6 +633,162 @@ const AdminDashboard = () => {
     window.location.reload();
   };
 
+  // Pages management functions
+  const handlePageFileUpload = async (e, pageType) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const content = event.target.result;
+      const token = localStorage.getItem("admin_token");
+      
+      try {
+        const response = await fetch(`${API}/admin/pages/${pageType}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ content })
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          setPages(prev => ({
+            ...prev,
+            [pageType]: result
+          }));
+          alert(`${pageType} page updated successfully!`);
+        } else {
+          alert("Error updating page");
+        }
+      } catch (error) {
+        console.error("Error updating page:", error);
+        alert("Error updating page");
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const generateHTMLTemplate = (pageType) => {
+    const templates = {
+      about: `<!DOCTYPE html>
+<html>
+<head>
+    <title>About Us - BLZE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">About BLZE</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Story</h2>
+            <p class="text-gray-600 mb-4">
+                Welcome to BLZE, your premier destination for high-quality cannabis products. 
+                We are committed to providing exceptional products and service to our community.
+            </p>
+            <p class="text-gray-600">
+                Edit this content to tell your unique story and mission.
+            </p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Mission</h2>
+            <p class="text-gray-600">
+                Add your mission statement and values here.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`,
+      contact: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us - BLZE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">Contact Us</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Get in Touch</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-700">Phone</h3>
+                        <p class="text-gray-600">+1 (555) 123-4567</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700">Email</h3>
+                        <p class="text-gray-600">info@blze.com</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700">Address</h3>
+                        <p class="text-gray-600">123 Main Street<br>City, State 12345</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Hours</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Monday - Friday</span>
+                        <span class="text-gray-800">9:00 AM - 8:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Saturday</span>
+                        <span class="text-gray-800">10:00 AM - 6:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Sunday</span>
+                        <span class="text-gray-800">12:00 PM - 5:00 PM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`
+    };
+
+    const template = templates[pageType];
+    const blob = new Blob([template], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${pageType}-template.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Blog management functions
+  const handleDeleteBlogPost = async (postId) => {
+    if (!confirm("Are you sure you want to delete this blog post?")) return;
+    
+    const token = localStorage.getItem("admin_token");
+    
+    try {
+      const response = await fetch(`${API}/admin/blog/${postId}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        setBlogPosts(blogPosts.filter(p => p.id !== postId));
+      }
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-gray-100">
       {/* Header */}
