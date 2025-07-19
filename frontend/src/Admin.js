@@ -763,6 +763,11 @@ const AdminDashboard = () => {
   const [editingPage, setEditingPage] = useState(null);
   const [showBlogForm, setShowBlogForm] = useState(false);
   const [editingBlogPost, setEditingBlogPost] = useState(null);
+  
+  // Enhanced order and inventory state
+  const [inventory, setInventory] = useState([]);
+  const [enhancedOrders, setEnhancedOrders] = useState([]);
+  const [complianceReport, setComplianceReport] = useState({});
 
   useEffect(() => {
     fetchData();
