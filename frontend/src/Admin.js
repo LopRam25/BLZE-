@@ -69,6 +69,8 @@ const ProductForm = ({ product, onSave, onCancel }) => {
     type: product?.type || "",
     category: product?.category || "sativa",
     thc: product?.thc || 0,
+    delta9THC: product?.delta9THC || "",
+    thca: product?.thca || "",
     price: product?.price || 0,
     pricing: product?.pricing || {
       "1g": 10,
