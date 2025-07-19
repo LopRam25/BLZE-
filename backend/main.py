@@ -31,6 +31,8 @@ ADMIN_PASSWORD = "blze2024"
 # Data storage (in production, use proper database)
 PRODUCTS_FILE = "products.json"
 ORDERS_FILE = "orders.json"
+INVENTORY_FILE = "inventory.json"
+RECEIPTS_FILE = "receipts.json"
 SETTINGS_FILE = "settings.json"
 PAGES_FILE = "backend/pages.json"
 BLOG_FILE = "backend/blog.json"
