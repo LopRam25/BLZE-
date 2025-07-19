@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import Navigation from './Navigation';
 
 const BlogPage = () => {
   const [blogPosts, setBlogPosts] = useState([]);
