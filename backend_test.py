@@ -12,7 +12,7 @@ from PIL import Image
 import io
 
 # Configuration
-BACKEND_URL = "https://879f0e09-df79-4d99-81f5-9944f31ad6f8.preview.emergentagent.com"
+BACKEND_URL = "https://a72bd55c-4478-4952-8f96-3344a97b4ae3.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 ADMIN_TOKEN = "admin_token"
 TEST_PRODUCT_ID = "dante-inferno-001"
