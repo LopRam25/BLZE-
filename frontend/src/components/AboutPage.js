@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navigation from './Navigation';
 
 const AboutPage = () => {
   const [aboutData, setAboutData] = useState(null);
