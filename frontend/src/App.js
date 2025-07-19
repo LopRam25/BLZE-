@@ -349,9 +349,32 @@ const ProductCard = ({ product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
 
   const handleCallNow = () => {
     window.location.href = "tel:8285823092";
+  };
+
+  const openImageModal = (index = 0) => {
+    setModalImageIndex(index);
+    setShowImageModal(true);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+  };
+
+  const nextModalImage = () => {
+    if (product.images && product.images.length > 1) {
+      setModalImageIndex((prev) => (prev + 1) % product.images.length);
+    }
+  };
+
+  const prevModalImage = () => {
+    if (product.images && product.images.length > 1) {
+      setModalImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length);
+    }
   };
 
   const nextImage = () => {
