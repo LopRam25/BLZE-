@@ -420,7 +420,7 @@ const ProductCard = ({ product }) => {
       window.addEventListener('keydown', handleKeyPress);
       return () => window.removeEventListener('keydown', handleKeyPress);
     }
-  }, [showImageModal, product.images]);
+  }, [showImageModal, product.images, modalImageIndex]);
 
   const nextImage = () => {
     if (product.images && product.images.length > 1) {
