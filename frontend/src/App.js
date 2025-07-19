@@ -352,6 +352,8 @@ const ProductCard = ({ product }) => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [showCOA, setShowCOA] = useState(false);
+  const [modalTouchStart, setModalTouchStart] = useState(null);
+  const [modalTouchEnd, setModalTouchEnd] = useState(null);
 
   const handleCallNow = () => {
     window.location.href = "tel:8285823092";
