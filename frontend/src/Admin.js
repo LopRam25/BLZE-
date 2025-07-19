@@ -1391,6 +1391,226 @@ const AdminDashboard = () => {
               </div>
             )}
 
+            {activeTab === "inventory" && (
+              <div>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900">Inventory Management</h2>
+                  <div className="text-sm text-gray-600">
+                    Total Products: {inventory.length}
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Product</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Category</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Delta-9 THC</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">THCA</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Total THC</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Stock</th>
+                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {inventory.map((product) => (
+                          <tr key={product.id} className={`hover:bg-gray-50 ${product.quantity < 5 ? 'bg-red-50' : ''}`}>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center">
+                                {product.images && product.images[0] && (
+                                  <img 
+                                    src={product.images[0]} 
+                                    alt={product.name}
+                                    className="w-12 h-12 rounded-lg object-cover mr-3"
+                                  />
+                                )}
+                                <div>
+                                  <div className="font-semibold text-gray-900">{product.name}</div>
+                                  <div className="text-sm text-gray-500">{product.type}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                {product.category}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              {product.delta9THC ? `${product.delta9THC}%` : '-'}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              {product.thca ? `${product.thca}%` : '-'}
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              {product.totalTHC ? `${product.totalTHC.toFixed(2)}%` : '-'}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="number"
+                                  value={product.quantity}
+                                  onChange={(e) => updateInventoryQuantity(product.id, parseInt(e.target.value))}
+                                  className={`w-20 px-2 py-1 border rounded text-sm ${
+                                    product.quantity < 5 ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                                  }`}
+                                />
+                                {product.quantity < 5 && (
+                                  <span className="text-red-600 text-xs">⚠️ Low</span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <button
+                                onClick={() => {
+                                  setEditingProduct(product);
+                                  setShowProductForm(true);
+                                }}
+                                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {inventory.length === 0 && (
+                  <div className="text-center py-16">
+                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                      No inventory data available
+                    </h3>
+                    <p className="text-gray-500">
+                      Add products with inventory information to see them here
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "enhanced-orders" && (
+              <div>
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900">Order Management</h2>
+                  <div className="flex space-x-4 text-sm text-gray-600">
+                    <span>Total Orders: {enhancedOrders.length}</span>
+                    <span>Pending: {enhancedOrders.filter(o => o.status === 'Pending').length}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {enhancedOrders.map((order) => (
+                    <div key={order.orderId} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                      <div className="p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-lg font-bold text-gray-900">Order #{order.orderId}</h3>
+                            <p className="text-sm text-gray-600">
+                              {new Date(order.dateTime).toLocaleDateString()} at {new Date(order.dateTime).toLocaleTimeString()}
+                            </p>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <select
+                              value={order.status}
+                              onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
+                              className={`px-3 py-1 rounded-full text-sm font-medium ${
+                                order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                                order.status === 'Fulfilled' ? 'bg-green-100 text-green-800' :
+                                'bg-red-100 text-red-800'
+                              }`}
+                            >
+                              <option value="Pending">Pending</option>
+                              <option value="Fulfilled">Fulfilled</option>
+                              <option value="Cancelled">Cancelled</option>
+                            </select>
+                            <button
+                              onClick={() => viewReceipt(order.orderId)}
+                              className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+                            >
+                              View Receipt
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2">Customer Information</h4>
+                            <div className="space-y-1 text-sm">
+                              <p><span className="font-medium">Name:</span> {order.customerName}</p>
+                              <p><span className="font-medium">Phone:</span> {order.phoneNumber}</p>
+                              <p className="flex items-center">
+                                <span className="font-medium">ID Verified:</span>
+                                <span className={`ml-2 px-2 py-1 rounded-full text-xs ${
+                                  order.idVerified ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                }`}>
+                                  {order.idVerified ? '✅ Verified' : '❌ Not Verified'}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+
+                          <div>
+                            <h4 className="font-semibold text-gray-900 mb-2">Order Summary</h4>
+                            <div className="space-y-1 text-sm">
+                              <p><span className="font-medium">Subtotal:</span> ${order.subtotal.toFixed(2)}</p>
+                              <p><span className="font-medium">Excise Tax:</span> ${order.exciseTax.toFixed(2)}</p>
+                              <p><span className="font-medium">Sales Tax:</span> ${order.salesTax.toFixed(2)}</p>
+                              <p className="font-bold border-t pt-1"><span className="font-medium">Total:</span> ${order.total.toFixed(2)}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-6">
+                          <h4 className="font-semibold text-gray-900 mb-3">Products Ordered</h4>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">Product</th>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">Qty</th>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">Delta-9 THC</th>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">THCA</th>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">Total THC</th>
+                                  <th className="px-3 py-2 text-left font-medium text-gray-700">Price</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-200">
+                                {order.products.map((product, index) => (
+                                  <tr key={index}>
+                                    <td className="px-3 py-2 font-medium">{product.productName}</td>
+                                    <td className="px-3 py-2">{product.quantity}</td>
+                                    <td className="px-3 py-2">{product.delta9THC}%</td>
+                                    <td className="px-3 py-2">{product.thca}%</td>
+                                    <td className="px-3 py-2">{product.totalTHC.toFixed(2)}%</td>
+                                    <td className="px-3 py-2">${product.price.toFixed(2)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {enhancedOrders.length === 0 && (
+                  <div className="text-center py-16">
+                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                      No orders yet
+                    </h3>
+                    <p className="text-gray-500">
+                      Orders will appear here once customers start placing them
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {activeTab === "pages" && (
               <div>
                 <div className="flex justify-between items-center mb-8">
