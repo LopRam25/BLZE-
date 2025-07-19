@@ -595,6 +595,78 @@ const ProductCard = ({ product }) => {
           </button>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+          <div className="relative max-w-4xl max-h-full w-full h-full flex items-center justify-center">
+            {/* Close Button */}
+            <button
+              onClick={closeImageModal}
+              className="absolute top-4 right-4 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 z-10"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+
+            {/* Main Image */}
+            <img 
+              src={product.images ? product.images[modalImageIndex] : product.image}
+              alt={product.name}
+              className="max-w-full max-h-full object-contain"
+            />
+
+            {/* Navigation Arrows */}
+            {product.images && product.images.length > 1 && (
+              <>
+                <button
+                  onClick={prevModalImage}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-3"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
+                <button
+                  onClick={nextModalImage}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-3"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </>
+            )}
+
+            {/* Image Indicators */}
+            {product.images && product.images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {product.images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setModalImageIndex(index)}
+                    className={`w-3 h-3 rounded-full ${
+                      index === modalImageIndex ? 'bg-white' : 'bg-white bg-opacity-50'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Product Info Overlay */}
+            <div className="absolute bottom-4 left-4 text-white bg-black bg-opacity-50 rounded-lg p-3">
+              <h3 className="font-bold text-lg">{product.name}</h3>
+              <p className="text-sm">{product.type}</p>
+              {product.images && product.images.length > 1 && (
+                <p className="text-xs mt-1">
+                  {modalImageIndex + 1} of {product.images.length}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
