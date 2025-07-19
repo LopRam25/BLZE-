@@ -261,9 +261,6 @@ def deduct_inventory(order_products: list, products: list) -> list:
         for product in products:
             if product.get('id') == product_id:
                 product['quantity'] = max(0, product.get('quantity', 0) - quantity)
-                # Update warning flag
-                if product.get('totalTHC') is not None:
-                    product['warningFlag'] = product['quantity'] < 5 or not product.get('isCompliant', True)
                 break
     return products
 
