@@ -299,7 +299,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Category
@@ -320,7 +320,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  THC %
+                  THC % (Legacy)
                 </label>
                 <input
                   type="number"
@@ -333,25 +333,55 @@ const ProductForm = ({ product, onSave, onCancel }) => {
                 />
               </div>
               
-              <div className="col-span-2">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Pricing Structure
+                  Delta-9 THC %
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(formData.pricing).map(([weight, price]) => (
-                    <div key={weight} className="flex items-center space-x-2">
-                      <label className="text-sm font-medium text-gray-600 w-12">{weight}:</label>
-                      <input
-                        type="number"
-                        value={price}
-                        onChange={(e) => handlePricingChange(weight, e.target.value)}
-                        step="0.01"
-                        className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                      />
-                    </div>
-                  ))}
-                </div>
+                <input
+                  type="number"
+                  name="delta9THC"
+                  value={formData.delta9THC || ''}
+                  onChange={handleChange}
+                  step="0.01"
+                  placeholder="0.29"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  THCA %
+                </label>
+                <input
+                  type="number"
+                  name="thca"
+                  value={formData.thca || ''}
+                  onChange={handleChange}
+                  step="0.01"
+                  placeholder="0.50"
+                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Pricing Structure
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(formData.pricing).map(([weight, price]) => (
+                  <div key={weight} className="flex items-center space-x-2">
+                    <label className="text-sm font-medium text-gray-600 w-12">{weight}:</label>
+                    <input
+                      type="number"
+                      value={price}
+                      onChange={(e) => handlePricingChange(weight, e.target.value)}
+                      step="0.01"
+                      className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                      required
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
