@@ -564,8 +564,8 @@ const AdminDashboard = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [showPageEditor, setShowPageEditor] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
-  const [showBlogEditor, setShowBlogEditor] = useState(false);
-  const [editingBlog, setEditingBlog] = useState(null);
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingBlogPost, setEditingBlogPost] = useState(null);
 
   useEffect(() => {
     fetchData();
