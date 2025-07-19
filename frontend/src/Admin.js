@@ -80,7 +80,6 @@ const ProductForm = ({ product, onSave, onCancel }) => {
     quantity: product?.quantity || 0,
     description: product?.description || "",
     genetics: product?.genetics || "",
-    grower: product?.grower || "",
     aroma: product?.aroma || "",
     flavor: product?.flavor || "",
     isPremium: product?.isPremium || false,
