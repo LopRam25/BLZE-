@@ -213,6 +213,90 @@ def save_blog_posts(posts):
     with open(BLOG_FILE, 'w') as f:
         json.dump(posts, f, indent=2)
 
+def load_enhanced_orders():
+    try:
+        with open("enhanced_orders.json", 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_enhanced_orders(orders):
+    with open("enhanced_orders.json", 'w') as f:
+        json.dump(orders, f, indent=2)
+
+def load_receipts():
+    try:
+        with open(RECEIPTS_FILE, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+def save_receipts(receipts):
+    with open(RECEIPTS_FILE, 'w') as f:
+        json.dump(receipts, f, indent=2)
+
+# THC Compliance Functions
+def calculate_total_thc(delta9_thc: float, thca: float) -> float:
+    """Calculate Total THC based on delta9 and THCA"""
+    return delta9_thc + (thca * 0.877)
+
+def check_compliance(total_thc: float) -> bool:
+    """Check product compliance (totalTHC <= 0.3%)"""
+    return total_thc <= 0.3
+
+def update_product_compliance(product: dict) -> dict:
+    """Update product with calculated totalTHC and compliance status"""
+    if product.get('delta9THC') is not None and product.get('thca') is not None:
+        product['totalTHC'] = calculate_total_thc(product['delta9THC'], product['thca'])
+        product['isCompliant'] = check_compliance(product['totalTHC'])
+        product['warningFlag'] = product.get('quantity', 0) < 5 or not product['isCompliant']
+    return product
+
+def deduct_inventory(order_products: list, products: list) -> list:
+    """Deduct inventory quantities after order"""
+    for order_product in order_products:
+        product_id = order_product.get('productId')
+        quantity = order_product.get('quantity', 0)
+        
+        for product in products:
+            if product.get('id') == product_id:
+                product['quantity'] = max(0, product.get('quantity', 0) - quantity)
+                # Update warning flag
+                if product.get('totalTHC') is not None:
+                    product['warningFlag'] = product['quantity'] < 5 or not product.get('isCompliant', True)
+                break
+    return products
+
+def generate_receipt_data(order: dict) -> dict:
+    """Generate order receipt data"""
+    return {
+        "header": {
+            "logo": "BLZE™",
+            "website": "www.blze.co",
+            "receiptId": order.get('orderId'),
+            "date": order.get('dateTime'),
+            "customer": order.get('customerName'),
+            "phone": order.get('phoneNumber'),
+            "idVerified": order.get('idVerified', True),
+        },
+        "products": order.get('products', []),
+        "pricing": {
+            "subtotal": order.get('subtotal', 0),
+            "exciseTax": order.get('exciseTax', 0),
+            "salesTax": order.get('salesTax', 0),
+            "total": order.get('total', 0),
+        },
+        "compliance": {
+            "disclaimer": [
+                "⚠️ Must be 21+ to purchase.",
+                "✅ ID verified at time of sale.",
+                "🚫 Do not operate vehicles or machinery while impaired.",
+                "🧊 Store safely. Keep out of reach of children and pets."
+            ],
+        },
+        "url": order.get('receiptUrl', '')
+    }
+
 def load_orders():
     try:
         with open(ORDERS_FILE, 'r') as f:
