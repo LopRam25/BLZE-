@@ -668,6 +668,9 @@ const ProductCard = ({ product }) => {
               src={product.images ? product.images[modalImageIndex] : product.image}
               alt={product.name}
               className="max-w-full max-h-full object-contain"
+              onTouchStart={handleModalTouchStart}
+              onTouchMove={handleModalTouchMove}
+              onTouchEnd={handleModalTouchEnd}
             />
 
             {/* Navigation Arrows */}
