@@ -777,7 +777,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("admin_token");
     
     try {
-      const [productsRes, ordersRes, statsRes, pagesRes, blogRes] = await Promise.all([
+      const [productsRes, ordersRes, statsRes, pagesRes, blogRes, inventoryRes, enhancedOrdersRes, complianceRes] = await Promise.all([
         fetch(`${API}/products`),
         fetch(`${API}/admin/orders`, {
           headers: { "Authorization": `Bearer ${token}` }
@@ -788,6 +788,15 @@ const AdminDashboard = () => {
         fetch(`${API}/pages`),
         fetch(`${API}/admin/blog`, {
           headers: { "Authorization": `Bearer ${token}` }
+        }),
+        fetch(`${API}/admin/inventory`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        }),
+        fetch(`${API}/admin/orders/enhanced`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        }),
+        fetch(`${API}/admin/compliance-report`, {
+          headers: { "Authorization": `Bearer ${token}` }
         })
       ]);
 
@@ -796,6 +805,9 @@ const AdminDashboard = () => {
       if (statsRes.ok) setStats(await statsRes.json());
       if (pagesRes.ok) setPages(await pagesRes.json());
       if (blogRes.ok) setBlogPosts(await blogRes.json());
+      if (inventoryRes.ok) setInventory(await inventoryRes.json());
+      if (enhancedOrdersRes.ok) setEnhancedOrders(await enhancedOrdersRes.json());
+      if (complianceRes.ok) setComplianceReport(await complianceRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     }
