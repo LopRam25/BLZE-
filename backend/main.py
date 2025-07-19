@@ -135,6 +135,35 @@ class BlogPost(BaseModel):
     publishDate: Optional[str] = None
     published: bool = True
 
+class OrderProduct(BaseModel):
+    productId: str
+    productName: str
+    quantity: int
+    delta9THC: float
+    thca: float
+    totalTHC: float
+    price: float
+
+class EnhancedOrder(BaseModel):
+    orderId: Optional[str] = None
+    dateTime: Optional[str] = None
+    customerName: str
+    phoneNumber: str
+    idVerified: bool = True
+    products: List[OrderProduct]
+    subtotal: float
+    exciseTax: float = 0.0
+    salesTax: float = 0.0
+    total: float
+    status: str = "Pending"
+    receiptUrl: Optional[str] = None
+
+class Receipt(BaseModel):
+    orderId: str
+    receiptId: str
+    generatedAt: str
+    receiptData: dict
+
 class Order(BaseModel):
     id: Optional[str] = None
     customer_name: str
