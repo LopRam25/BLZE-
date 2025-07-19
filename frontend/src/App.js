@@ -380,6 +380,30 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  // Handle touch events for modal swipe
+  const handleModalTouchStart = (e) => {
+    setModalTouchEnd(null);
+    setModalTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleModalTouchMove = (e) => {
+    setModalTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleModalTouchEnd = () => {
+    if (!modalTouchStart || !modalTouchEnd) return;
+    const distance = modalTouchStart - modalTouchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && product.images && product.images.length > 1) {
+      nextModalImage();
+    }
+    if (isRightSwipe && product.images && product.images.length > 1) {
+      prevModalImage();
+    }
+  };
+
   // Handle keyboard events for modal
   useEffect(() => {
     if (showImageModal) {
