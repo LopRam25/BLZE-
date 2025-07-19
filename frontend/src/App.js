@@ -377,6 +377,24 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  // Handle keyboard events for modal
+  useEffect(() => {
+    if (showImageModal) {
+      const handleKeyPress = (e) => {
+        if (e.key === 'Escape') {
+          closeImageModal();
+        } else if (e.key === 'ArrowRight') {
+          nextModalImage();
+        } else if (e.key === 'ArrowLeft') {
+          prevModalImage();
+        }
+      };
+      
+      window.addEventListener('keydown', handleKeyPress);
+      return () => window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, [showImageModal, product.images]);
+
   const nextImage = () => {
     if (product.images && product.images.length > 1) {
       setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
