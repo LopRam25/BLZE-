@@ -551,6 +551,217 @@ const ProductForm = ({ product, onSave, onCancel }) => {
   );
 };
 
+const BlogForm = ({ post, onSave, onCancel }) => {
+  const [formData, setFormData] = useState({
+    title: post?.title || "",
+    content: post?.content || "",
+    publishDate: post?.publishDate || new Date().toISOString().split('T')[0],
+    image: post?.image || ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [contentFile, setContentFile] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type === 'text/html' || file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+      // Handle HTML file upload
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setFormData(prev => ({ ...prev, content: event.target.result }));
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Please upload an HTML file (.html or .htm)');
+    }
+  };
+
+  const generateBlogTemplate = () => {
+    const template = `<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog Post - BLZE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-50">
+    <article class="max-w-4xl mx-auto py-12 px-4">
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Your Blog Post Title</h1>
+            <div class="text-gray-600">
+                <time datetime="2025-01-01">January 1, 2025</time>
+            </div>
+        </header>
+        
+        <div class="prose prose-lg max-w-none">
+            <p class="text-xl text-gray-700 mb-6">
+                This is your blog post introduction. Make it engaging and informative.
+            </p>
+            
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Section Heading</h2>
+            <p class="text-gray-600 mb-4">
+                Add your content here. You can use HTML tags for formatting.
+                Include images, links, and other elements as needed.
+            </p>
+            
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Subsection</h3>
+            <ul class="list-disc pl-6 mb-4">
+                <li>Use lists for key points</li>
+                <li>Keep content organized and readable</li>
+                <li>Use proper HTML structure</li>
+            </ul>
+            
+            <p class="text-gray-600">
+                Continue adding your content sections as needed.
+            </p>
+        </div>
+    </article>
+</body>
+</html>`;
+
+    const blob = new Blob([template], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'blog-post-template.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await onSave({ ...formData, id: post?.id });
+    } catch (error) {
+      console.error("Error saving blog post:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {post ? "Edit Blog Post" : "New Blog Post"}
+            </h2>
+            <button
+              onClick={onCancel}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Publish Date
+              </label>
+              <input
+                type="date"
+                name="publishDate"
+                value={formData.publishDate}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Featured Image URL (optional)
+              </label>
+              <input
+                type="url"
+                name="image"
+                value={formData.image}
+                onChange={handleInputChange}
+                placeholder="https://example.com/image.jpg"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Content (HTML)
+              </label>
+              <div className="mb-3 flex space-x-2">
+                <input
+                  type="file"
+                  accept=".html,.htm"
+                  onChange={handleFileUpload}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button
+                  type="button"
+                  onClick={generateBlogTemplate}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  Download Template
+                </button>
+              </div>
+              <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleInputChange}
+                rows="10"
+                placeholder="Upload an HTML file or write your content here..."
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 font-mono text-sm"
+                required
+              />
+            </div>
+
+            <div className="flex space-x-4 pt-4">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Saving..." : (post ? "Update Post" : "Create Post")}
+              </button>
+              <button
+                type="button"
+                onClick={onCancel}
+                className="flex-1 bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts] = useState([]);
