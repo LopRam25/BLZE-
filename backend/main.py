@@ -639,33 +639,6 @@ async def get_receipt(order_id: str):
     
     raise HTTPException(status_code=404, detail="Receipt not found")
 
-@app.get("/api/admin/compliance-report")
-async def get_compliance_report(admin: bool = Depends(verify_admin)):
-    """Get compliance report for all products"""
-    products = load_products()
-    report = {
-        "compliantProducts": [],
-        "nonCompliantProducts": [],
-        "lowStockProducts": [],
-        "warningProducts": []
-    }
-    
-    for product in products:
-        updated_product = update_product_compliance(product)
-        
-        if updated_product.get('isCompliant'):
-            report["compliantProducts"].append(updated_product)
-        else:
-            report["nonCompliantProducts"].append(updated_product)
-            
-        if updated_product.get('quantity', 0) < 5:
-            report["lowStockProducts"].append(updated_product)
-            
-        if updated_product.get('warningFlag'):
-            report["warningProducts"].append(updated_product)
-    
-    return report
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
