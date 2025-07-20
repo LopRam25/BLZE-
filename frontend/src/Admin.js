@@ -1304,10 +1304,7 @@ const AdminDashboard = () => {
 
 
 
-  const handleLogout = () => {
-    localStorage.removeItem("admin_token");
-    window.location.reload();
-  };
+
 
   // Pages management functions
   const handlePageFileUpload = async (e, pageType) => {
