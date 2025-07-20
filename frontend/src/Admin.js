@@ -1485,92 +1485,126 @@ const AdminDashboard = () => {
               <div>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">Inventory Management</h2>
-                  <div className="text-sm text-gray-600">
-                    Total Products: {inventory.length}
+                  <div className="flex space-x-6">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-blue-600">{inventory.length}</div>
+                      <div className="text-sm text-gray-600">Total Products</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-red-600">
+                        {inventory.filter(p => p.quantity < 5).length}
+                      </div>
+                      <div className="text-sm text-gray-600">Low Stock</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-600">
+                        {inventory.reduce((sum, p) => sum + p.quantity, 0)}
+                      </div>
+                      <div className="text-sm text-gray-600">Total Units</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Product</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Category</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Delta-9 THC</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">THCA</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Total THC</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Stock</th>
-                          <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {inventory.map((product) => (
-                          <tr key={product.id} className={`hover:bg-gray-50 ${product.quantity < 5 ? 'bg-red-50' : ''}`}>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center">
-                                {product.images && product.images[0] && (
-                                  <img 
-                                    src={product.images[0]} 
-                                    alt={product.name}
-                                    className="w-12 h-12 rounded-lg object-cover mr-3"
-                                  />
-                                )}
-                                <div>
-                                  <div className="font-semibold text-gray-900">{product.name}</div>
-                                  <div className="text-sm text-gray-500">{product.type}</div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                {product.category}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {inventory.map((product) => (
+                    <div key={product.id} className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 transition-all hover:shadow-xl ${
+                      product.quantity < 5 ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                    }`}>
+                      <div className="relative">
+                        {product.images && product.images[0] && (
+                          <img 
+                            src={product.images[0]} 
+                            alt={product.name}
+                            className="w-full h-48 object-cover"
+                          />
+                        )}
+                        {product.quantity < 5 && (
+                          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            LOW STOCK
+                          </div>
+                        )}
+                        <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
+                          {product.category}
+                        </div>
+                      </div>
+                      
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg text-gray-900 mb-2">{product.name}</h3>
+                        <p className="text-sm text-gray-600 mb-3">{product.type}</p>
+                        
+                        <div className="space-y-3">
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div className="bg-gray-50 p-2 rounded">
+                              <span className="text-gray-600">Delta-9 THC:</span>
+                              <div className="font-semibold">{product.delta9THC ? `${product.delta9THC}%` : 'N/A'}</div>
+                            </div>
+                            <div className="bg-gray-50 p-2 rounded">
+                              <span className="text-gray-600">THCA:</span>
+                              <div className="font-semibold">{product.thca ? `${product.thca}%` : 'N/A'}</div>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-blue-50 p-2 rounded">
+                            <span className="text-gray-600 text-sm">Total THC:</span>
+                            <div className="font-bold text-blue-800">
+                              {product.totalTHC ? `${product.totalTHC.toFixed(2)}%` : 'N/A'}
+                            </div>
+                          </div>
+                          
+                          <div className="border-t pt-3">
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-gray-600 font-medium">Current Stock:</span>
+                              <span className={`font-bold text-lg ${
+                                product.quantity < 5 ? 'text-red-600' : 'text-green-600'
+                              }`}>
+                                {product.quantity} units
                               </span>
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {product.delta9THC ? `${product.delta9THC}%` : '-'}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {product.thca ? `${product.thca}%` : '-'}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                              {product.totalTHC ? `${product.totalTHC.toFixed(2)}%` : '-'}
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="number"
-                                  value={product.quantity}
-                                  onChange={(e) => updateInventoryQuantity(product.id, parseInt(e.target.value))}
-                                  className={`w-20 px-2 py-1 border rounded text-sm ${
-                                    product.quantity < 5 ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                                  }`}
-                                />
-                                {product.quantity < 5 && (
-                                  <span className="text-red-600 text-xs">⚠️ Low</span>
-                                )}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4">
+                            </div>
+                            
+                            <div className="flex space-x-2">
                               <button
-                                onClick={() => {
-                                  setEditingProduct(product);
-                                  setShowProductForm(true);
-                                }}
-                                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                onClick={() => updateInventoryQuantity(product.id, Math.max(0, product.quantity - 1))}
+                                className="flex-1 bg-red-100 text-red-700 py-2 px-3 rounded-lg hover:bg-red-200 transition-colors font-medium"
                               >
-                                Edit
+                                -1
                               </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                              <input
+                                type="number"
+                                value={product.quantity}
+                                onChange={(e) => updateInventoryQuantity(product.id, parseInt(e.target.value) || 0)}
+                                className="w-16 text-center border border-gray-300 rounded-lg py-2 px-2 font-semibold"
+                              />
+                              <button
+                                onClick={() => updateInventoryQuantity(product.id, product.quantity + 1)}
+                                className="flex-1 bg-green-100 text-green-700 py-2 px-3 rounded-lg hover:bg-green-200 transition-colors font-medium"
+                              >
+                                +1
+                              </button>
+                            </div>
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              setEditingProduct(product);
+                              setShowProductForm(true);
+                            }}
+                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                          >
+                            Edit Product
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {inventory.length === 0 && (
                   <div className="text-center py-16">
+                    <div className="mb-4">
+                      <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+                      </svg>
+                    </div>
                     <h3 className="text-xl font-semibold text-gray-600 mb-2">
                       No inventory data available
                     </h3>
