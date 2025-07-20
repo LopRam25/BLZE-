@@ -1309,14 +1309,7 @@ const AdminDashboard = () => {
 
 
 
-      about: `<!DOCTYPE html>
-<html>
-<head>
-    <title>About Us - BLZE</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body class="bg-gray-50">
+
     <div class="max-w-4xl mx-auto py-12 px-4">
         <h1 class="text-4xl font-bold text-gray-900 mb-8">About BLZE</h1>
         
