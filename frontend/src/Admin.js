@@ -1301,15 +1301,6 @@ const AdminDashboard = () => {
 };
 
 
-
-
-
-
-
-
-
-
-
     <div class="max-w-4xl mx-auto py-12 px-4">
         <h1 class="text-4xl font-bold text-gray-900 mb-8">About BLZE</h1>
         
