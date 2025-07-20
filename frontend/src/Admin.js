@@ -1646,6 +1646,20 @@ const AdminDashboard = () => {
                             </div>
                           </div>
                           
+                          <div className="bg-purple-50 p-2 rounded">
+                            <span className="text-gray-600 text-sm">Quality:</span>
+                            <select
+                              value={product.quality || 'Premium'}
+                              onChange={(e) => updateProductQuality(product.id, e.target.value)}
+                              className="w-full mt-1 px-2 py-1 border border-purple-300 rounded text-sm font-medium"
+                            >
+                              <option value="Premium">Premium</option>
+                              <option value="Top Shelf">Top Shelf</option>
+                              <option value="Mid Grade">Mid Grade</option>
+                              <option value="Budget">Budget</option>
+                            </select>
+                          </div>
+                          
                           <div className="border-t pt-3">
                             <div className="flex items-center justify-between mb-2">
                               <span className="text-gray-600 font-medium">Current Stock:</span>
