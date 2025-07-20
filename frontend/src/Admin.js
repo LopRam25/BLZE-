@@ -1077,6 +1077,80 @@ const AdminDashboard = () => {
     window.open(`${API.replace('/api', '')}/receipt/${orderId}`, '_blank');
   };
 
+  const generateTestReceipt = () => {
+    // Create a test receipt for demonstration
+    const testOrder = {
+      orderId: 'TEST' + Date.now().toString().slice(-6),
+      dateTime: new Date().toISOString(),
+      customerName: 'John Cannabis',
+      phoneNumber: '555-0123',
+      idVerified: true,
+      products: [
+        {
+          productName: 'Dante\'s Inferno',
+          quantity: 1,
+          delta9THC: 0.29,
+          thca: 25.8,
+          totalTHC: 22.91,
+          price: 85.00
+        }
+      ],
+      subtotal: 85.00,
+      exciseTax: 2.55,
+      salesTax: 6.80,
+      total: 94.35,
+      status: 'Pending'
+    };
+    
+    // Generate receipt URL and open
+    const testReceiptUrl = `${API.replace('/api', '')}/receipt/${testOrder.orderId}`;
+    window.open(testReceiptUrl, '_blank');
+  };
+
+  const toggleProductVisibility = async (productId, isVisible) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/products/${productId}`, {
+        method: "PUT", 
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ isVisible })
+      });
+
+      if (response.ok) {
+        setInventory(prev => prev.map(item => 
+          item.id === productId ? { ...item, isVisible } : item
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating product visibility:", error);
+    }
+  };
+
+  const updateProductQuality = async (productId, quality) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ quality })
+      });
+
+      if (response.ok) {
+        setInventory(prev => prev.map(item => 
+          item.id === productId ? { ...item, quality } : item
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating product quality:", error);
+    }
+  };
+
   const handleSaveBlogPost = async (blogPost) => {
     const token = localStorage.getItem("admin_token");
     
