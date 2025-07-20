@@ -1571,28 +1571,41 @@ const AdminDashboard = () => {
               <div>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-900">Inventory Management</h2>
-                  <div className="flex space-x-6">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">{inventory.length}</div>
-                      <div className="text-sm text-gray-600">Total Products</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-red-600">
-                        {inventory.filter(p => p.quantity < 5).length}
+                  <div className="flex items-center space-x-6">
+                    <label className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={showHiddenProducts}
+                        onChange={(e) => setShowHiddenProducts(e.target.checked)}
+                        className="rounded text-blue-600"
+                      />
+                      <span className="text-sm text-gray-600">Show Hidden Products</span>
+                    </label>
+                    <div className="flex space-x-6">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">{inventory.length}</div>
+                        <div className="text-sm text-gray-600">Total Products</div>
                       </div>
-                      <div className="text-sm text-gray-600">Low Stock</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-green-600">
-                        {inventory.reduce((sum, p) => sum + p.quantity, 0)}
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-red-600">
+                          {inventory.filter(p => p.quantity < 5).length}
+                        </div>
+                        <div className="text-sm text-gray-600">Low Stock</div>
                       </div>
-                      <div className="text-sm text-gray-600">Total Units</div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">
+                          {inventory.reduce((sum, p) => sum + p.quantity, 0)}
+                        </div>
+                        <div className="text-sm text-gray-600">Total Units</div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {inventory.map((product) => (
+                  {inventory
+                    .filter(product => showHiddenProducts || product.isVisible !== false)
+                    .map((product) => (
                     <div key={product.id} className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 transition-all hover:shadow-xl ${
                       product.quantity < 5 ? 'border-red-300 bg-red-50' : 'border-gray-200'
                     }`}>
