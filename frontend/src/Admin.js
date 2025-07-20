@@ -1306,43 +1306,7 @@ const AdminDashboard = () => {
 
 
 
-  // Pages management functions
-  const handlePageFileUpload = async (e, pageType) => {
-    const file = e.target.files[0];
-    if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      const content = event.target.result;
-      const token = localStorage.getItem("admin_token");
-      
-      try {
-        const response = await fetch(`${API}/admin/pages/${pageType}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({ content })
-        });
-        
-        if (response.ok) {
-          const result = await response.json();
-          setPages(prev => ({
-            ...prev,
-            [pageType]: result
-          }));
-          alert(`${pageType} page updated successfully!`);
-        } else {
-          alert("Error updating page");
-        }
-      } catch (error) {
-        console.error("Error updating page:", error);
-        alert("Error updating page");
-      }
-    };
-    reader.readAsText(file);
-  };
 
   const generateHTMLTemplate = (pageType) => {
     const templates = {
