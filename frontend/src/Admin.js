@@ -1308,8 +1308,7 @@ const AdminDashboard = () => {
 
 
 
-  const generateHTMLTemplate = (pageType) => {
-    const templates = {
+
       about: `<!DOCTYPE html>
 <html>
 <head>
