@@ -1300,24 +1300,7 @@ const AdminDashboard = () => {
   );
 };
 
-  const handleDeleteProduct = async (productId) => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-    
-    const token = localStorage.getItem("admin_token");
-    
-    try {
-      const response = await fetch(`${API}/admin/products/${productId}`, {
-        method: "DELETE",
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      
-      if (response.ok) {
-        setProducts(products.filter(p => p.id !== productId));
-      }
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
-  };
+
 
   const handleSaveProduct = (product) => {
     if (editingProduct) {
