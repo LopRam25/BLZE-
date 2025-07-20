@@ -1603,11 +1603,21 @@ const AdminDashboard = () => {
                             className="w-full h-48 object-cover"
                           />
                         )}
-                        {product.quantity < 5 && (
+                        if (product.quantity < 5) {
                           <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
                             LOW STOCK
                           </div>
                         )}
+                        <div className="absolute top-2 left-2 flex space-x-1">
+                          <button
+                            onClick={() => toggleProductVisibility(product.id, !product.isVisible)}
+                            className={`px-2 py-1 rounded text-xs font-bold ${
+                              product.isVisible !== false ? 'bg-green-600 text-white' : 'bg-gray-600 text-white'
+                            }`}
+                          >
+                            {product.isVisible !== false ? '👁️ Visible' : '🚫 Hidden'}
+                          </button>
+                        </div>
                         <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
                           {product.category}
                         </div>
