@@ -1060,6 +1060,239 @@ const AdminDashboard = () => {
           </div>
         )}
 
+        {/* Receipt Maker */}
+        {activeTab === "receipts" && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold text-gray-900">Receipt Maker</h2>
+              <button
+                onClick={() => setShowReceiptForm(true)}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                + New Receipt
+              </button>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <h3 className="font-medium text-gray-900 mb-3">Quick Actions</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    const testReceipt = {
+                      customerName: 'John Cannabis',
+                      phoneNumber: '555-0123',
+                      idVerified: true,
+                      products: [
+                        {
+                          productName: 'Dante\'s Inferno',
+                          quantity: 1,
+                          delta9THC: 0.29,
+                          thca: 25.8,
+                          totalTHC: 22.91,
+                          price: 85.00
+                        }
+                      ],
+                      subtotal: 85.00,
+                      exciseTax: 2.55,
+                      salesTax: 6.80,
+                      total: 94.35
+                    };
+                    generateCustomReceipt(testReceipt);
+                  }}
+                  className="w-full bg-blue-100 text-blue-700 py-3 px-4 rounded-lg text-sm font-medium text-left"
+                >
+                  📄 Generate Sample Receipt
+                </button>
+                <button
+                  onClick={() => setShowReceiptForm(true)}
+                  className="w-full bg-purple-100 text-purple-700 py-3 px-4 rounded-lg text-sm font-medium text-left"
+                >
+                  ✏️ Create Custom Receipt
+                </button>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <h3 className="font-medium text-gray-900 mb-3">Receipt Templates</h3>
+              <div className="grid grid-cols-2 gap-2">
+                <button className="bg-gray-100 text-gray-700 py-8 rounded-lg text-xs">
+                  🌿 Flower<br/>Receipt
+                </button>
+                <button className="bg-gray-100 text-gray-700 py-8 rounded-lg text-xs">
+                  🍯 Concentrate<br/>Receipt
+                </button>
+                <button className="bg-gray-100 text-gray-700 py-8 rounded-lg text-xs">
+                  🍪 Edible<br/>Receipt
+                </button>
+                <button className="bg-gray-100 text-gray-700 py-8 rounded-lg text-xs">
+                  🎁 Bundle<br/>Receipt
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Orders */}
+        {activeTab === "orders" && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold text-gray-900">Orders</h2>
+              <div className="text-sm text-gray-600">
+                {enhancedOrders.length} total
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              <div className="bg-yellow-100 p-3 rounded-lg text-center">
+                <div className="text-lg font-bold text-yellow-800">
+                  {enhancedOrders.filter(o => o.status === 'Pending').length}
+                </div>
+                <div className="text-xs text-yellow-600">Pending</div>
+              </div>
+              <div className="bg-green-100 p-3 rounded-lg text-center">
+                <div className="text-lg font-bold text-green-800">
+                  {enhancedOrders.filter(o => o.status === 'Fulfilled').length}
+                </div>
+                <div className="text-xs text-green-600">Fulfilled</div>
+              </div>
+              <div className="bg-red-100 p-3 rounded-lg text-center">
+                <div className="text-lg font-bold text-red-800">
+                  {enhancedOrders.filter(o => o.status === 'Cancelled').length}
+                </div>
+                <div className="text-xs text-red-600">Cancelled</div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {enhancedOrders.map((order) => (
+                <div key={order.orderId} className="bg-white rounded-lg shadow-sm border p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-medium text-gray-900">#{order.orderId}</h3>
+                      <p className="text-sm text-gray-600">{order.customerName}</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-medium text-gray-900">${order.total.toFixed(2)}</div>
+                      <select
+                        value={order.status}
+                        onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
+                        className={`text-xs px-2 py-1 rounded-full border-0 ${
+                          order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                          order.status === 'Fulfilled' ? 'bg-green-100 text-green-800' :
+                          'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Fulfilled">Fulfilled</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm">
+                      <span className="text-gray-600">Phone: </span>
+                      <a href={`tel:${order.phoneNumber}`} className="text-blue-600">
+                        {order.phoneNumber}
+                      </a>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-600">ID Verified: </span>
+                      <span className={order.idVerified ? 'text-green-600' : 'text-red-600'}>
+                        {order.idVerified ? '✓ Yes' : '✗ No'}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-gray-600">Products: </span>
+                      <span className="text-gray-900">
+                        {order.products.map(p => p.productName).join(', ')}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-2 mt-3">
+                    <button
+                      onClick={() => viewReceipt(order.orderId)}
+                      className="flex-1 bg-blue-100 text-blue-700 py-2 px-3 rounded-lg text-sm font-medium"
+                    >
+                      View Receipt
+                    </button>
+                    <button className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium">
+                      Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {enhancedOrders.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-4xl mb-2">📋</div>
+                <h3 className="text-lg font-medium text-gray-600 mb-1">No orders yet</h3>
+                <p className="text-sm text-gray-500">Orders will appear here once placed</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Pages */}
+        {activeTab === "pages" && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-bold text-gray-900">Pages Manager</h2>
+            
+            <div className="space-y-3">
+              {Object.entries(pages).map(([pageType, pageData]) => (
+                <div key={pageType} className="bg-white rounded-lg shadow-sm border p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium text-gray-900 capitalize">{pageType} Page</h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {pageData?.content ? `${pageData.content.substring(0, 100)}...` : 'No content yet'}
+                      </p>
+                    </div>
+                    <button className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium">
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h3 className="font-medium text-green-900 mb-2">📋 How to Update Pages</h3>
+              <div className="space-y-1 text-sm text-green-800">
+                <p>• Upload HTML files for perfect formatting</p>
+                <p>• Content updates automatically on site</p>
+                <p>• Mobile-friendly templates provided</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile-Optimized Product Form */}
+      {showProductForm && (
+        <MobileProductForm
+          product={editingProduct}
+          onSave={handleSaveProduct}
+          onCancel={() => {
+            setShowProductForm(false);
+            setEditingProduct(null);
+          }}
+        />
+      )}
+
+      {/* Mobile-Optimized Receipt Form */}
+      {showReceiptForm && (
+        <MobileReceiptForm
+          onSave={generateCustomReceipt}
+          onCancel={() => setShowReceiptForm(false)}
+        />
+      )}
+    </div>
+  );
+};
+
   const handleDeleteProduct = async (productId) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     
