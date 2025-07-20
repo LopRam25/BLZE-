@@ -1603,7 +1603,7 @@ const AdminDashboard = () => {
                             className="w-full h-48 object-cover"
                           />
                         )}
-                        if (product.quantity < 5) {
+                        {product.quantity < 5 && (
                           <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
                             LOW STOCK
                           </div>
