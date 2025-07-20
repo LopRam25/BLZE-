@@ -784,22 +784,11 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [stats, setStats] = useState({});
+  const [enhancedOrders, setEnhancedOrders] = useState([]);
+  const [pages, setPages] = useState({});
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  
-  // CMS state
-  const [pages, setPages] = useState({});
-  const [blogPosts, setBlogPosts] = useState([]);
-  const [showPageEditor, setShowPageEditor] = useState(false);
-  const [editingPage, setEditingPage] = useState(null);
-  const [showBlogForm, setShowBlogForm] = useState(false);
-  const [editingBlogPost, setEditingBlogPost] = useState(null);
-  
-  // Enhanced order and inventory state
-  const [inventory, setInventory] = useState([]);
-  const [enhancedOrders, setEnhancedOrders] = useState([]);
-  const [showHiddenProducts, setShowHiddenProducts] = useState(false);
+  const [showReceiptForm, setShowReceiptForm] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -809,37 +798,267 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("admin_token");
     
     try {
-      const [productsRes, ordersRes, statsRes, pagesRes, blogRes, inventoryRes, enhancedOrdersRes] = await Promise.all([
+      const [productsRes, enhancedOrdersRes, pagesRes] = await Promise.all([
         fetch(`${API}/products`),
-        fetch(`${API}/admin/orders`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        }),
-        fetch(`${API}/admin/stats`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        }),
-        fetch(`${API}/pages`),
-        fetch(`${API}/admin/blog`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        }),
-        fetch(`${API}/admin/inventory`, {
-          headers: { "Authorization": `Bearer ${token}` }
-        }),
         fetch(`${API}/admin/orders/enhanced`, {
           headers: { "Authorization": `Bearer ${token}` }
-        })
+        }),
+        fetch(`${API}/pages`)
       ]);
 
       if (productsRes.ok) setProducts(await productsRes.json());
-      if (ordersRes.ok) setOrders(await ordersRes.json());
-      if (statsRes.ok) setStats(await statsRes.json());
-      if (pagesRes.ok) setPages(await pagesRes.json());
-      if (blogRes.ok) setBlogPosts(await blogRes.json());
-      if (inventoryRes.ok) setInventory(await inventoryRes.json());
       if (enhancedOrdersRes.ok) setEnhancedOrders(await enhancedOrdersRes.json());
+      if (pagesRes.ok) setPages(await pagesRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleSaveProduct = async (productData) => {
+    const token = localStorage.getItem("admin_token");
+    const formData = new FormData();
+    
+    Object.keys(productData).forEach(key => {
+      if (key === 'images' && productData[key]) {
+        productData[key].forEach(file => formData.append('images', file));
+      } else if (key === 'coa' && productData[key]) {
+        formData.append('coa', productData[key]);
+      } else if (key === 'pricing') {
+        formData.append(key, JSON.stringify(productData[key]));
+      } else {
+        formData.append(key, productData[key]);
+      }
+    });
+
+    try {
+      const url = editingProduct 
+        ? `${API}/admin/products/${editingProduct.id}`
+        : `${API}/admin/products`;
+      
+      const response = await fetch(url, {
+        method: editingProduct ? "PUT" : "POST",
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData
+      });
+
+      if (response.ok) {
+        fetchData();
+        setShowProductForm(false);
+        setEditingProduct(null);
+      }
+    } catch (error) {
+      console.error("Error saving product:", error);
+    }
+  };
+
+  const toggleProductVisibility = async (productId, isVisible) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/products/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ isVisible })
+      });
+
+      if (response.ok) {
+        setProducts(prev => prev.map(item => 
+          item.id === productId ? { ...item, isVisible } : item
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating product visibility:", error);
+    }
+  };
+
+  const updateInventoryQuantity = async (productId, newQuantity) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/inventory/${productId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+
+      if (response.ok) {
+        setProducts(prev => prev.map(item => 
+          item.id === productId ? { ...item, quantity: newQuantity } : item
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating inventory:", error);
+    }
+  };
+
+  const updateOrderStatus = async (orderId, newStatus) => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/orders/enhanced/${orderId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (response.ok) {
+        setEnhancedOrders(prev => prev.map(order => 
+          order.orderId === orderId ? { ...order, status: newStatus } : order
+        ));
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  const viewReceipt = (orderId) => {
+    window.open(`${API.replace('/api', '')}/receipt/${orderId}`, '_blank');
+  };
+
+  const generateCustomReceipt = (receiptData) => {
+    const testOrder = {
+      orderId: 'CUSTOM' + Date.now().toString().slice(-6),
+      dateTime: new Date().toISOString(),
+      ...receiptData
+    };
+    
+    const testReceiptUrl = `${API.replace('/api', '')}/receipt/${testOrder.orderId}`;
+    window.open(testReceiptUrl, '_blank');
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile Header */}
+      <div className="bg-white shadow-sm border-b sticky top-0 z-10">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-gray-900">BLZE Admin</h1>
+            <button
+              onClick={() => {
+                localStorage.removeItem("admin_token");
+                window.location.reload();
+              }}
+              className="text-sm text-gray-600 hover:text-gray-800"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Tab Navigation */}
+      <div className="bg-white border-b overflow-x-auto">
+        <div className="flex min-w-max px-2">
+          {[
+            { id: "products", label: "Products", icon: "📦" },
+            { id: "receipts", label: "Receipt Maker", icon: "🧾" },
+            { id: "orders", label: "Orders", icon: "📋" },
+            { id: "pages", label: "Pages", icon: "📄" }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+                activeTab === tab.id
+                  ? "text-green-600 border-b-2 border-green-600 bg-green-50"
+                  : "text-gray-600 hover:text-gray-800"
+              }`}
+            >
+              <div className="flex items-center justify-center space-x-1">
+                <span>{tab.icon}</span>
+                <span>{tab.label}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="p-4 pb-20">
+        {/* Products Manager */}
+        {activeTab === "products" && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-bold text-gray-900">Products Manager</h2>
+              <button
+                onClick={() => {
+                  setEditingProduct(null);
+                  setShowProductForm(true);
+                }}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                + Add Product
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              {products.map((product) => (
+                <div key={product.id} className="bg-white rounded-lg shadow-sm border p-4">
+                  <div className="flex space-x-3">
+                    {product.images && product.images[0] && (
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-gray-900 truncate">{product.name}</h3>
+                      <p className="text-sm text-gray-600">{product.category}</p>
+                      <div className="flex items-center space-x-4 mt-2">
+                        <span className="text-sm text-gray-900">Stock: {product.quantity}</span>
+                        <span className={`text-xs px-2 py-1 rounded-full ${
+                          product.isVisible !== false ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {product.isVisible !== false ? 'Visible' : 'Hidden'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-2 mt-3">
+                    <button
+                      onClick={() => {
+                        setEditingProduct(product);
+                        setShowProductForm(true);
+                      }}
+                      className="flex-1 bg-blue-100 text-blue-700 py-2 px-3 rounded-lg text-sm font-medium"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => toggleProductVisibility(product.id, !product.isVisible)}
+                      className="flex-1 bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm font-medium"
+                    >
+                      {product.isVisible !== false ? 'Hide' : 'Show'}
+                    </button>
+                    <div className="flex items-center space-x-1">
+                      <button
+                        onClick={() => updateInventoryQuantity(product.id, Math.max(0, product.quantity - 1))}
+                        className="bg-red-100 text-red-700 w-8 h-8 rounded-lg text-sm font-medium"
+                      >
+                        -
+                      </button>
+                      <span className="w-8 text-center text-sm font-medium">{product.quantity}</span>
+                      <button
+                        onClick={() => updateInventoryQuantity(product.id, product.quantity + 1)}
+                        className="bg-green-100 text-green-700 w-8 h-8 rounded-lg text-sm font-medium"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
   const handleDeleteProduct = async (productId) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
