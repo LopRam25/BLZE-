@@ -28,5 +28,40 @@
     "coa": "",
     "rating": 0.0,
     "reviews": 0
+  },
+  {
+    "id": "a8567156-a28b-4e30-bc21-887ae33446a4",
+    "name": "Oreoz",
+    "type": "Sativa",
+    "category": "sativa",
+    "thc": 35.0,
+    "price": 0.0,
+    "pricing": {
+      "1g": 10,
+      "3.5g": 30,
+      "7g": 60,
+      "14g": 110,
+      "28g": 200
+    },
+    "quantity": 454,
+    "description": "Kush smell",
+    "genetics": "Hdhsks",
+    "aroma": "Hdjjsms",
+    "flavor": "Ndjd",
+    "isPremium": false,
+    "images": [
+      "https://a72bd55c-4478-4952-8f96-3344a97b4ae3.preview.emergentagent.com/api/uploads/99850fbe-0aec-4b78-bed1-1073e3240173.jpeg",
+      "https://a72bd55c-4478-4952-8f96-3344a97b4ae3.preview.emergentagent.com/api/uploads/b6458d1f-6673-4b46-bc83-d9faef26f1d0.jpeg"
+    ],
+    "coa": "",
+    "rating": 0.0,
+    "reviews": 0,
+    "sku": null,
+    "unitWeightGrams": null,
+    "delta9THC": 0.02,
+    "thca": 0.37,
+    "totalTHC": null,
+    "isCompliant": null,
+    "warningFlag": null
   }
 ]
