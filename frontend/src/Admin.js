@@ -799,6 +799,7 @@ const AdminDashboard = () => {
   // Enhanced order and inventory state
   const [inventory, setInventory] = useState([]);
   const [enhancedOrders, setEnhancedOrders] = useState([]);
+  const [showHiddenProducts, setShowHiddenProducts] = useState(false);
 
   useEffect(() => {
     fetchData();
