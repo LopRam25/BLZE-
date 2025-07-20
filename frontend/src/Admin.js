@@ -783,7 +783,6 @@ const BlogForm = ({ post, onSave, onCancel }) => {
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts] = useState([]);
-  const [orders, setOrders] = useState([]);
   const [enhancedOrders, setEnhancedOrders] = useState([]);
   const [pages, setPages] = useState({});
   const [showProductForm, setShowProductForm] = useState(false);
@@ -964,7 +963,7 @@ const AdminDashboard = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${"" +
                 activeTab === tab.id
                   ? "text-green-600 border-b-2 border-green-600 bg-green-50"
                   : "text-gray-600 hover:text-gray-800"
@@ -1013,9 +1012,9 @@ const AdminDashboard = () => {
                       <p className="text-sm text-gray-600">{product.category}</p>
                       <div className="flex items-center space-x-4 mt-2">
                         <span className="text-sm text-gray-900">Stock: {product.quantity}</span>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
+                        <span className={"text-xs px-2 py-1 rounded-full " + (
                           product.isVisible !== false ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                        }`}>
+                        )}>
                           {product.isVisible !== false ? 'Visible' : 'Hidden'}
                         </span>
                       </div>
@@ -1057,6 +1056,14 @@ const AdminDashboard = () => {
                 </div>
               ))}
             </div>
+
+            {products.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-4xl mb-2">📦</div>
+                <h3 className="text-lg font-medium text-gray-600 mb-1">No products yet</h3>
+                <p className="text-sm text-gray-500">Add your first product above</p>
+              </div>
+            )}
           </div>
         )}
 
@@ -1176,11 +1183,11 @@ const AdminDashboard = () => {
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
-                        className={`text-xs px-2 py-1 rounded-full border-0 ${
+                        className={"text-xs px-2 py-1 rounded-full border-0 " + (
                           order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                           order.status === 'Fulfilled' ? 'bg-green-100 text-green-800' :
                           'bg-red-100 text-red-800'
-                        }`}
+                        )}
                       >
                         <option value="Pending">Pending</option>
                         <option value="Fulfilled">Fulfilled</option>
