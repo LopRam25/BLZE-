@@ -1300,9 +1300,7 @@ const AdminDashboard = () => {
   );
 };
 
-
-    <div class="max-w-4xl mx-auto py-12 px-4">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8">About BLZE</h1>
+const MobileProductForm = ({ product, onSave, onCancel }) => {
         
         <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Story</h2>
