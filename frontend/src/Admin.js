@@ -1302,15 +1302,7 @@ const AdminDashboard = () => {
 
 
 
-  const handleSaveProduct = (product) => {
-    if (editingProduct) {
-      setProducts(products.map(p => p.id === product.id ? product : p));
-    } else {
-      setProducts([...products, product]);
-    }
-    setShowProductForm(false);
-    setEditingProduct(null);
-  };
+
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
