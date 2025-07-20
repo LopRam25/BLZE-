@@ -1635,6 +1635,9 @@ const AdminDashboard = () => {
                         <div className="absolute bottom-2 left-2 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-xs">
                           {product.category}
                         </div>
+                        <div className="absolute bottom-2 right-2 bg-purple-600 bg-opacity-90 text-white px-2 py-1 rounded text-xs font-bold">
+                          {product.quality || 'Premium'}
+                        </div>
                       </div>
                       
                       <div className="p-4">
