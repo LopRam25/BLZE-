@@ -2392,6 +2392,346 @@ const AdminDashboard = () => {
   );
 };
 
+const MobileProductForm = ({ product, onSave, onCancel }) => {
+  const [formData, setFormData] = useState({
+    id: product?.id || "",
+    name: product?.name || "",
+    type: product?.type || "",
+    category: product?.category || "hybrid",
+    thc: product?.thc || 0,
+    delta9THC: product?.delta9THC || "",
+    thca: product?.thca || "",
+    price: product?.price || 0,
+    quantity: product?.quantity || 0,
+    description: product?.description || "",
+    genetics: product?.genetics || "",
+    aroma: product?.aroma || "",
+    flavor: product?.flavor || "",
+    isPremium: product?.isPremium || false,
+    isVisible: product?.isVisible !== false,
+    quality: product?.quality || "Premium"
+  });
+
+  const [images, setImages] = useState([]);
+  const [coa, setCoa] = useState(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({ ...formData, images, coa });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+      <div className="bg-white w-full max-h-[90vh] rounded-t-xl overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+          <h2 className="text-lg font-bold text-gray-900">
+            {product ? "Edit Product" : "Add Product"}
+          </h2>
+          <button onClick={onCancel} className="text-gray-500">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+              >
+                <option value="hybrid">Hybrid</option>
+                <option value="sativa">Sativa</option>
+                <option value="indica">Indica</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Quality</label>
+              <select
+                value={formData.quality}
+                onChange={(e) => setFormData(prev => ({ ...prev, quality: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+              >
+                <option value="Premium">Premium</option>
+                <option value="Top Shelf">Top Shelf</option>
+                <option value="Mid Grade">Mid Grade</option>
+                <option value="Budget">Budget</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Delta-9 THC %</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.delta9THC}
+                onChange={(e) => setFormData(prev => ({ ...prev, delta9THC: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                placeholder="0.29"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">THCA %</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.thca}
+                onChange={(e) => setFormData(prev => ({ ...prev, thca: e.target.value }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                placeholder="25.8"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.price}
+                onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Stock Quantity</label>
+              <input
+                type="number"
+                value={formData.quantity}
+                onChange={(e) => setFormData(prev => ({ ...prev, quantity: parseInt(e.target.value) }))}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              rows="3"
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Product Images</label>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => setImages(Array.from(e.target.files))}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+            />
+          </div>
+
+          <div className="flex items-center space-x-4 pt-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.isPremium}
+                onChange={(e) => setFormData(prev => ({ ...prev, isPremium: e.target.checked }))}
+                className="rounded"
+              />
+              <span className="text-sm text-gray-700">Premium Product</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={formData.isVisible}
+                onChange={(e) => setFormData(prev => ({ ...prev, isVisible: e.target.checked }))}
+                className="rounded"
+              />
+              <span className="text-sm text-gray-700">Visible to Customers</span>
+            </label>
+          </div>
+
+          <div className="flex space-x-3 pt-6 pb-4">
+            <button
+              type="submit"
+              className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-medium"
+            >
+              {product ? "Update Product" : "Add Product"}
+            </button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const MobileReceiptForm = ({ onSave, onCancel }) => {
+  const [receiptData, setReceiptData] = useState({
+    customerName: '',
+    phoneNumber: '',
+    idVerified: true,
+    products: [
+      {
+        productName: '',
+        quantity: 1,
+        delta9THC: 0.29,
+        thca: 25.8,
+        totalTHC: 22.91,
+        price: 0
+      }
+    ],
+    subtotal: 0,
+    exciseTax: 0,
+    salesTax: 0,
+    total: 0
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const subtotal = receiptData.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+    const exciseTax = subtotal * 0.03;
+    const salesTax = subtotal * 0.08;
+    const total = subtotal + exciseTax + salesTax;
+    
+    onSave({
+      ...receiptData,
+      subtotal,
+      exciseTax,
+      salesTax,
+      total
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+      <div className="bg-white w-full max-h-[90vh] rounded-t-xl overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+          <h2 className="text-lg font-bold text-gray-900">Create Custom Receipt</h2>
+          <button onClick={onCancel} className="text-gray-500">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+            <input
+              type="text"
+              value={receiptData.customerName}
+              onChange={(e) => setReceiptData(prev => ({ ...prev, customerName: e.target.value }))}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <input
+              type="tel"
+              value={receiptData.phoneNumber}
+              onChange={(e) => setReceiptData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+              className="w-full p-3 border border-gray-300 rounded-lg"
+              required
+            />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={receiptData.idVerified}
+              onChange={(e) => setReceiptData(prev => ({ ...prev, idVerified: e.target.checked }))}
+              className="rounded"
+            />
+            <label className="text-sm text-gray-700">ID Verified</label>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Product Information</label>
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Product Name"
+                value={receiptData.products[0].productName}
+                onChange={(e) => {
+                  const newProducts = [...receiptData.products];
+                  newProducts[0].productName = e.target.value;
+                  setReceiptData(prev => ({ ...prev, products: newProducts }));
+                }}
+                className="w-full p-3 border border-gray-300 rounded-lg"
+                required
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  type="number"
+                  placeholder="Quantity"
+                  value={receiptData.products[0].quantity}
+                  onChange={(e) => {
+                    const newProducts = [...receiptData.products];
+                    newProducts[0].quantity = parseInt(e.target.value);
+                    setReceiptData(prev => ({ ...prev, products: newProducts }));
+                  }}
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Price"
+                  value={receiptData.products[0].price}
+                  onChange={(e) => {
+                    const newProducts = [...receiptData.products];
+                    newProducts[0].price = parseFloat(e.target.value);
+                    setReceiptData(prev => ({ ...prev, products: newProducts }));
+                  }}
+                  className="w-full p-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex space-x-3 pt-6 pb-4">
+            <button
+              type="submit"
+              className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-medium"
+            >
+              Generate Receipt
+            </button>
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg font-medium"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
