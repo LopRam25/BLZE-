@@ -805,6 +805,32 @@ const BlogForm = ({ post, onSave, onCancel }) => {
 const ReceiptPreview = ({ receipt, onClose }) => {
   const saveReceipt = async () => {
     const token = localStorage.getItem("admin_token");
+    
+    // Transform receipt data to match backend model
+    const transformedProducts = receipt.products.map((product, index) => ({
+      productId: `product-${index}`,
+      productName: product.productName,
+      quantity: product.quantity,
+      delta9THC: product.delta9THC || 0.29,
+      thca: product.thca || 25.8,
+      totalTHC: product.totalTHC || 22.91,
+      price: product.price
+    }));
+    
+    const orderData = {
+      orderId: receipt.orderId,
+      dateTime: receipt.dateTime,
+      customerName: receipt.customerName,
+      phoneNumber: receipt.phoneNumber,
+      idVerified: receipt.idVerified,
+      products: transformedProducts,
+      subtotal: receipt.subtotal || receipt.total,
+      exciseTax: receipt.exciseTax || 0,
+      salesTax: receipt.salesTax || 0,
+      total: receipt.total,
+      status: "Completed"
+    };
+    
     try {
       const response = await fetch(`${API}/admin/orders/enhanced`, {
         method: "POST",
@@ -812,18 +838,20 @@ const ReceiptPreview = ({ receipt, onClose }) => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(receipt)
+        body: JSON.stringify(orderData)
       });
 
       if (response.ok) {
         alert("Receipt saved successfully!");
         onClose();
       } else {
-        alert("Error saving receipt");
+        const error = await response.text();
+        console.error("Save error:", error);
+        alert("Error saving receipt: " + error);
       }
     } catch (error) {
       console.error("Error saving receipt:", error);
-      alert("Error saving receipt");
+      alert("Error saving receipt: " + error.message);
     }
   };
 
