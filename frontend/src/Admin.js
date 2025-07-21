@@ -1281,32 +1281,99 @@ const AdminDashboard = () => {
         {/* Pages */}
         {activeTab === "pages" && (
           <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900">Pages Manager</h2>
+            <h2 className="text-lg font-bold text-gray-900">Content Management</h2>
             
-            <div className="space-y-3">
-              {Object.entries(pages).map(([pageType, pageData]) => (
-                <div key={pageType} className="bg-white rounded-lg shadow-sm border p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium text-gray-900 capitalize">{pageType} Page</h3>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {pageData?.content ? `${pageData.content.substring(0, 100)}...` : 'No content yet'}
-                      </p>
+            {/* Static Pages Section */}
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <h3 className="font-medium text-gray-900 mb-3">Static Pages</h3>
+              <div className="space-y-3">
+                {Object.entries(pages).map(([pageType, pageData]) => (
+                  <div key={pageType} className="border border-gray-200 rounded-lg p-3">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium text-gray-900 capitalize">{pageType} Page</h4>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {pageData?.content ? `${pageData.content.substring(0, 100)}...` : 'No content yet'}
+                        </p>
+                      </div>
+                      <button className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium">
+                        Edit
+                      </button>
                     </div>
-                    <button className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium">
-                      Edit
-                    </button>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Blog Posts Section */}
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium text-gray-900">Blog Posts</h3>
+                <button
+                  onClick={() => {
+                    setEditingBlogPost(null);
+                    setShowBlogForm(true);
+                  }}
+                  className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm font-medium"
+                >
+                  + New Post
+                </button>
+              </div>
+              
+              <div className="space-y-3">
+                {blogPosts.map((post) => (
+                  <div key={post.id} className="border border-gray-200 rounded-lg p-3">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-gray-900">{post.title}</h4>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Published: {new Date(post.publishDate).toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {post.content ? 
+                            `${post.content.replace(/<[^>]*>/g, '').substring(0, 100)}...` : 
+                            'No content'
+                          }
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => {
+                            setEditingBlogPost(post);
+                            setShowBlogForm(true);
+                          }}
+                          className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBlogPost(post.id)}
+                          className="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-sm font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {blogPosts.length === 0 && (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-2">📝</div>
+                    <h4 className="text-lg font-medium text-gray-600 mb-1">No blog posts yet</h4>
+                    <p className="text-sm text-gray-500">Create your first blog post above</p>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="font-medium text-green-900 mb-2">📋 How to Update Pages</h3>
+              <h3 className="font-medium text-green-900 mb-2">📋 Content Management Tips</h3>
               <div className="space-y-1 text-sm text-green-800">
                 <p>• Upload HTML files for perfect formatting</p>
+                <p>• Each HTML file creates a new blog post</p>
                 <p>• Content updates automatically on site</p>
-                <p>• Mobile-friendly templates provided</p>
+                <p>• Use the template download for consistent styling</p>
               </div>
             </div>
           </div>
