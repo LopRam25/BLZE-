@@ -105,6 +105,7 @@ class Product(BaseModel):
     flavor: Optional[str] = None
     isPremium: bool = False
     isVisible: bool = True  # Add visibility field
+    quality: str = "Premium"  # Add quality field
     images: List[str] = []
     coa: Optional[str] = None
     rating: float = 0.0
