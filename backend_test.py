@@ -13,7 +13,7 @@ import io
 from datetime import datetime
 
 # Configuration
-BACKEND_URL = "https://a72bd55c-4478-4952-8f96-3344a97b4ae3.preview.emergentagent.com"
+BACKEND_URL = "https://fa492cb6-c629-40ca-8c54-fada6805cea0.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 ADMIN_TOKEN = "admin_token"
 TEST_PRODUCT_ID = "dante-inferno-001"
