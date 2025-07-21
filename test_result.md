@@ -105,7 +105,7 @@
 user_problem_statement: "Fix multiple admin interface issues: 1) Products not hiding on main site when toggling visibility in admin, 2) Receipt calculation should be simple price x quantity, 3) Blog functionality should be integrated into pages section, 4) HTML uploads should create new blog posts automatically."
 
 backend:
-  - task: "Data Persistence"
+  - task: "Product Visibility API Support"
     implemented: true
     working: true
     file: "/app/backend/main.py"
@@ -113,9 +113,24 @@ backend:
     priority: "high"
     needs_retesting: false
     status_history:
+      - working: false
+        agent: "main"
+        comment: "Backend Product model missing isVisible field for product visibility control"
       - working: true
-        agent: "testing"
-        comment: "CONFIRMED: Data persistence working correctly. Backend runs from /app directory and saves to /app/products.json (not /app/backend/products.json). Product updates including images are properly persisted. Verified both API responses and file contents match."
+        agent: "main"
+        comment: "ADDED: Added isVisible and quality fields to Product model. Updated inventory API endpoint to accept visibility and quality updates via PUT /api/admin/inventory/{product_id}"
+
+  - task: "Enhanced Receipt Generation"
+    implemented: true
+    working: true
+    file: "/app/backend/main.py"
+    stuck_count: 0
+    priority: "medium"  
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Receipt generation working with simplified calculation logic matching frontend changes"
 
   - task: "Image Upload API"
     implemented: true
