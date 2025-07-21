@@ -1503,6 +1503,7 @@ const MobileProductForm = ({ product, onSave, onCancel }) => {
 };
 
 const MobileReceiptForm = ({ onSave, onCancel }) => {
+  const [products, setProducts] = useState([]);
   const [receiptData, setReceiptData] = useState({
     customerName: '',
     phoneNumber: '',
@@ -1522,6 +1523,70 @@ const MobileReceiptForm = ({ onSave, onCancel }) => {
     salesTax: 0,
     total: 0
   });
+
+  // Fetch products on component mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${API}/products`);
+        if (response.ok) {
+          const productsData = await response.json();
+          setProducts(productsData);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
+
+  const addProductLine = () => {
+    setReceiptData(prev => ({
+      ...prev,
+      products: [...prev.products, {
+        productName: '',
+        quantity: 1,
+        delta9THC: 0.29,
+        thca: 25.8,
+        totalTHC: 22.91,
+        price: 0
+      }]
+    }));
+  };
+
+  const removeProductLine = (index) => {
+    setReceiptData(prev => ({
+      ...prev,
+      products: prev.products.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateProductLine = (index, field, value) => {
+    setReceiptData(prev => ({
+      ...prev,
+      products: prev.products.map((product, i) => {
+        if (i === index) {
+          if (field === 'productName') {
+            // Auto-fill product details when product is selected
+            const selectedProduct = products.find(p => p.name === value);
+            if (selectedProduct) {
+              return {
+                ...product,
+                productName: value,
+                delta9THC: selectedProduct.delta9THC || 0.29,
+                thca: selectedProduct.thca || 25.8,
+                totalTHC: selectedProduct.totalTHC || 22.91,
+                price: selectedProduct.pricing ? selectedProduct.pricing['3.5g'] || selectedProduct.price : selectedProduct.price
+              };
+            }
+          }
+          return { ...product, [field]: value };
+        }
+        return product;
+      })
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
