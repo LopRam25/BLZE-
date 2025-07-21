@@ -1650,45 +1650,94 @@ const MobileReceiptForm = ({ onSave, onCancel }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Product Information</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium text-gray-700">Products</label>
+              <button
+                type="button"
+                onClick={addProductLine}
+                className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
+              >
+                + Add Product
+              </button>
+            </div>
+            
             <div className="space-y-3">
-              <input
-                type="text"
-                placeholder="Product Name"
-                value={receiptData.products[0].productName}
-                onChange={(e) => {
-                  const newProducts = [...receiptData.products];
-                  newProducts[0].productName = e.target.value;
-                  setReceiptData(prev => ({ ...prev, products: newProducts }));
-                }}
-                className="w-full p-3 border border-gray-300 rounded-lg"
-                required
-              />
-              <div className="grid grid-cols-2 gap-3">
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  value={receiptData.products[0].quantity}
-                  onChange={(e) => {
-                    const newProducts = [...receiptData.products];
-                    newProducts[0].quantity = parseInt(e.target.value);
-                    setReceiptData(prev => ({ ...prev, products: newProducts }));
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="Price"
-                  value={receiptData.products[0].price}
-                  onChange={(e) => {
-                    const newProducts = [...receiptData.products];
-                    newProducts[0].price = parseFloat(e.target.value);
-                    setReceiptData(prev => ({ ...prev, products: newProducts }));
-                  }}
-                  className="w-full p-3 border border-gray-300 rounded-lg"
-                />
-              </div>
+              {receiptData.products.map((product, index) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-3">
+                  <div className="flex justify-between items-start mb-3">
+                    <h4 className="font-medium text-gray-700">Product {index + 1}</h4>
+                    {receiptData.products.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeProductLine(index)}
+                        className="text-red-600 text-sm"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <select
+                      value={product.productName}
+                      onChange={(e) => updateProductLine(index, 'productName', e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg"
+                      required
+                    >
+                      <option value="">Select a Product</option>
+                      {products.map((p) => (
+                        <option key={p.id} value={p.name}>{p.name} - {p.category}</option>
+                      ))}
+                    </select>
+                    
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        placeholder="Quantity"
+                        value={product.quantity}
+                        onChange={(e) => updateProductLine(index, 'quantity', parseInt(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      />
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="Price"
+                        value={product.price}
+                        onChange={(e) => updateProductLine(index, 'price', parseFloat(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="Delta-9 THC %"
+                        value={product.delta9THC}
+                        onChange={(e) => updateProductLine(index, 'delta9THC', parseFloat(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
+                      />
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="THCA %"
+                        value={product.thca}
+                        onChange={(e) => updateProductLine(index, 'thca', parseFloat(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
+                      />
+                      <input
+                        type="number"
+                        step="0.01"
+                        placeholder="Total THC %"
+                        value={product.totalTHC}
+                        onChange={(e) => updateProductLine(index, 'totalTHC', parseFloat(e.target.value))}
+                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
