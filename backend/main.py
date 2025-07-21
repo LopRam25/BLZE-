@@ -545,13 +545,18 @@ async def get_inventory(admin: bool = Depends(verify_admin)):
     return products
 
 @app.put("/api/admin/inventory/{product_id}")
-async def update_inventory(product_id: str, quantity: int, admin: bool = Depends(verify_admin)):
-    """Update product inventory quantity"""
+async def update_inventory(product_id: str, update_data: InventoryUpdate, admin: bool = Depends(verify_admin)):
+    """Update product inventory quantity, visibility, or quality"""
     products = load_products()
     
     for product in products:
         if product.get('id') == product_id:
-            product['quantity'] = quantity
+            if update_data.quantity is not None:
+                product['quantity'] = update_data.quantity
+            if update_data.isVisible is not None:
+                product['isVisible'] = update_data.isVisible
+            if update_data.quality is not None:
+                product['quality'] = update_data.quality
             break
     else:
         raise HTTPException(status_code=404, detail="Product not found")
