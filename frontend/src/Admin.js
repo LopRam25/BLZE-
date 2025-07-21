@@ -1698,6 +1698,17 @@ const AdminDashboard = () => {
           }}
         />
       )}
+
+      {/* Receipt Preview Modal */}
+      {showReceiptPreview && currentReceipt && (
+        <ReceiptPreview
+          receipt={currentReceipt}
+          onClose={() => {
+            setShowReceiptPreview(false);
+            setCurrentReceipt(null);
+          }}
+        />
+      )}
     </div>
   );
 };
