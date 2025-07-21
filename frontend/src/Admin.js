@@ -1348,7 +1348,13 @@ const AdminDashboard = () => {
                           {pageData?.content ? `${pageData.content.substring(0, 100)}...` : 'No content yet'}
                         </p>
                       </div>
-                      <button className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium">
+                      <button 
+                        onClick={() => {
+                          setEditingPage({ type: pageType, ...pageData });
+                          setShowPageForm(true);
+                        }}
+                        className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
+                      >
                         Edit
                       </button>
                     </div>
