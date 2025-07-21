@@ -104,6 +104,7 @@ class Product(BaseModel):
     aroma: Optional[str] = None
     flavor: Optional[str] = None
     isPremium: bool = False
+    isVisible: bool = True  # Add visibility field
     images: List[str] = []
     coa: Optional[str] = None
     rating: float = 0.0
