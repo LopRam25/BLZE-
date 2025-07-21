@@ -785,9 +785,12 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState([]);
   const [enhancedOrders, setEnhancedOrders] = useState([]);
   const [pages, setPages] = useState({});
+  const [blogPosts, setBlogPosts] = useState([]);
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [showReceiptForm, setShowReceiptForm] = useState(false);
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingBlogPost, setEditingBlogPost] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -797,17 +800,19 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("admin_token");
     
     try {
-      const [productsRes, enhancedOrdersRes, pagesRes] = await Promise.all([
+      const [productsRes, enhancedOrdersRes, pagesRes, blogRes] = await Promise.all([
         fetch(`${API}/products`),
         fetch(`${API}/admin/orders/enhanced`, {
           headers: { "Authorization": `Bearer ${token}` }
         }),
-        fetch(`${API}/pages`)
+        fetch(`${API}/pages`),
+        fetch(`${API}/blog`)
       ]);
 
       if (productsRes.ok) setProducts(await productsRes.json());
       if (enhancedOrdersRes.ok) setEnhancedOrders(await enhancedOrdersRes.json());
       if (pagesRes.ok) setPages(await pagesRes.json());
+      if (blogRes.ok) setBlogPosts(await blogRes.json());
     } catch (error) {
       console.error("Error fetching data:", error);
     }
