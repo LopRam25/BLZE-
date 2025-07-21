@@ -129,6 +129,11 @@ class PageContent(BaseModel):
     address: Optional[str] = None
     hours: Optional[str] = None
 
+class InventoryUpdate(BaseModel):
+    quantity: Optional[int] = None
+    isVisible: Optional[bool] = None
+    quality: Optional[str] = None
+
 class BlogPost(BaseModel):
     id: Optional[str] = None
     title: str
