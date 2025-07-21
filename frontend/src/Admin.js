@@ -1399,6 +1399,18 @@ const AdminDashboard = () => {
           onCancel={() => setShowReceiptForm(false)}
         />
       )}
+
+      {/* Blog Post Form */}
+      {showBlogForm && (
+        <BlogForm
+          post={editingBlogPost}
+          onSave={handleSaveBlogPost}
+          onCancel={() => {
+            setShowBlogForm(false);
+            setEditingBlogPost(null);
+          }}
+        />
+      )}
     </div>
   );
 };
