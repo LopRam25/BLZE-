@@ -1526,9 +1526,9 @@ const AdminDashboard = () => {
                         }
                       ],
                       subtotal: 85.00,
-                      exciseTax: 2.55,
-                      salesTax: 6.80,
-                      total: 94.35
+                      exciseTax: 0,
+                      salesTax: 0,
+                      total: 85.00
                     };
                     generateCustomReceipt(testReceipt);
                   }}
