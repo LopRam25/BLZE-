@@ -888,9 +888,13 @@ const AdminDashboard = () => {
         setProducts(prev => prev.map(item => 
           item.id === productId ? { ...item, quantity: newQuantity } : item
         ));
+      } else {
+        console.error("Failed to update inventory");
+        alert("Failed to update inventory");
       }
     } catch (error) {
       console.error("Error updating inventory:", error);
+      alert("Error updating inventory");
     }
   };
 
