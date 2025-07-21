@@ -592,7 +592,29 @@ const BlogForm = ({ post, onSave, onCancel }) => {
       // Handle HTML file upload
       const reader = new FileReader();
       reader.onload = (event) => {
-        setFormData(prev => ({ ...prev, content: event.target.result }));
+        const htmlContent = event.target.result;
+        
+        // Extract title from HTML
+        const titleMatch = htmlContent.match(/<title[^>]*>([^<]*)<\/title>/i);
+        const h1Match = htmlContent.match(/<h1[^>]*>([^<]*)<\/h1>/i);
+        
+        let extractedTitle = '';
+        if (titleMatch && titleMatch[1]) {
+          extractedTitle = titleMatch[1].replace('Blog Post - BLZE', '').replace(' - BLZE', '').trim();
+        } else if (h1Match && h1Match[1]) {
+          extractedTitle = h1Match[1].trim();
+        }
+        
+        // Use filename as fallback title
+        if (!extractedTitle) {
+          extractedTitle = file.name.replace(/\.(html|htm)$/i, '').replace(/[-_]/g, ' ');
+        }
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          content: htmlContent,
+          title: extractedTitle || prev.title
+        }));
       };
       reader.readAsText(file);
     } else {
