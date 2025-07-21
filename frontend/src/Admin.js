@@ -802,6 +802,220 @@ const BlogForm = ({ post, onSave, onCancel }) => {
   );
 };
 
+const PageForm = ({ page, onSave, onCancel }) => {
+  const [formData, setFormData] = useState({
+    type: page?.type || "",
+    title: page?.title || "",
+    content: page?.content || "",
+    email: page?.email || "",
+    phone: page?.phone || "",
+    address: page?.address || "",
+    hours: page?.hours || ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type === 'text/html' || file.name.endsWith('.html') || file.name.endsWith('.htm')) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const htmlContent = event.target.result;
+        
+        // Extract title from HTML
+        const titleMatch = htmlContent.match(/<title[^>]*>([^<]*)<\/title>/i);
+        const h1Match = htmlContent.match(/<h1[^>]*>([^<]*)<\/h1>/i);
+        
+        let extractedTitle = '';
+        if (titleMatch && titleMatch[1]) {
+          extractedTitle = titleMatch[1].replace(' - BLZE', '').trim();
+        } else if (h1Match && h1Match[1]) {
+          extractedTitle = h1Match[1].trim();
+        }
+        
+        setFormData(prev => ({ 
+          ...prev, 
+          content: htmlContent,
+          title: extractedTitle || prev.title
+        }));
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Please upload an HTML file (.html or .htm)');
+    }
+  };
+
+  const generatePageTemplate = (pageType) => {
+    const templates = {
+      about: `<!DOCTYPE html>
+<html>
+<head>
+    <title>About Us - BLZE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">About BLZE</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Our Story</h2>
+            <p class="text-gray-600 mb-4">
+                Welcome to BLZE, your premier destination for high-quality cannabis products. 
+                We are committed to providing exceptional products and service to our community.
+            </p>
+        </div>
+    </div>
+</body>
+</html>`,
+      contact: `<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact Us - BLZE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">Contact Us</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Get in Touch</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-700">Phone</h3>
+                        <p class="text-gray-600">+1 (555) 123-4567</p>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-700">Email</h3>
+                        <p class="text-gray-600">info@blze.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>`
+    };
+
+    const template = templates[pageType] || templates.about;
+    const blob = new Blob([template], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${pageType}-template.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await onSave(formData);
+    } catch (error) {
+      console.error("Error saving page:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              Edit {formData.type} Page
+            </h2>
+            <button
+              onClick={onCancel}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Content (HTML)
+              </label>
+              <div className="mb-3 flex space-x-2">
+                <input
+                  type="file"
+                  accept=".html,.htm"
+                  onChange={handleFileUpload}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => generatePageTemplate(formData.type)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  Download Template
+                </button>
+              </div>
+              <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleInputChange}
+                rows="10"
+                placeholder="Upload an HTML file or write your content here..."
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 font-mono text-sm"
+                required
+              />
+            </div>
+
+            <div className="flex space-x-4 pt-4">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Saving..." : "Update Page"}
+              </button>
+              <button
+                type="button"
+                onClick={onCancel}
+                className="flex-1 bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [products, setProducts] = useState([]);
