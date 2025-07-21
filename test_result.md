@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Create a premium cannabis e-commerce landing page for BLZE brand with direct sales and delivery functionality. Image upload functionality is broken - uploaded JPEG images are not displaying on the product pages."
+user_problem_statement: "Fix compilation errors in Admin.js after mobile-first redesign attempt. The file had syntax errors including 'return outside of function' at line 1646 and webpack compilation errors due to orphaned code and structural issues."
 
 backend:
   - task: "Data Persistence"
