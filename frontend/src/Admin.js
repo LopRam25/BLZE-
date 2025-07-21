@@ -803,6 +803,30 @@ const BlogForm = ({ post, onSave, onCancel }) => {
 };
 
 const ReceiptPreview = ({ receipt, onClose }) => {
+  const saveReceipt = async () => {
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/orders/enhanced`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(receipt)
+      });
+
+      if (response.ok) {
+        alert("Receipt saved successfully!");
+        onClose();
+      } else {
+        alert("Error saving receipt");
+      }
+    } catch (error) {
+      console.error("Error saving receipt:", error);
+      alert("Error saving receipt");
+    }
+  };
+
   const printReceipt = () => {
     const printContent = document.getElementById('receipt-content').innerHTML;
     const printWindow = window.open('', '_blank');
@@ -845,8 +869,8 @@ const ReceiptPreview = ({ receipt, onClose }) => {
 
           <div id="receipt-content" className="border border-gray-300 p-4 rounded-lg bg-white">
             <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
-              <h1 className="text-2xl font-bold">BLZE Cannabis</h1>
-              <p className="text-sm text-gray-600">Premium Cannabis Delivery</p>
+              <h1 className="text-2xl font-bold">BLZE</h1>
+              <p className="text-sm text-gray-600">Premium Delivery</p>
             </div>
 
             <div className="mb-6">
@@ -898,17 +922,23 @@ const ReceiptPreview = ({ receipt, onClose }) => {
             </div>
 
             <div className="mt-6 text-xs text-gray-500 text-center">
-              <p>Thank you for choosing BLZE Cannabis</p>
+              <p>Thank you for choosing BLZE</p>
               <p>Must be 21+ • Keep receipt for records</p>
             </div>
           </div>
 
           <div className="flex space-x-3 mt-6">
             <button
+              onClick={saveReceipt}
+              className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold"
+            >
+              💾 Save Receipt
+            </button>
+            <button
               onClick={printReceipt}
               className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
             >
-              🖨️ Print Receipt
+              🖨️ Print
             </button>
             <button
               onClick={onClose}
