@@ -853,7 +853,7 @@ const AdminDashboard = () => {
   const toggleProductVisibility = async (productId, isVisible) => {
     const token = localStorage.getItem("admin_token");
     try {
-      const response = await fetch(`${API}/admin/products/${productId}`, {
+      const response = await fetch(`${API}/admin/inventory/${productId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -866,9 +866,13 @@ const AdminDashboard = () => {
         setProducts(prev => prev.map(item => 
           item.id === productId ? { ...item, isVisible } : item
         ));
+      } else {
+        console.error("Failed to update visibility");
+        alert("Failed to update product visibility");
       }
     } catch (error) {
       console.error("Error updating product visibility:", error);
+      alert("Error updating product visibility");
     }
   };
 
