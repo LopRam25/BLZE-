@@ -27,7 +27,8 @@
     ],
     "coa": "",
     "rating": 0.0,
-    "reviews": 0
+    "reviews": 0,
+    "isVisible": false
   },
   {
     "id": "a8567156-a28b-4e30-bc21-887ae33446a4",
