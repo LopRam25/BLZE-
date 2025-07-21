@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Fix compilation errors in Admin.js after mobile-first redesign attempt. The file had syntax errors including 'return outside of function' at line 1646 and webpack compilation errors due to orphaned code and structural issues."
+user_problem_statement: "Fix multiple admin interface issues: 1) Products not hiding on main site when toggling visibility in admin, 2) Receipt calculation should be simple price x quantity, 3) Blog functionality should be integrated into pages section, 4) HTML uploads should create new blog posts automatically."
 
 backend:
   - task: "Data Persistence"
