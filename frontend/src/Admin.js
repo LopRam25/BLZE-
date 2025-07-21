@@ -902,6 +902,34 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleSavePage = async (pageData) => {
+    const token = localStorage.getItem("admin_token");
+    
+    try {
+      const response = await fetch(`${API}/admin/pages/${pageData.type}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(pageData)
+      });
+      
+      if (response.ok) {
+        await fetchData();
+        setShowPageForm(false);
+        setEditingPage(null);
+      } else {
+        const errorText = await response.text();
+        console.error("Error saving page:", errorText);
+        alert("Error saving page: " + errorText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error saving page: " + error.message);
+    }
+  };
+
   const toggleProductVisibility = async (productId, isVisible) => {
     const token = localStorage.getItem("admin_token");
     try {
