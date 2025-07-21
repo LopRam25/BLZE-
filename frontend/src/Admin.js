@@ -1469,6 +1469,18 @@ const AdminDashboard = () => {
           }}
         />
       )}
+
+      {/* Page Edit Form */}
+      {showPageForm && (
+        <PageForm
+          page={editingPage}
+          onSave={handleSavePage}
+          onCancel={() => {
+            setShowPageForm(false);
+            setEditingPage(null);
+          }}
+        />
+      )}
     </div>
   );
 };
