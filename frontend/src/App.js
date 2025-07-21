@@ -757,7 +757,8 @@ const HomePage = () => {
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    const isVisible = product.isVisible !== false; // Only show visible products
+    return matchesCategory && matchesSearch && isVisible;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
