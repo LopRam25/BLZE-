@@ -13,7 +13,7 @@
       "14g": 110,
       "28g": 200
     },
-    "quantity": 17,
+    "quantity": 70,
     "description": "Premium THCA flower with sweet creamy notes",
     "genetics": "Devil Driver x Oreoz",
     "grower": "Discount Pharms",
@@ -63,6 +63,7 @@
     "thca": 0.37,
     "totalTHC": null,
     "isCompliant": null,
-    "warningFlag": null
+    "warningFlag": null,
+    "isVisible": true
   }
 ]
