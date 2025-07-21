@@ -1231,8 +1231,9 @@ const AdminDashboard = () => {
       ...receiptData
     };
     
-    const testReceiptUrl = `${API.replace('/api', '')}/receipt/${testOrder.orderId}`;
-    window.open(testReceiptUrl, '_blank');
+    setCurrentReceipt(testOrder);
+    setShowReceiptPreview(true);
+    setShowReceiptForm(false);
   };
 
   return (
