@@ -2252,41 +2252,15 @@ const MobileReceiptForm = ({ onSave, onCancel }) => {
                         onChange={(e) => updateProductLine(index, 'quantity', parseInt(e.target.value))}
                         className="w-full p-2 border border-gray-300 rounded-lg text-sm"
                       />
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Price"
-                        value={product.price}
-                        onChange={(e) => updateProductLine(index, 'price', parseFloat(e.target.value))}
-                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                      />
+                      <div className="p-2 border border-gray-200 rounded-lg text-sm bg-gray-50">
+                        Price: ${product.price}
+                      </div>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-2">
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Delta-9 THC %"
-                        value={product.delta9THC}
-                        onChange={(e) => updateProductLine(index, 'delta9THC', parseFloat(e.target.value))}
-                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
-                      />
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="THCA %"
-                        value={product.thca}
-                        onChange={(e) => updateProductLine(index, 'thca', parseFloat(e.target.value))}
-                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
-                      />
-                      <input
-                        type="number"
-                        step="0.01"
-                        placeholder="Total THC %"
-                        value={product.totalTHC}
-                        onChange={(e) => updateProductLine(index, 'totalTHC', parseFloat(e.target.value))}
-                        className="w-full p-2 border border-gray-300 rounded-lg text-xs"
-                      />
+                    <div className="p-2 border border-gray-200 rounded-lg bg-gray-50">
+                      <div className="text-xs text-gray-600">
+                        Delta-9 THC: {product.delta9THC}% | THCA: {product.thca}% | Total THC: {product.totalTHC}%
+                      </div>
                     </div>
                   </div>
                 </div>
