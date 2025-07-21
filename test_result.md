@@ -163,20 +163,65 @@ backend:
         comment: "RESOLVED: Static file serving is working correctly. Backend runs from /app directory, so 'uploads' directory resolves to /app/uploads/. Files are uploaded to /app/uploads/ and served correctly at /uploads/ URLs. Tested with actual image upload and verified 200 response with proper content-type."
 
 frontend:
-  - task: "Fix Admin.js Compilation Errors"
+  - task: "Product Visibility Filtering on Main Site"
     implemented: true
     working: true
-    file: "/app/frontend/src/Admin.js"
+    file: "/app/frontend/src/App.js"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
       - working: false
         agent: "main"
-        comment: "Admin.js had syntax errors with orphaned code sections, broken component definitions, and 'return outside of function' parsing errors after mobile-first redesign attempt"
+        comment: "Products marked as hidden in admin were still showing on the main site"
       - working: true
         agent: "main"
-        comment: "RESOLVED: Successfully removed orphaned code from lines 1303-2231 including broken MobileProductForm definition, orphaned functions, and invalid JSX. React app now compiles successfully without syntax errors. All services running properly."
+        comment: "FIXED: Added isVisible filter to product filtering logic in HomePage component. Products with isVisible: false are now properly hidden from the main site display."
+
+  - task: "Simplified Receipt Calculation"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/Admin.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Receipt calculation was complex with automatic tax calculations"
+      - working: true
+        agent: "main"
+        comment: "SIMPLIFIED: Receipt now uses simple price × quantity calculation without automatic tax additions. Total equals subtotal."
+
+  - task: "Blog Integration in Pages Section"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/Admin.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "Blog functionality was separate from content management"
+      - working: true
+        agent: "main"
+        comment: "INTEGRATED: Blog posts now appear in the Pages section under Content Management. Users can create, edit, and delete blog posts from one centralized location."
+
+  - task: "HTML Upload Auto-Post Creation"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/Admin.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "main"
+        comment: "HTML uploads required manual title entry"
+      - working: true
+        agent: "main"
+        comment: "AUTOMATED: HTML file uploads now automatically extract titles from <title> or <h1> tags, or use filename as fallback. Each upload creates a new blog post with proper formatting."
 
 metadata:
   created_by: "main_agent"
