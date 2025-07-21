@@ -814,40 +814,11 @@ const AdminDashboard = () => {
   };
 
   const handleSaveProduct = async (productData) => {
-    const token = localStorage.getItem("admin_token");
-    const formData = new FormData();
-    
-    Object.keys(productData).forEach(key => {
-      if (key === 'images' && productData[key]) {
-        productData[key].forEach(file => formData.append('images', file));
-      } else if (key === 'coa' && productData[key]) {
-        formData.append('coa', productData[key]);
-      } else if (key === 'pricing') {
-        formData.append(key, JSON.stringify(productData[key]));
-      } else {
-        formData.append(key, productData[key]);
-      }
-    });
-
-    try {
-      const url = editingProduct 
-        ? `${API}/admin/products/${editingProduct.id}`
-        : `${API}/admin/products`;
-      
-      const response = await fetch(url, {
-        method: editingProduct ? "PUT" : "POST",
-        headers: { "Authorization": `Bearer ${token}` },
-        body: formData
-      });
-
-      if (response.ok) {
-        fetchData();
-        setShowProductForm(false);
-        setEditingProduct(null);
-      }
-    } catch (error) {
-      console.error("Error saving product:", error);
-    }
+    // The ProductForm component handles its own API calls
+    // This function just refreshes the data and closes the form
+    await fetchData();
+    setShowProductForm(false);
+    setEditingProduct(null);
   };
 
   const toggleProductVisibility = async (productId, isVisible) => {
