@@ -802,6 +802,127 @@ const BlogForm = ({ post, onSave, onCancel }) => {
   );
 };
 
+const ReceiptPreview = ({ receipt, onClose }) => {
+  const printReceipt = () => {
+    const printContent = document.getElementById('receipt-content').innerHTML;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Receipt #${receipt.orderId}</title>
+          <style>
+            body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .item { display: flex; justify-content: space-between; margin: 5px 0; }
+            .total { border-top: 2px solid #000; padding-top: 10px; margin-top: 20px; font-weight: bold; }
+            .thc-info { font-size: 12px; color: #666; margin-top: 10px; }
+          </style>
+        </head>
+        <body>
+          ${printContent}
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-xl max-w-md w-full">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">Receipt Preview</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div id="receipt-content" className="border border-gray-300 p-4 rounded-lg bg-white">
+            <div className="text-center border-b-2 border-gray-800 pb-4 mb-6">
+              <h1 className="text-2xl font-bold">BLZE Cannabis</h1>
+              <p className="text-sm text-gray-600">Premium Cannabis Delivery</p>
+            </div>
+
+            <div className="mb-6">
+              <div className="flex justify-between mb-2">
+                <span>Receipt #:</span>
+                <span className="font-mono">{receipt.orderId}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Date:</span>
+                <span>{new Date(receipt.dateTime).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Customer:</span>
+                <span>{receipt.customerName}</span>
+              </div>
+              <div className="flex justify-between mb-2">
+                <span>Phone:</span>
+                <span>{receipt.phoneNumber}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>ID Verified:</span>
+                <span>{receipt.idVerified ? '✓ Yes' : '✗ No'}</span>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h3 className="font-bold mb-3 border-b border-gray-400 pb-1">Products</h3>
+              {receipt.products.map((product, index) => (
+                <div key={index} className="mb-4 pb-2 border-b border-gray-200 last:border-b-0">
+                  <div className="flex justify-between font-semibold">
+                    <span>{product.productName}</span>
+                    <span>${(product.price * product.quantity).toFixed(2)}</span>
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    <div>Qty: {product.quantity} × ${product.price.toFixed(2)}</div>
+                    <div className="mt-1">
+                      Delta-9 THC: {product.delta9THC}% | THCA: {product.thca}% | Total THC: {product.totalTHC}%
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t-2 border-gray-800 pt-4">
+              <div className="flex justify-between text-lg font-bold">
+                <span>TOTAL:</span>
+                <span>${receipt.total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="mt-6 text-xs text-gray-500 text-center">
+              <p>Thank you for choosing BLZE Cannabis</p>
+              <p>Must be 21+ • Keep receipt for records</p>
+            </div>
+          </div>
+
+          <div className="flex space-x-3 mt-6">
+            <button
+              onClick={printReceipt}
+              className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+            >
+              🖨️ Print Receipt
+            </button>
+            <button
+              onClick={onClose}
+              className="flex-1 bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PageForm = ({ page, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     type: page?.type || "",
