@@ -826,6 +826,58 @@ const AdminDashboard = () => {
     setEditingProduct(null);
   };
 
+  const handleSaveBlogPost = async (blogPost) => {
+    const token = localStorage.getItem("admin_token");
+    
+    try {
+      const url = editingBlogPost 
+        ? `${API}/admin/blog/${editingBlogPost.id}`
+        : `${API}/admin/blog`;
+      
+      const method = editingBlogPost ? "PUT" : "POST";
+      
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(blogPost)
+      });
+      
+      if (response.ok) {
+        await fetchData();
+        setShowBlogForm(false);
+        setEditingBlogPost(null);
+      } else {
+        const errorText = await response.text();
+        console.error("Error saving blog post:", errorText);
+        alert("Error saving blog post: " + errorText);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Error saving blog post: " + error.message);
+    }
+  };
+
+  const handleDeleteBlogPost = async (postId) => {
+    if (!confirm("Are you sure you want to delete this blog post?")) return;
+
+    const token = localStorage.getItem("admin_token");
+    try {
+      const response = await fetch(`${API}/admin/blog/${postId}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        setBlogPosts(prev => prev.filter(post => post.id !== postId));
+      }
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+    }
+  };
+
   const toggleProductVisibility = async (productId, isVisible) => {
     const token = localStorage.getItem("admin_token");
     try {
