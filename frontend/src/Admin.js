@@ -1300,9 +1300,7 @@ const AdminDashboard = () => {
   );
 };
 
-
-
-  // Blog management functions
+const MobileProductForm
   const handleDeleteBlogPost = async (postId) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return;
 
