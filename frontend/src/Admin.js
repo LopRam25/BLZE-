@@ -1029,6 +1029,8 @@ const AdminDashboard = () => {
   const [editingBlogPost, setEditingBlogPost] = useState(null);
   const [showPageForm, setShowPageForm] = useState(false);
   const [editingPage, setEditingPage] = useState(null);
+  const [showReceiptPreview, setShowReceiptPreview] = useState(false);
+  const [currentReceipt, setCurrentReceipt] = useState(null);
 
   useEffect(() => {
     fetchData();
