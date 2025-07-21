@@ -1562,16 +1562,13 @@ const MobileReceiptForm = ({ onSave, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const subtotal = receiptData.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-    const exciseTax = subtotal * 0.03;
-    const salesTax = subtotal * 0.08;
-    const total = subtotal + exciseTax + salesTax;
     
     onSave({
       ...receiptData,
       subtotal,
-      exciseTax,
-      salesTax,
-      total
+      exciseTax: 0, // Remove automatic tax calculation
+      salesTax: 0,  // Remove automatic tax calculation  
+      total: subtotal // Total is just the subtotal
     });
   };
 
