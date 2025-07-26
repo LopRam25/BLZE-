@@ -13,7 +13,7 @@
       "14g": 110,
       "28g": 200
     },
-    "quantity": 70,
+    "quantity": 77,
     "description": "Premium THCA flower with sweet creamy notes",
     "genetics": "Devil Driver x Oreoz",
     "grower": "Discount Pharms",
@@ -28,7 +28,7 @@
     "coa": "",
     "rating": 0.0,
     "reviews": 0,
-    "isVisible": false
+    "isVisible": true
   },
   {
     "id": "a8567156-a28b-4e30-bc21-887ae33446a4",
@@ -44,7 +44,7 @@
       "14g": 110,
       "28g": 200
     },
-    "quantity": 454,
+    "quantity": 450,
     "description": "Kush smell",
     "genetics": "Hdhsks",
     "aroma": "Hdjjsms",
@@ -64,6 +64,6 @@
     "totalTHC": null,
     "isCompliant": null,
     "warningFlag": null,
-    "isVisible": false
+    "isVisible": true
   }
 ]

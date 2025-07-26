@@ -1,0 +1,86 @@
+[
+  {
+    "orderId": "18E3B282",
+    "receiptId": "18E3B282",
+    "generatedAt": "2025-07-21T06:09:42.867845",
+    "receiptData": {
+      "header": {
+        "logo": "BLZE\u2122",
+        "website": "www.blze.co",
+        "receiptId": "18E3B282",
+        "date": "2025-07-21T06:09:42.867845",
+        "customer": "Test",
+        "phone": "825823092",
+        "idVerified": true
+      },
+      "products": [
+        {
+          "productId": "product-0",
+          "productName": "Dantes Inferno",
+          "quantity": 3,
+          "delta9THC": 0.29,
+          "thca": 25.8,
+          "totalTHC": 22.91,
+          "price": 30.0
+        }
+      ],
+      "pricing": {
+        "subtotal": 90.0,
+        "exciseTax": 2.7,
+        "salesTax": 7.2,
+        "total": 99.9
+      },
+      "compliance": {
+        "disclaimer": [
+          "\u26a0\ufe0f Must be 21+ to purchase.",
+          "\u2705 ID verified at time of sale.",
+          "\ud83d\udeab Do not operate vehicles or machinery while impaired.",
+          "\ud83e\uddca Store safely. Keep out of reach of children and pets."
+        ]
+      },
+      "url": null
+    }
+  },
+  {
+    "orderId": "1FE10A18",
+    "receiptId": "1FE10A18",
+    "generatedAt": "2025-07-25T23:44:12.789778",
+    "receiptData": {
+      "header": {
+        "logo": "BLZE\u2122",
+        "website": "www.blze.co",
+        "receiptId": "1FE10A18",
+        "date": "2025-07-25T23:44:12.789778",
+        "customer": "All",
+        "phone": "8285823092",
+        "idVerified": true
+      },
+      "products": [
+        {
+          "productId": "product-0",
+          "productName": "Dantes Inferno",
+          "quantity": 1,
+          "delta9THC": 0.29,
+          "thca": 25.8,
+          "totalTHC": 22.91,
+          "price": 30.0
+        }
+      ],
+      "pricing": {
+        "subtotal": 30.0,
+        "exciseTax": 0.9,
+        "salesTax": 2.4,
+        "total": 33.3
+      },
+      "compliance": {
+        "disclaimer": [
+          "\u26a0\ufe0f Must be 21+ to purchase.",
+          "\u2705 ID verified at time of sale.",
+          "\ud83d\udeab Do not operate vehicles or machinery while impaired.",
+          "\ud83e\uddca Store safely. Keep out of reach of children and pets."
+        ]
+      },
+      "url": null
+    }
+  }
+]
