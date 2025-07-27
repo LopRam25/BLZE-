@@ -17,7 +17,7 @@ services:
 
   # Next.js frontend running as a Node web service (SSR)
   - type: web
-    name: frontend
+    name: frontend-ssr
     runtime: node
     buildCommand: |
       cd next
