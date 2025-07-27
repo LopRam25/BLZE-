@@ -1,31 +1,41 @@
-"use client";
-import { useState } from 'react';
+import Link from 'next/link';
 
 interface Props {
-  onChange: (filter: string) => void;
+  active?: string;
+  searchParams: Record<string, string | string[] | undefined>;
 }
 
-export default function FiltersBar({ onChange }: Props) {
+/**
+ * Server-rendered filter bar. Each chip is an actual link with query params so it
+ * works when JS is disabled.
+ */
+export default function FiltersBar({ active = 'All', searchParams }: Props) {
   const categories = ['All', 'Sativa', 'Indica', 'Hybrid'];
-  const [active, setActive] = useState('All');
+
+  const hrefFor = (cat: string) => {
+    const params = new URLSearchParams(searchParams as any);
+    if (cat === 'All') {
+      params.delete('type');
+    } else {
+      params.set('type', cat);
+    }
+    return `/?${params.toString()}`;
+  };
 
   return (
     <div className="flex space-x-2 overflow-x-auto pb-2 mb-4">
       {categories.map((cat) => (
-        <button
+        <Link
           key={cat}
-          onClick={() => {
-            setActive(cat);
-            onChange(cat);
-          }}
-          className={`whitespace-nowrap px-4 py-1 rounded-full border transition-colors duration-150 ${
+          href={hrefFor(cat)}
+          className={`whitespace-nowrap px-4 py-1 rounded-full border text-sm transition-colors duration-150 ${
             active === cat
               ? 'bg-green-600 text-white border-green-600'
               : 'bg-white text-gray-800'
           }`}
         >
           {cat}
-        </button>
+        </Link>
       ))}
     </div>
   );

@@ -15,8 +15,22 @@ async function getProducts() {
   }
 }
 
-export default async function HomePage() {
-  const products = await getProducts();
+interface PageProps {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export default async function HomePage({ searchParams }: PageProps) {
+  const allProducts = await getProducts();
+
+  const query = typeof searchParams.q === 'string' ? searchParams.q.toLowerCase() : '';
+  const type = typeof searchParams.type === 'string' ? searchParams.type : 'All';
+
+  const filtered = allProducts.filter((p: any) => {
+    const matchesQuery = query ? p.name?.toLowerCase().includes(query) : true;
+    const matchesType =
+      type === 'All' ? true : p.category?.toLowerCase() === type.toLowerCase();
+    return matchesQuery && matchesType;
+  });
 
   return (
     <section>
@@ -28,9 +42,9 @@ export default async function HomePage() {
         fully compliant. Looking for <strong>cbd delivery asheville nc</strong>? You’re in
         the right place.
       </p>
-      <SearchBar onChange={() => {}} />
-      <FiltersBar onChange={() => {}} />
-      {products.length === 0 ? (
+      <SearchBar defaultValue={query} />
+      <FiltersBar active={type} searchParams={searchParams} />
+      {filtered.length === 0 ? (
         <p className="text-center py-20 text-gray-600">
           No products found.{' '}
           <a href="tel:+18285551234" className="underline font-semibold">
@@ -40,7 +54,7 @@ export default async function HomePage() {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p: any) => (
+          {filtered.map((p: any) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
