@@ -13,7 +13,7 @@ export default function ProductCard({ product }: { product: Product }) {
     <div className="bg-white shadow rounded-lg p-4 flex flex-col">
       <Image
         src={product.image || '/placeholder.jpg'}
-        alt={product.name}
+        alt={`${product.name} CBD Flower Delivery Asheville NC`}
         width={400}
         height={300}
         className="rounded-md object-cover h-40 w-full"

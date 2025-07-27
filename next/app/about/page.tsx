@@ -22,6 +22,11 @@ export default function AboutPage() {
         few taps, and top-shelf flower shows up at your door—no traffic, no waiting rooms,
         no cash-only surprises.
       </p>
+      <p className="text-sm">
+        Curious how it works? Visit our <a href="/delivery" className="text-blue-600 underline">CBD
+        delivery page</a> or <a href="/contact" className="text-blue-600 underline">contact the
+        BLZE team</a> for answers.
+      </p>
       <p>
         Our menu is hand-selected from licensed North Carolina cultivators and every batch
         is <em>third-party lab tested</em> to guarantee &lt;0.3 % Δ⁹-THC. Whether you’re
