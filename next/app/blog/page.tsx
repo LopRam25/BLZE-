@@ -1,5 +1,7 @@
 export const metadata = {
-  title: 'Blog | BLZE CBD Delivery',
+  title: 'CBD Blog Asheville NC | Hemp News & Tips – Blze',
+  description:
+    'Stay updated on CBD trends in Asheville NC: hemp laws, product guides, and wellness tips from Blze.',
 };
 
 export default function BlogPage() {

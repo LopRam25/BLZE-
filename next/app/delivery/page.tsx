@@ -1,5 +1,7 @@
 export const metadata = {
-  title: 'Delivery Areas | BLZE CBD Delivery',
+  title: 'CBD Delivery Asheville NC | 60-Min Hemp Flower – Blze',
+  description:
+    'Order CBD flower, oil & more for 60-minute delivery in Asheville, Henderson, Polk & Transylvania counties. Discreet, legal, 0.3% THC compliant.',
 };
 
 export default function DeliveryPage() {
