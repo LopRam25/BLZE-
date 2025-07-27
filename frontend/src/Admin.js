@@ -212,8 +212,33 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       return;
     }
     
-    // Create a fresh copy of form data to ensure latest state
+    // Create a sanitized copy of form data to ensure correct types
+    const numericFields = [
+      "thc",
+      "delta9THC",
+      "thca",
+      "price",
+      "quantity",
+      "unitWeightGrams",
+    ];
+
     const currentFormData = { ...formData };
+
+    numericFields.forEach((field) => {
+      if (currentFormData.hasOwnProperty(field)) {
+        const raw = currentFormData[field];
+        const num = parseFloat(raw);
+        currentFormData[field] = isNaN(num) ? 0 : num;
+      }
+    });
+
+    // Ensure pricing values are numeric
+    if (currentFormData.pricing) {
+      Object.keys(currentFormData.pricing).forEach((key) => {
+        const n = parseFloat(currentFormData.pricing[key]);
+        currentFormData.pricing[key] = isNaN(n) ? 0 : n;
+      });
+    }
     
     console.log("Form data being submitted:", currentFormData);
     console.log("Images in form data:", currentFormData.images);
