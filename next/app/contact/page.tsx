@@ -4,13 +4,10 @@ export const metadata = {
   title: 'Contact BLZE | CBD Delivery Asheville NC',
   description:
     'Need help with your CBD order in Asheville NC? Call or message BLZE for fast answers on products, delivery times and compliance.',
-};
-
-export const generateMetadata = () => ({
   alternates: {
     canonical: `${BASE_URL}/contact`,
   },
-});
+};
 
 export default function ContactPage() {
   return (

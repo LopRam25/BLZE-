@@ -5,13 +5,10 @@ export const metadata = {
   title: 'CBD Delivery Asheville NC | 60-Min Hemp Flower – BLZE',
   description:
     'Order CBD flower, oil & more for 60-minute delivery in Asheville, Henderson, Polk & Transylvania counties. Discreet, legal, 0.3% THC compliant.',
-};
-
-export const generateMetadata = () => ({
   alternates: {
     canonical: `${BASE_URL}/delivery`,
   },
-});
+};
 
 export default function DeliveryPage() {
   const areas = ['Buncombe', 'Henderson', 'Polk', 'Transylvania'];

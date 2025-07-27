@@ -4,13 +4,10 @@ export const metadata = {
   title: 'About BLZE | CBD Delivery Asheville NC',
   description:
     'Learn how BLZE offers compliant, same-day CBD delivery in Asheville NC. Premium hemp flower, CBD oil & gummies brought to your doorstep.',
-};
-
-export const generateMetadata = () => ({
   alternates: {
     canonical: `${BASE_URL}/about`,
   },
-});
+};
 
 export default function AboutPage() {
   return (

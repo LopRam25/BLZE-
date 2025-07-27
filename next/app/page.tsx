@@ -8,13 +8,10 @@ export const metadata = {
   title: 'BLZE CBD Asheville NC | Premium Hemp Flower & Oil Delivery',
   description:
     'Fast, discreet CBD delivery in Asheville NC. Browse Sativa, Indica & Hybrid hemp flower plus CBD oil. Order now and receive in under 60 minutes.',
-};
-
-export const generateMetadata = () => ({
   alternates: {
     canonical: BASE_URL,
   },
-});
+};
 
 async function getProducts() {
   try {
