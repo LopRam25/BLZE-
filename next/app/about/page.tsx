@@ -30,8 +30,7 @@ export default function AboutPage() {
       <p>
         Our menu is hand-selected from licensed North Carolina cultivators and every batch
         is <em>third-party lab tested</em> to guarantee &lt;0.3 % Δ⁹-THC. Whether you’re
-        searching for <strong>CBD delivery Asheville NC</strong> or exploring hybrids for
-        evening relaxation, BLZE has you covered.
+        exploring <strong>cbd Asheville NC</strong> options or comparing <strong>Asheville NC dispensaries</strong>, BLZE has you covered with compliant hemp products and rapid delivery.
       </p>
       <p>
         We operate 7 days a week with average delivery times under 60 minutes inside

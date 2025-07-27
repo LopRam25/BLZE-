@@ -53,9 +53,8 @@ export default async function HomePage({ searchParams }: PageProps) {
       <p className="mb-6 text-gray-700 max-w-3xl">
         Browse our curated menu of federally legal hemp flower and CBD products. We deliver
         across Buncombe, Henderson, Polk, and Transylvania counties—fast, discreet and fully
-        compliant. Looking for <strong>CBD delivery Asheville NC</strong>? You’re in the right
-        place—or <a href="/delivery" className="text-blue-600 underline">explore our delivery
-        service details</a> to learn how fast we can reach you.
+        compliant. If you’re searching for a <strong>dispensary Asheville NC</strong> style
+        experience without leaving home, you’re in the right place—<a href="/delivery" className="text-blue-600 underline">explore our delivery service details</a> to learn how fast we can reach you.
       </p>
       <SearchBar defaultValue={query} />
       <FiltersBar active={type} searchParams={searchParams} />

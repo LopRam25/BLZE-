@@ -24,8 +24,9 @@ export default function DeliveryPage() {
         ))}
       </ul>
       <p className="mt-6 text-gray-600">
-        Not in our zone yet? Send us a message and we’ll let you know when BLZE expands to
-        your area.
+        Looking for a <strong>dispensary near Asheville NC</strong> that actually comes to you?
+        BLZE delivers hemp flower and CBD oil in under an hour. Not in our zone yet? Send us a
+        message and we’ll let you know when we expand.
       </p>
 
       {/* Map Placeholder */}
