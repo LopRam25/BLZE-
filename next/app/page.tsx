@@ -1,6 +1,7 @@
 import FiltersBar from '../components/FiltersBar';
 import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
+import JsonLd from '../components/JsonLd';
 import { BASE_URL } from '../lib/constants';
 
 export const metadata = {
@@ -72,6 +73,59 @@ export default async function HomePage({ searchParams }: PageProps) {
           ))}
         </div>
       )}
+
+      {/* LocalBusiness Schema */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'LocalBusiness',
+          name: 'BLZE CBD Delivery',
+          image: `${BASE_URL}/android-chrome-512x512.png`,
+          url: BASE_URL,
+          telephone: '+1-828-555-1234',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Downtown',
+            addressLocality: 'Asheville',
+            addressRegion: 'NC',
+            postalCode: '28801',
+            addressCountry: 'US',
+          },
+          openingHoursSpecification: [
+            {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+              ],
+              opens: '10:00',
+              closes: '22:00',
+            },
+          ],
+          areaServed: {
+            '@type': 'GeoCircle',
+            geoMidpoint: {
+              '@type': 'GeoCoordinates',
+              latitude: 35.5951,
+              longitude: -82.5515,
+            },
+            geoRadius: 40000,
+          },
+          makesOffer: {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'CBD Delivery Service',
+              areaServed: 'Asheville NC and surrounding counties',
+            },
+          },
+        }}
+      />
     </section>
   );
 }

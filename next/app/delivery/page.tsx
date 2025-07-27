@@ -1,4 +1,5 @@
 import { BASE_URL } from '../../lib/constants';
+import JsonLd from '../../components/JsonLd';
 
 export const metadata = {
   title: 'CBD Delivery Asheville NC | 60-Min Hemp Flower – BLZE',
@@ -61,6 +62,33 @@ export default function DeliveryPage() {
           </p>
         </details>
       </div>
+
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          serviceType: 'CBD Delivery in Asheville',
+          provider: {
+            '@type': 'LocalBusiness',
+            name: 'BLZE CBD Delivery',
+            telephone: '+1-828-555-1234',
+            areaServed: 'Asheville NC',
+          },
+          availableChannel: {
+            '@type': 'ServiceChannel',
+            serviceLocation: {
+              '@type': 'Place',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Asheville',
+                addressRegion: 'NC',
+                addressCountry: 'US',
+              },
+            },
+          },
+          url: `${BASE_URL}/delivery`,
+        }}
+      />
     </section>
   );
 }
