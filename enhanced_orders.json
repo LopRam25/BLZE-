@@ -1,0 +1,50 @@
+[
+  {
+    "orderId": "18E3B282",
+    "dateTime": "2025-07-21T06:09:42.867845",
+    "customerName": "Test",
+    "phoneNumber": "825823092",
+    "idVerified": true,
+    "products": [
+      {
+        "productId": "product-0",
+        "productName": "Dantes Inferno",
+        "quantity": 3,
+        "delta9THC": 0.29,
+        "thca": 25.8,
+        "totalTHC": 22.91,
+        "price": 30.0
+      }
+    ],
+    "subtotal": 90.0,
+    "exciseTax": 2.7,
+    "salesTax": 7.2,
+    "total": 99.9,
+    "status": "Completed",
+    "receiptUrl": "/receipt/18E3B282"
+  },
+  {
+    "orderId": "1FE10A18",
+    "dateTime": "2025-07-25T23:44:12.789778",
+    "customerName": "All",
+    "phoneNumber": "8285823092",
+    "idVerified": true,
+    "products": [
+      {
+        "productId": "product-0",
+        "productName": "Dantes Inferno",
+        "quantity": 1,
+        "delta9THC": 0.29,
+        "thca": 25.8,
+        "totalTHC": 22.91,
+        "price": 30.0
+      }
+    ],
+    "subtotal": 30.0,
+    "exciseTax": 0.9,
+    "salesTax": 2.4,
+    "total": 33.3,
+    "status": "Completed",
+    "receiptUrl": "/receipt/1FE10A18"
+  }
+]

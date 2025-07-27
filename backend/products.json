@@ -1,0 +1,30 @@
+[
+  {
+    "id": "dante-inferno-001",
+    "name": "Dantes Inferno",
+    "type": "Indica-Dominant Hybrid",
+    "category": "hybrid",
+    "thc": 35.97,
+    "pricing": {
+      "1g": 10,
+      "3.5g": 30,
+      "7g": 60,
+      "14g": 110,
+      "28g": 200
+    },
+    "price": 10,
+    "quantity": 12,
+    "description": "Premium THCA flower with sweet creamy notes",
+    "genetics": "Devil Driver x Oreoz",
+    "grower": "Discount Pharms",
+    "aroma": "Sweet with creamy notes",
+    "flavor": "Smooth, dessert-like, rich",
+    "isPremium": true,
+    "images": [
+      "https://fa492cb6-c629-40ca-8c54-fada6805cea0.preview.emergentagent.com/api/uploads/900a12e4-5e6f-4dc1-8423-b3773477fa60.jpeg"
+    ],
+    "coa": "",
+    "rating": 0.0,
+    "reviews": 0
+  }
+]

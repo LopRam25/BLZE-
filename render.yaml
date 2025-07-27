@@ -1,0 +1,31 @@
+version: "1"
+services:
+  # FastAPI backend running on a free Web Service
+  - type: web
+    name: backend
+    runtime: python
+    plan: free
+    buildCommand: |
+      # Install backend dependencies
+      pip install --upgrade pip
+      pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+  # React frontend served as a free Static Site
+  - type: web
+    name: frontend
+    runtime: static
+    buildCommand: |
+      # Install node dependencies & build production bundle
+      cd frontend
+      yarn install --silent
+      yarn build
+    staticPublishPath: frontend/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
