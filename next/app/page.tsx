@@ -1,12 +1,19 @@
 import FiltersBar from '../components/FiltersBar';
 import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
+import { BASE_URL } from '../lib/constants';
 
 export const metadata = {
-  title: 'Blze CBD Asheville NC | Premium Hemp Flower & Oil Delivery',
+  title: 'BLZE CBD Asheville NC | Premium Hemp Flower & Oil Delivery',
   description:
     'Fast, discreet CBD delivery in Asheville NC. Browse Sativa, Indica & Hybrid hemp flower plus CBD oil. Order now and receive in under 60 minutes.',
 };
+
+export const generateMetadata = () => ({
+  alternates: {
+    canonical: BASE_URL,
+  },
+});
 
 async function getProducts() {
   try {
