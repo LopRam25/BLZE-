@@ -4,13 +4,10 @@ export const metadata = {
   title: 'CBD Blog Asheville NC | Hemp News & Tips – BLZE',
   description:
     'Stay updated on CBD trends in Asheville NC: hemp laws, product guides, and wellness tips from BLZE.',
-};
-
-export const generateMetadata = () => ({
   alternates: {
     canonical: `${BASE_URL}/blog`,
   },
-});
+};
 
 export default function BlogPage() {
   return (
